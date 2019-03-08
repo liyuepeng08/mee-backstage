@@ -19,13 +19,15 @@ module.exports = {
     path: config.build.assetsRoot,
     filename: '[name].js',
     publicPath: process.env.NODE_ENV === 'production' ?
-      config.build.assetsPublicPath : config.dev.assetsPublicPath
+      config.build.assetsPublicPath :
+      config.dev.assetsPublicPath
   },
   resolve: {
     extensions: ['.js', '.vue', '.json'],
     alias: {
       'vue$': 'vue/dist/vue.esm.js',
       '@': resolve('src'),
+      'base': resolve('src/components/base'),
     }
   },
   module: {
@@ -33,14 +35,13 @@ module.exports = {
         test: /\.vue$/,
         loader: 'vue-loader',
         options: vueLoaderConfig
-      }, {
+      },
+      {
         test: /\.js$/,
         loader: 'babel-loader',
         include: [resolve('src'), resolve('test'), resolve('node_modules/webpack-dev-server/client')]
-      }, {
-        test: /\.sass$/,
-        loaders: ['style', 'css', 'sass']
-      }, {
+      },
+      {
         test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,
         loader: 'url-loader',
         options: {
@@ -63,6 +64,9 @@ module.exports = {
           limit: 10000,
           name: utils.assetsPath('fonts/[name].[hash:7].[ext]')
         }
+      }, {
+        test: /\.less$/,
+        loader: 'style-loader!css-loader!less-loader'
       }
     ]
   },
