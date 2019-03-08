@@ -1,5 +1,6 @@
 <template>
     <el-breadcrumb separator-class="el-icon-arrow-right">
+        <i class="el-icon-location-outline"></i>
         <el-breadcrumb-item :to="{ path: '/' }">校园管理</el-breadcrumb-item>
         <el-breadcrumb-item>教师管理</el-breadcrumb-item>
         <el-breadcrumb-item>新增教师</el-breadcrumb-item>

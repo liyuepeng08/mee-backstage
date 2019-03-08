@@ -5,7 +5,9 @@
             <el-col :span="3">
                 <left-nav></left-nav>
             </el-col>
-            <el-col :span="21">这个是右侧</el-col>
+            <el-col :span="21" style="background-color: #F3F3F5;">
+                <router-view/>
+            </el-col>
         </el-row>
     </section>
 </template>
