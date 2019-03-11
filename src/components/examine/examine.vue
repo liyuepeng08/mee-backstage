@@ -13,7 +13,6 @@
 import Crumbs from '@/components/crumbs/crumbs'
 import Search from '@/components/search/search'
 import Tab from '@/components/examine/tab/tab'
-import TableList from '@/components/examine/table-list/table-list'
 export default {
     components: {
         Crumbs,

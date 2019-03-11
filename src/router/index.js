@@ -17,6 +17,8 @@ import AddStudent from '@/components/AddStudent/AddStudent' //添加学生
 import DetailStudent from '@/components/detailStudent/detailStudent' //管理员详情
 import AddTeacher from '@/components/AddTeacher/AddTeacher' //添加教师
 import DetailTeacher from '@/components/detailTeacher/detailTeacher' //教师详情
+import ExamineTeacher from '@/components/examineTeacher/examineTeacher'   //教师审核详情
+import ExamineStudent from '@/components/examineStudent/examineStudent'     //学生审核详情
 Vue.use(Router)
 
 export default new Router({
@@ -75,6 +77,16 @@ export default new Router({
         path: 'detailTeacher', //教师详情
         name: 'detailTeacher',
         component: DetailTeacher
+      },
+      {                         //学生审核详情
+        path: 'examineStudent',
+        name: 'examineStudent',
+        component: ExamineStudent
+      },
+      {                       //教师审核详情
+        path: 'examineTeacher',
+        name: 'examineTeacher',
+        component: ExamineTeacher
       }
     ]
   }, {

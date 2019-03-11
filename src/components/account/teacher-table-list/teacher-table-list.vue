@@ -36,7 +36,7 @@
         <el-table-column
             label="操作">
             <template slot-scope="scope">
-                <el-button type="text" size="small">详情</el-button>
+                <el-button type="text" size="small" @click="detailMsg">详情</el-button>
                 <el-button type="text" size="small">编辑</el-button>
                 <el-button type="text" size="small" @click="deleteMsg(scope)">删除</el-button>
             </template>
@@ -95,6 +95,11 @@ export default {
                     type: 'success',
                     message: '删除成功!'
                 })
+            })
+        },
+        detailMsg(scope) {
+            this.$router.push({
+                path: '/admin/detailTeacher'
             })
         }
     }

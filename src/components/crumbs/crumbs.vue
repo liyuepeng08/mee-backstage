@@ -15,6 +15,7 @@ export default {
 <style lang="less" scoped>
 .position{
     margin:20px 0 20px 20px;
+    margin-left: 0px;
     padding-left: 14px;
     .posIcon{
         position: absolute;

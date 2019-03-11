@@ -1,6 +1,6 @@
 <template>
   <div class="addManager">
-    <h3 class="pageTitle">教师详情</h3>
+    <h3 class="pageTitle">教师审核详情</h3>
     <!-- <form class="el-form demo-ruleForm"> -->
     <el-form
       :model="ruleForm"
