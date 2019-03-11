@@ -11,6 +11,9 @@ import School from '@/components/school/school' //学校管理
 import Account from '@/components/account/account' //账户管理
 import Examine from '@/components/examine/examine' //审核管理
 import Security from '@/components/security/security' //安全管理
+import AddManager from '@/components/addManager/addManager' //添加管理员
+import AddStudent from '@/components/AddStudent/AddStudent' //添加学生
+import AddTeacher from '@/components/AddTeacher/AddTeacher' //添加教师
 Vue.use(Router)
 
 export default new Router({
@@ -42,6 +45,21 @@ export default new Router({
         path: 'security', //安全设置
         name: 'security',
         component: Security
+      }, {
+        path: 'addManager', //添加管理员
+        name: 'addManager',
+        component: AddManager
+
+      }, {
+        path: 'addStudent', //添加学生
+        name: 'addStudent',
+        component: AddStudent
+
+      }, {
+        path: 'addTeacher', //添加教师
+        name: 'addTeacher',
+        component: AddTeacher
+
       }
     ]
   }, {
