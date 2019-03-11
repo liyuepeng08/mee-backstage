@@ -13,7 +13,7 @@
 </template>
 <script>
 //当前是选项卡组件
-import TableList from '@/components/account/table-list/table-list'
+import TableList from '@/components/examine/table-list/table-list'
 import Pages from '@/components/pages/pages'
 export default {
     data() {
