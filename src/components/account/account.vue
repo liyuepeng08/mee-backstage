@@ -2,19 +2,21 @@
     <div>
         <crumbs></crumbs>
         <search></search>
-        <table></table>
+        <tab></tab>
     </div>
 </template>
 <script>
 //这个是 账号管理 组件
 import Crumbs from '@/components/crumbs/crumbs'
 import Search from '@/components/search/search'
-import Table from '@/components/table/table'
+import TableList from '@/components/table/table'
+import Tab from '@/components/tab/tab'
 export default {
     components: {
         Crumbs,
         Search,
-        Table
+        TableList,
+        Tab
     }
 }
 </script>
