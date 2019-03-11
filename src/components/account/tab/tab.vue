@@ -2,7 +2,7 @@
     <el-tabs v-model="activeName2" type="card" @tab-click="handleClick">
         <el-tab-pane label="管理员管理" name="1">
             <div class="butt">
-                <el-button type="primary" icon="el-icon-plus" class="new-add">新增</el-button>
+                <el-button type="primary" icon="el-icon-plus" class="new-add" @click="addAdmin">新增</el-button>
                 <el-button type="primary" icon="el-icon-share" class="new-add">邀请</el-button>
             </div>
             
@@ -11,7 +11,7 @@
         </el-tab-pane>
         <el-tab-pane label="教师管理" name="2">
             <div class="butt">
-                <el-button type="primary" icon="el-icon-plus" class="new-add">新增</el-button>
+                <el-button type="primary" icon="el-icon-plus" class="new-add" @click="addTeacher">新增</el-button>
                 <el-button type="primary" icon="el-icon-share" class="new-add">邀请</el-button>
             </div>
             
@@ -20,7 +20,7 @@
         </el-tab-pane>
         <el-tab-pane label="学生管理" name="3">
             <div class="butt">
-                <el-button type="primary" icon="el-icon-plus">新增</el-button>
+                <el-button type="primary" icon="el-icon-plus" @click="addStudent">新增</el-button>
                 <el-button type="primary" icon="el-icon-share">邀请</el-button>
                 <el-button type="primary" icon="el-icon-upload2" class="upload-butt">
                     批量新增
@@ -49,6 +49,21 @@ export default {
     methods: {
         handleClick() {
 
+        },
+        addAdmin() {
+            this.$router.push({
+                path: '/admin/addManager'
+            })
+        },
+        addTeacher() {
+            this.$router.push({
+                path: '/admin/addTeacher'
+            })
+        },
+        addStudent() {
+            this.$router.push({
+                path: '/admin/addStudent'
+            })
         }
     },
     components: {
