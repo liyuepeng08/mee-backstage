@@ -2,7 +2,9 @@
     <div>
         <crumbs></crumbs>
         <search></search>
-        <tab></tab>
+        <div class="account-content">
+            <tab></tab>
+        </div>
     </div>
 </template>
 <script>
@@ -10,7 +12,7 @@
 import Crumbs from '@/components/crumbs/crumbs'
 import Search from '@/components/search/search'
 import TableList from '@/components/table/table'
-import Tab from '@/components/tab/tab'
+import Tab from '@/components/account/tab/tab'
 export default {
     components: {
         Crumbs,
@@ -21,6 +23,11 @@ export default {
 }
 </script>
 <style lang="less" scoped>
-
+.account-content {
+    background-color: #fff;
+    padding-top: 20px;
+    padding-left: 10px;
+    padding-bottom: 20px;
+}
 </style>
 

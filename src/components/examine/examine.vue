@@ -2,23 +2,32 @@
     <div>
         <crumbs></crumbs>
         <search></search>
-        <table></table>
+        <div class="examine-content">
+            <tab></tab>
+        </div>
+        
     </div>
 </template>
 <script>
 //这个是 审核管理 组件
 import Crumbs from '@/components/crumbs/crumbs'
 import Search from '@/components/search/search'
-import Table from '@/components/table/table'
+import Tab from '@/components/examine/tab/tab'
+import TableList from '@/components/examine/table-list/table-list'
 export default {
     components: {
         Crumbs,
         Search,
-        Table
+        Tab
     }
 }
 </script>
 <style lang="less" scoped>
-
+.examine-content {
+    background-color: #fff;
+    padding-top: 20px;
+    padding-left: 10px;
+    padding-bottom: 20px;
+}
 </style>
 
