@@ -54,7 +54,7 @@ export default {
 }
 .el-menu-item.is-active {
     background-color: #4BD3B7;
-    border-left: 10px #fff solid;
+    border-left: 10px #B4F2E5 solid;
     color: #fff;
 }
 
@@ -63,13 +63,13 @@ export default {
 }
 .el-menu-item:hover {
     background-color: #4BD3B7;
-    border-left: 10px #fff solid;
+    border-left: 10px #B4F2E5 solid;
     color: #fff;
 }
 
 .el-menu-item:focus {
     background-color: #4BD3B7;
-    border-left: 10px #fff solid;
+    border-left: 10px #B4F2E5 solid;
 }
 </style>
 

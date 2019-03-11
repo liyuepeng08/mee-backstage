@@ -5,7 +5,6 @@
             <pages></pages>
         </el-tab-pane>
         <el-tab-pane label="学生申请" name="2">
-            学生申请
             <table-list></table-list>
             <pages></pages>
         </el-tab-pane>

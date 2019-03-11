@@ -20,9 +20,12 @@
         </el-tab-pane>
         <el-tab-pane label="学生管理" name="3">
             <div class="butt">
-                <el-button type="primary" icon="el-icon-plus" class="new-add">新增</el-button>
-                <el-button type="primary" icon="el-icon-share" class="new-add">邀请</el-button>
-                <el-button type="primary" icon="el-icon-upload2" class="new-add">批量新增</el-button>
+                <el-button type="primary" icon="el-icon-plus">新增</el-button>
+                <el-button type="primary" icon="el-icon-share">邀请</el-button>
+                <el-button type="primary" icon="el-icon-upload2" class="upload-butt">
+                    批量新增
+                    <input type="file" name="" id="upload-file">
+                </el-button>
                 <a href="#" style="color: blue"><i class="el-icon-download"></i>下载模板</a>
             </div>
             
@@ -59,5 +62,18 @@ export default {
 <style lang="less" scoped>
 .butt {
     margin-bottom: 10px;
+}
+.upload-butt {
+    position: relative;
+}
+#upload-file {
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    opacity: 0;
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
 }
 </style>
