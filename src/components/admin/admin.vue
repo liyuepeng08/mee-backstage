@@ -5,7 +5,7 @@
       <el-col :span="3">
         <left-nav></left-nav>
       </el-col>
-      <el-col :span="21" style="background-color: #F3F3F5;">
+      <el-col :span="21" class="right-cont" style="">
         <router-view/>
       </el-col>
     </el-row>
@@ -23,6 +23,21 @@ export default {
 };
 </script>
 <style lang="less" scoped>
+.el-row, .el-col {
+    min-height: 100%;
+    background-color: #3F4464;
+}
+.container {
+    min-height: 100%;
+}
+.right-cont {
+    background-color: #F3F3F5;
+    min-height: 100%;
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-bottom: 50px;
+}
+
 </style>
 
 

@@ -100,7 +100,7 @@ export default {
     height: 120px;
     font-size: 12px;
     background: #fff;
-    margin: 0 20px 20px 20px;
+    margin-bottom: 20px;
     .el-input__inner {
         height: 30px;
         line-height: 30px;

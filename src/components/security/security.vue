@@ -2,19 +2,19 @@
     <div>
         <crumbs></crumbs>
         <search></search>
-        <table></table>
+        <table-list></table-list>
     </div>
 </template>
 <script>
 //这个是 安全管理 组件
 import Crumbs from '@/components/crumbs/crumbs'
 import Search from '@/components/search/search'
-import Table from '@/components/table/table'
+import TableList from '@/components/table/table'
 export default {
     components: {
         Crumbs,
         Search,
-        Table
+        TableList
     }
 }
 </script>

@@ -28,6 +28,7 @@ export default {
     padding-top: 20px;
     padding-left: 10px;
     padding-bottom: 20px;
+    padding-right: 10px;
 }
 </style>
 
