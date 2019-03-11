@@ -12,7 +12,7 @@
 //这个是 代理商管理 组件
 import Crumbs from '@/components/crumbs/crumbs'
 import Search from '@/components/search/search'
-import TableList from '@/components/table/table'
+import TableList from '@/components/agent/table-list/table-list'
 export default {
     components: {
         Crumbs,
@@ -26,6 +26,7 @@ export default {
     background-color: #fff;
     padding-top: 20px;
     padding-left: 10px;
+    padding-bottom: 20px;
 }
 .new-add {
     margin-bottom: 10px;
