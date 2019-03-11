@@ -17,6 +17,8 @@ import AddStudent from '@/components/AddStudent/AddStudent' //添加学生
 import DetailStudent from '@/components/detailStudent/detailStudent' //管理员详情
 import AddTeacher from '@/components/AddTeacher/AddTeacher' //添加教师
 import DetailTeacher from '@/components/detailTeacher/detailTeacher' //教师详情
+import ReqManager from '@/components/reqManager/reqManager' //邀请管理员
+
 Vue.use(Router)
 
 export default new Router({
@@ -75,6 +77,10 @@ export default new Router({
         path: 'detailTeacher', //教师详情
         name: 'detailTeacher',
         component: DetailTeacher
+      }, {
+        path: 'reqManager', //教师详情
+        name: 'reqManager',
+        component: ReqManager
       }
     ]
   }, {
