@@ -12,8 +12,11 @@ import Account from '@/components/account/account' //账户管理
 import Examine from '@/components/examine/examine' //审核管理
 import Security from '@/components/security/security' //安全管理
 import AddManager from '@/components/addManager/addManager' //添加管理员
+import DetailManager from '@/components/detailManager/detailManager' //管理员详情
 import AddStudent from '@/components/AddStudent/AddStudent' //添加学生
+import DetailStudent from '@/components/detailStudent/detailStudent' //管理员详情
 import AddTeacher from '@/components/AddTeacher/AddTeacher' //添加教师
+import DetailTeacher from '@/components/detailTeacher/detailTeacher' //教师详情
 Vue.use(Router)
 
 export default new Router({
@@ -51,15 +54,27 @@ export default new Router({
         component: AddManager
 
       }, {
+        path: 'detailManager', //管理员详情
+        name: 'detailManager',
+        component: DetailManager
+
+      }, {
         path: 'addStudent', //添加学生
         name: 'addStudent',
         component: AddStudent
-
+      }, {
+        path: 'detailStudent', //学生详情
+        name: 'detailStudent',
+        component: DetailStudent
       }, {
         path: 'addTeacher', //添加教师
         name: 'addTeacher',
         component: AddTeacher
 
+      }, {
+        path: 'detailTeacher', //教师详情
+        name: 'detailTeacher',
+        component: DetailTeacher
       }
     ]
   }, {
