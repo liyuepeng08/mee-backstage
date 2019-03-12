@@ -20,6 +20,7 @@ import DetailTeacher from '@/components/detailTeacher/detailTeacher' //教师详
 import ReqManager from '@/components/reqManager/reqManager' //邀请管理员
 import ExamineTeacher from '@/components/examineTeacher/examineTeacher' //教师审核详情
 import ExamineStudent from '@/components/examineStudent/examineStudent' //学生审核详情
+
 Vue.use(Router)
 
 export default new Router({
@@ -92,7 +93,12 @@ export default new Router({
         path: 'examineTeacher',
         name: 'examineTeacher',
         component: ExamineTeacher
-      }
+      },
+      {
+        path: 'reqManager', //邀请页面
+        name: 'reqManager',
+        component: ReqManager
+        }
     ]
   }, {
     path: '/login',
