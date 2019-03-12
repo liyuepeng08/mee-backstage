@@ -36,9 +36,9 @@
         <el-table-column
             label="操作">
             <template slot-scope="scope">
-                <el-button type="text" size="small">详情</el-button>
+                <el-button type="text" size="small" @click="detailMsg">详情</el-button>
                 <el-button type="text" size="small">编辑</el-button>
-                <el-button type="text" size="small">删除</el-button>
+                <el-button type="text" size="small" @click="deleteMsg(scope)">删除</el-button>
             </template>
         </el-table-column>
     </el-table>
@@ -80,6 +80,27 @@ export default {
                 time: '2019-02-19',
                 subject: '高数'
             }]
+        }
+    },
+    methods: {
+        deleteMsg(scope) {
+            
+
+            this.$confirm('确定要删除' + this.tableData[scope.$index].name + '用户吗？', '删除管理员',{
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+            }).then(() => {
+                this.$message({
+                    type: 'success',
+                    message: '删除成功!'
+                })
+            })
+        },
+        detailMsg(scope) {
+            this.$router.push({
+                path: '/admin/detailTeacher'
+            })
         }
     }
 };

@@ -24,8 +24,13 @@
         </el-table-column>
 
         <el-table-column
-            prop="schoolName"
-            label="学校名称">
+            prop="mechanism"
+            label="所属机构">
+        </el-table-column>
+
+        <el-table-column
+            prop="subject"
+            label="教授科目">
         </el-table-column>
 
         <el-table-column
@@ -46,7 +51,7 @@ export default {
                 date: '2016-05-02',
                 name: '爱谁谁',
                 nickname: '我是代理商',
-                schoolName: '开普勒实验小学北京海淀分校',
+                mechanism: '开普勒实验小学北京海淀分校',
                 telephone: '18897689866',
                 time: '2019-02-19',
                 subject: '高数'
@@ -54,7 +59,7 @@ export default {
                 date: '2016-05-02',
                 name: '爱谁谁',
                 nickname: '我是代理商',
-                schoolName: '开普勒实验小学北京海淀分校',
+                mechanism: '开普勒实验小学北京海淀分校',
                 telephone: '18897689866',
                 time: '2019-02-19',
                 subject: '高数'
@@ -62,7 +67,7 @@ export default {
                 date: '2016-05-02',
                 name: '爱谁谁',
                 nickname: '我是代理商',
-                schoolName: '开普勒实验小学北京海淀分校',
+                mechanism: '开普勒实验小学北京海淀分校',
                 telephone: '18897689866',
                 time: '2019-02-19',
                 subject: '高数'
@@ -70,7 +75,7 @@ export default {
                 date: '2016-05-02',
                 name: '爱谁谁',
                 nickname: '我是代理商',
-                schoolName: '开普勒实验小学北京海淀分校',
+                mechanism: '开普勒实验小学北京海淀分校',
                 telephone: '18897689866',
                 time: '2019-02-19',
                 subject: '高数'
@@ -92,9 +97,9 @@ export default {
                 })
             })
         },
-        detailMsg() {
+        detailMsg(scope) {
             this.$router.push({
-                path: '/admin/detailManager'
+                path: '/admin/examineStudent'
             })
         }
     }

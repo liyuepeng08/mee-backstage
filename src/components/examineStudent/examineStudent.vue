@@ -1,6 +1,6 @@
 <template>
   <div class="addManager">
-    <h3 class="pageTitle">教师详情</h3>
+    <h3 class="pageTitle">学生审核详情</h3>
     <!-- <form class="el-form demo-ruleForm"> -->
     <el-form
       :model="ruleForm"
@@ -25,7 +25,7 @@
         <span>{{ruleForm.passWord}}</span>
       </el-form-item>
       <el-form-item label="学校或机构 :" prop="school">
-        <div :key="index" v-for="(item,index) in ruleForm.school">{{item.name}}</div>
+        <span>{{ruleForm.school}}</span>
       </el-form-item>
       <el-form-item label="联系电话 :" prop="phone">
         <span>{{ruleForm.phone}}</span>
@@ -36,25 +36,18 @@
       <el-form-item label="出生年月 :" prop="birthday">
         <span>{{ruleForm.birthday}}</span>
       </el-form-item>
-      <el-form-item label="工作年限 :" prop="workLife">
-        <span>{{ruleForm.workLife}}</span>
-      </el-form-item>
-      <el-form-item label="教育科目 :" prop="subject">
-        <span>{{ruleForm.subject}}</span>
-      </el-form-item>
-      <el-form-item label="工作地址 :" prop="prefecture">
-        <span>{{ruleForm.prefecture}}</span>
-      </el-form-item>
-      <el-form-item label="教育年级 :" prop="grade">
+      <el-form-item label=" 年级 :" prop="grade">
         <span>{{ruleForm.grade}}</span>
       </el-form-item>
-      <el-form-item label="职称 :" prop="teacherTitle">
-        <span>{{ruleForm.teacherTitle}}</span>
+      <el-form-item label=" 班级 :" prop="class">
+        <span>{{ruleForm.class}}</span>
       </el-form-item>
-      <el-form-item label="资格证书 :" prop="card">
-        <img class="teacherCard" src="./teacherCard.jpg" alt>
-        <!-- <img class="teacherCard" :src="ruleForm.card" alt> -->
-      </el-form-item>
+      <div class="auditor" v-show="ifAuditor">
+        <el-row>
+          <el-button style="width:120px;height:40px;background:#2e8ed6" type="primary">通过</el-button>
+          <el-button style="width:120px;height:40px;border:1px solid #2e8ed6" plain>拒绝</el-button>
+        </el-row>
+      </div>
     </el-form>
     <!-- </form> -->
   </div>
@@ -72,17 +65,14 @@ export default {
         name: "窦娥", //用户名
         nickName: "妖刀姬", //昵称
         passWord: "7758521", //密码
-        school: [{ name: "北京市第一小学" }, { name: "北京市第二小学" }], //学校
+        school: "北京市第一小学", //学校
         phone: "15010611993", //电话
         email: "15010611993@163.com", //邮箱
         birthday: "1981-05-15", //出生年月
-        workLife: "10年以上", //工作年限
-        subject: "英语（二类）", //教育科目
-        prefecture: "北京市昌平区华家园东一区", //工作地址
         grade: "小学4年纪", //教授年纪
-        teacherTitle: "高级教师", //教育职称
-        card: "./teacherCard.jpg" // 教师资格证书
-      }
+        class: "英语托福班" //班级
+      },
+      ifAuditor: true
     };
   }
 };
@@ -94,6 +84,7 @@ export default {
   background: #fff;
   margin: 10px 10px 0 10px;
   min-height: 600px;
+  padding-bottom: 40px;
   .pageTitle {
     font-size: 14px;
     font-weight: normal;
@@ -104,6 +95,9 @@ export default {
     width: 220px;
     height: 140px;
     padding-bottom: 40px;
+  }
+  .auditor {
+    padding: 30px 120px 50px;
   }
 }
 </style>

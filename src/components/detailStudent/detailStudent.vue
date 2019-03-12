@@ -1,6 +1,6 @@
 <template>
   <div class="addManager">
-    <h3 class="pageTitle">新增管理员</h3>
+    <h3 class="pageTitle">学生详情</h3>
     <!-- <form class="el-form demo-ruleForm"> -->
     <el-form
       :model="ruleForm"
@@ -42,12 +42,12 @@
       <el-form-item label=" 班级 :" prop="class">
         <span>{{ruleForm.class}}</span>
       </el-form-item>
-      <div class="auditor" v-show="ifAuditor">
+      <!-- <div class="auditor" v-show="ifAuditor">
         <el-row>
           <el-button style="width:120px;height:40px;background:#2e8ed6" type="primary">通过</el-button>
           <el-button style="width:120px;height:40px;border:1px solid #2e8ed6" plain>拒绝</el-button>
         </el-row>
-      </div>
+      </div> -->
     </el-form>
     <!-- </form> -->
   </div>

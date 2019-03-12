@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="security">
         <crumbs></crumbs>
         <search></search>
         <table-list></table-list>
@@ -19,6 +19,8 @@ export default {
 }
 </script>
 <style lang="less" scoped>
-
+.security {
+    min-height: 1080px;
+}
 </style>
 
