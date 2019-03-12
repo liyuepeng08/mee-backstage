@@ -3,8 +3,8 @@
     <div class="loginBody">
       <img class="logo" src="../assets/images/loginLogo.png" alt>
       <div class="account">
-        <input type="text" class="userName" placeholder="请输入手机号/账号">
-        <input type="password" placeholder="请输入密码">
+        <input type="text" class="userName" v-model="account" placeholder="请输入手机号/账号">
+        <input type="password" placeholder="请输入密码" v-model="password">
       </div>
       <select name="school" id="school" class="school tipsColor">
         <option class="tips" style="display: none;" disabled selected>请选择默认选项或机构</option>
@@ -12,7 +12,7 @@
         <option value="2">2</option>
         <option value="3">3</option>
       </select>
-      <input type="button" value="登 录" class="button">
+      <input type="button" value="登 录" @click="signin" class="button">
       <div class="aboutLink">
         <a href class="registerLink">注册账号</a>|
         <a href>忘记密码？</a>
@@ -26,8 +26,28 @@ export default {
   name: "Login",
   data() {
     return {
-      msg: "Welcome to Your Vue.js App"
+      msg: "Welcome to Your Vue.js App",
+      account: '',
+      password: ''
     };
+  },
+  methods: {
+    signin() {        //点击按钮登录
+
+      if (this.account === "admin") {
+        if (this.password === "123456") {
+          this.$router.push({
+            path: '/admin'
+          })
+        }
+        else {
+          alert("密码错误！")
+        }
+      }
+      else {
+        alert("查无此账号！")
+      }
+    }
   }
 };
 </script>
