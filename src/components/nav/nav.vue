@@ -1,25 +1,60 @@
 <template>
-    <el-menu :default-active="$route.path" router>
-        <el-menu-item style="padding-left: 0px;" index="/admin">
+    <el-menu :default-active="$route.path" router @select="navClick" text-color="#666666" style="border: none;">
+        <el-menu-item style="padding-left: 20px;" index="/admin">
             <!-- <router-link to="/admin">代理商管理</router-link> -->
-            代理商管理
+            首页
         </el-menu-item>
-        <el-menu-item style="padding-left: 0px;" index="/admin/school">
-            <!-- <router-link to="/admin/school">学校管理</router-link> -->
-            学校管理
+
+        <el-submenu index="1">
+            <template slot="title">
+                <i></i>
+                <span>用户管理</span>
+            </template>
+            <el-menu-item-group>
+                <!-- <template slot="title">分组一</template> -->
+                <el-menu-item index="">管理员管理</el-menu-item>
+                <el-menu-item index="/admin/school">机构管理</el-menu-item>
+                <el-menu-item index="">教师管理</el-menu-item>
+                <el-menu-item index="">学生管理</el-menu-item>
+            </el-menu-item-group>
+        </el-submenu>
+
+        <el-submenu index="2">
+            <template slot="title">
+                <i></i>
+                <span>资源管理</span>
+            </template>
+            <el-menu-item-group>
+                <!-- <template slot="title">分组一</template> -->
+                <el-menu-item index="">课程管理</el-menu-item>
+                <el-menu-item index="">试卷管理</el-menu-item>
+            </el-menu-item-group>
+        </el-submenu>
+
+        <el-menu-item style="padding-left: 20px;" index="/admin">
+            <!-- <router-link to="/admin">代理商管理</router-link> -->
+            班级管理
         </el-menu-item>
-        <el-menu-item style="padding-left: 0px;" index="/admin/account">
-            <!-- <router-link to="/admin/account">账号管理</router-link> -->
-            账号管理
+
+        <el-submenu index="3">
+            <template slot="title">
+                <i></i>
+                <span>审核管理</span>
+            </template>
+            <el-menu-item-group>
+                <el-menu-item index="">教师审核</el-menu-item>
+                <el-menu-item index="">学生管理</el-menu-item>
+                <el-menu-item index="">课程审核</el-menu-item>
+                <el-menu-item index="">考卷审核</el-menu-item>
+            </el-menu-item-group>
+        </el-submenu>
+
+        <el-menu-item style="padding-left: 20px;" index="/admin">
+            <!-- <router-link to="/admin">代理商管理</router-link> -->
+            <i></i>
+            <span>设置</span>
         </el-menu-item>
-        <el-menu-item style="padding-left: 0px;" index="/admin/examine">
-            <!-- <router-link to="/admin/examine">审核管理</router-link> -->
-            审核管理
-        </el-menu-item>
-        <el-menu-item style="padding-left: 0px;" index="/admin/security">
-            <!-- <router-link to="/admin/security">安全设置</router-link> -->
-            安全设置
-        </el-menu-item>
+
     </el-menu>
 </template>
 <script>
@@ -32,44 +67,56 @@ export default {
     },
     mounted() {
         console.log(this.$route.path)
+    },
+    methods: {
+        navClick(index, indexPath) {
+            console.log("index: " + index + " ; indexPath: " + indexPath)
+        }
     }
 }
 </script>
-<style lang="less" scoped>
-.el-menu {
-    background: none;
-    border-right: none;
-}
-.el-menu-item {
-    padding: 0;
-}
-.el-menu-item a {
-    color: #c9d0ff;
-    font-size: 14px;
-}
-.el-menu-item {
-    box-sizing: border-box;
-    text-align: center;
-    color: #c9d0ff;
+<style lang="less">
+.el-submenu .el-menu-item {
+    min-width: 0px;
 }
 .el-menu-item.is-active {
-    background-color: #4BD3B7;
-    border-left: 10px #B4F2E5 solid;
-    color: #fff;
+    background-color: #F4F8FF
 }
+.el-submenu .el-menu-item {
+    padding: 0px;
+}
+.el-menu-item-group__title {
+    padding: 0px;
+}
+// .el-menu {
+//     background: none;
+//     border-right: none;
+// }
+// .el-menu-item {
+//     padding: 0;
+// }
+// .el-menu-item a {
+//     color: #c9d0ff;
+//     font-size: 14px;
+// }
+// .el-menu-item {
+//     box-sizing: border-box;
+//     text-align: center;
+//     color: #c9d0ff;
+// }
+// .el-menu-item.is-active {
+//     color: #fff;
+// }
 
-.el-menu-item a {
-    display: block;
-}
-.el-menu-item:hover {
-    background-color: #4BD3B7;
-    border-left: 10px #B4F2E5 solid;
-    color: #fff;
-}
+// .el-menu-item a {
+//     display: block;
+// }
+// .el-menu-item:hover {
+//     color: #fff;
+// }
 
-.el-menu-item:focus {
-    background-color: #4BD3B7;
-    border-left: 10px #B4F2E5 solid;
-}
+// .el-menu-item:focus {
+//     background-color: #4BD3B7;
+// }
 </style>
 

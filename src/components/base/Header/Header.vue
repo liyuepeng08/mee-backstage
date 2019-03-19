@@ -36,15 +36,14 @@ export default {
 .header {
     width: 100%;
     height: 60px;
-    background-color: #ffffff;
-    box-shadow: 0px 1px 1px 0px rgba(51, 51, 51, 0.1);
+    background-color: #f3f3f5;
     .logo {
         width: 100%;
         height: 60px;
-        background-color: #2d3042;
         display: flex;
         align-items: center;
         justify-content: center;
+        background-color: #fff;
         float: left;
     }
     .headerRight {

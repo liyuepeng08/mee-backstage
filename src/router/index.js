@@ -29,7 +29,7 @@ export default new Router({
     name: 'admin',
     component: Admin,
     children: [{
-        path: '/', //代理商管理
+        path: 'agent', //代理商管理
         name: 'agent',
         component: Agent
       },
