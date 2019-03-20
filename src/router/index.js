@@ -20,6 +20,10 @@ import DetailTeacher from '@/components/detailTeacher/detailTeacher' //教师详
 import ReqManager from '@/components/reqManager/reqManager' //邀请管理员
 import ExamineTeacher from '@/components/examineTeacher/examineTeacher' //教师审核详情
 import ExamineStudent from '@/components/examineStudent/examineStudent' //学生审核详情
+import CourseManage from '@/components/courseManage/courseManage'   //课程管理
+import NewCourseDetail from '@/components/courseManage/newCourseDetail'      //新建课程详情
+import NewCourseUpload from '@/components/courseManage/newCourseUpload'        //新建课程上传
+import UploadVideo from '@/components/courseManage/uploadVideo'            //视频上传
 
 Vue.use(Router)
 
@@ -61,7 +65,6 @@ export default new Router({
         path: 'detailManager', //管理员详情
         name: 'detailManager',
         component: DetailManager
-
       }, {
         path: 'addStudent', //添加学生
         name: 'addStudent',
@@ -98,7 +101,26 @@ export default new Router({
         path: 'reqManager', //邀请页面
         name: 'reqManager',
         component: ReqManager
-        }
+      },
+      {
+        path: 'courseManage',     //课程管理
+        name: 'courseManage',
+        component: CourseManage,
+        children: [{            //新建课程详情
+          path: 'newCourseDetail',
+          name: 'newCourseDetail',
+          component: NewCourseDetail
+        }, {                            //新建课程上传
+          path: 'newCourseUpload',
+          name: 'newCourseUpload',
+          component: NewCourseUpload,
+          children: [{          //视频上传
+            path: 'uploadVideo',
+            name: 'uploadVideo',
+            component: UploadVideo
+          }]
+        }]
+      }
     ]
   }, {
     path: '/',
