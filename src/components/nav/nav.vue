@@ -12,10 +12,10 @@
             </template>
             <el-menu-item-group>
                 <!-- <template slot="title">分组一</template> -->
-                <el-menu-item index="">管理员管理</el-menu-item>
+                <el-menu-item index="/admin/adminUser">管理员管理</el-menu-item>
                 <el-menu-item index="/admin/school">机构管理</el-menu-item>
-                <el-menu-item index="">教师管理</el-menu-item>
-                <el-menu-item index="">学生管理</el-menu-item>
+                <el-menu-item index="/admin/teacherManage">教师管理</el-menu-item>
+                <el-menu-item index="/admin/studentManage">学生管理</el-menu-item>
             </el-menu-item-group>
         </el-submenu>
 
@@ -42,8 +42,8 @@
                 <span>审核管理</span>
             </template>
             <el-menu-item-group>
-                <el-menu-item index="">教师审核</el-menu-item>
-                <el-menu-item index="">学生管理</el-menu-item>
+                <el-menu-item index="/admin/examineTeacher">教师审核</el-menu-item>
+                <el-menu-item index="/admin/examineStudent">学生管理</el-menu-item>
                 <el-menu-item index="">课程审核</el-menu-item>
                 <el-menu-item index="">考卷审核</el-menu-item>
             </el-menu-item-group>

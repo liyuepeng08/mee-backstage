@@ -18,12 +18,14 @@ import DetailStudent from '@/components/detailStudent/detailStudent' //管理员
 import AddTeacher from '@/components/AddTeacher/AddTeacher' //添加教师
 import DetailTeacher from '@/components/detailTeacher/detailTeacher' //教师详情
 import ReqManager from '@/components/reqManager/reqManager' //邀请管理员
-import ExamineTeacher from '@/components/examineTeacher/examineTeacher' //教师审核详情
-import ExamineStudent from '@/components/examineStudent/examineStudent' //学生审核详情
+import ExamineTeacher from '@/components/examineTeacherDel/examineTeacherDel' //教师审核详情
+import ExamineStudent from '@/components/examineStudentDel/examineStudentDel' //学生审核详情
 import CourseManage from '@/components/courseManage/courseManage'   //课程管理
 import NewCourseDetail from '@/components/courseManage/newCourseDetail'      //新建课程详情
 import NewCourseUpload from '@/components/courseManage/newCourseUpload'        //新建课程上传
 import UploadVideo from '@/components/courseManage/uploadVideo'            //视频上传
+
+import TeacherManage from '@/components/teacherManage/teacherManage' //教师管理
 
 Vue.use(Router)
 
@@ -121,6 +123,11 @@ export default new Router({
           }]
         }]
       }
+        ,{
+          path: "teacherManage",
+          name: "teacherManage",
+          component: TeacherManage
+        }
     ]
   }, {
     path: '/',
