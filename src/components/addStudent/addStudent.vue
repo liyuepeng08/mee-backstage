@@ -1,86 +1,134 @@
 <template>
   <div class="addStudent">
     <h3 class="pageTitle">新增学生</h3>
+    <el-row class="bread">
+      <span :class="{'selected':tab===1}" @click="checkTab(1)">
+        <i/>基本信息
+      </span>
+      <b>></b>
+      <span :class="{'selected':tab===2}" @click="checkTab(2)">
+        <i/>更多信息
+      </span>
+    </el-row>
     <!-- <form class="el-form demo-ruleForm"> -->
     <el-form
       :model="ruleForm"
-      :rules="rules"
       ref="ruleForm"
-      label-width="130px"
+      label-width="90px"
       class="demo-ruleForm"
-      style="width:550px"
+      style="width:390px"
+      size="mini"
     >
-      <el-form-item label="账号" prop="account">
-        <el-input v-model="ruleForm.account"></el-input>
-      </el-form-item>
-      <el-form-item label="姓名" prop="name">
-        <el-input v-model="ruleForm.name"></el-input>
-      </el-form-item>
-      <el-form-item label="昵称" prop="nickName">
-        <el-input v-model="ruleForm.nickName"></el-input>
-      </el-form-item>
-      <el-form-item label="密码" prop="passWord">
-        <el-input v-model="ruleForm.passWord"></el-input>
-      </el-form-item>
-      <el-form-item label="学校或机构" prop="school">
-        <el-select style="width:100%" v-model="ruleForm.school" placeholder="请选择活动区域">
-          <el-option label="北京市第一小学" value="shanghai"></el-option>
-          <el-option label="北京市第二小学" value="beijing"></el-option>
-        </el-select>
-      </el-form-item>
-      <el-form-item>
-        <el-row style="margin-bottom:10px;">
-          <el-button style="border:1px solid #2e8ed6">+ 添加</el-button>
-        </el-row>
-      </el-form-item>
-      <el-form-item label="联系电话" prop="phone">
-        <el-input v-model="ruleForm.phone"></el-input>
-      </el-form-item>
-      <el-form-item
-        prop="email"
-        label="邮箱"
-        :rules="[
-          { required: true, message: '请输入邮箱地址', trigger: 'blur' },
-          { type: 'email', message: '请输入正确的邮箱地址', trigger: ['blur', 'change'] }
-        ]"
-      >
-        <el-input v-model="ruleForm.email"></el-input>
-      </el-form-item>
-      <el-form-item label="出生年月" required>
-        <el-form-item prop="birthday">
-          <el-date-picker
-            type="date"
-            placeholder="选择日期"
-            v-model="ruleForm.birthday"
-            style="width: 100%;"
-          ></el-date-picker>
+      <dl class="model essential" v-if="tab === 1">
+        <dt>基本信息</dt>
+        <!-- <el-form-item label="账号" prop="account">
+          <el-input v-model="ruleForm.account" placeholder="账号"></el-input>
+        </el-form-item>-->
+        <el-form-item label="姓名" prop="name">
+          <el-input class="w150" v-model="ruleForm.name" placeholder="请输入姓名"></el-input>
         </el-form-item>
-      </el-form-item>
-      <el-form-item label="年级" prop="grade">
-        <el-select style="width:100%" v-model="ruleForm.grade" placeholder="请选择年级">
-          <el-option label="三年级" value="shanghai"></el-option>
-          <el-option label="四年级" value="beijing"></el-option>
-        </el-select>
-      </el-form-item>
-      <el-form-item label="班级" prop="class">
-        <el-select style="width:100%" v-model="ruleForm.class" placeholder="请选择班级">
-          <el-option label="一班" value="shanghai"></el-option>
-          <el-option label="二班" value="beijing"></el-option>
-        </el-select>
-      </el-form-item>
-      <el-form-item>
-        <el-row style="margin-bottom:10px;">
-          <el-button style="border:1px solid #2e8ed6">+ 添加</el-button>
-        </el-row>
-      </el-form-item>
-      <el-form-item>
-        <el-row style="margin-bottom:10px;">
+        <el-form-item label="昵称" prop="nickName">
+          <el-input class="w150" v-model="ruleForm.nickName" placeholder="请输入昵称"></el-input>
+        </el-form-item>
+        <el-form-item label="性别" prop="sex">
+          <el-select class="w150" v-model="ruleForm.sex" placeholder="请选择活动区域">
+            <el-option label="男" value="0"></el-option>
+            <el-option label="女" value="1"></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="年级" prop="grade">
+          <el-select style="width:100%" v-model="ruleForm.grade" placeholder="请选择年级">
+            <el-option label="三年级" value="shanghai"></el-option>
+            <el-option label="四年级" value="beijing"></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="联系电话" prop="phone">
+          <el-input v-model="ruleForm.phone"></el-input>
+        </el-form-item>
+        <el-form-item prop="email" label="邮箱">
+          <el-input v-model="ruleForm.email"></el-input>
+        </el-form-item>
+        <el-form-item label="所属机构" prop="school">
+          <el-select style="width:100%" v-model="ruleForm.school" placeholder="请选择活动区域">
+            <el-option label="北京市第一小学" value="shanghai"></el-option>
+            <el-option label="北京市第二小学" value="beijing"></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="所在班级" prop="class">
+          <el-row>
+            <el-col :span="14">
+              <el-select style="width:100%" v-model="ruleForm.class" placeholder="选择班级">
+                <el-option label="一班" value="shanghai"></el-option>
+                <el-option label="二班" value="beijing"></el-option>
+              </el-select>
+            </el-col>
+            <el-col :span="9">
+              <el-row style="margin-bottom:10px;">
+                <el-row style="margin-bottom:10px;">
+                  <el-button style="color:#a9a9a9;border:none">
+                    <i class="el-icon-circle-plus-outline" style="margin-right: 4px;"></i>添加班级选项
+                  </el-button>
+                </el-row>
+              </el-row>
+            </el-col>
+          </el-row>
+        </el-form-item>
+        <el-form-item>
           <el-button
-            style="width:120px;height:40px;margin:50px 0 58px;background:#2e8ed6"
             type="primary"
-          >提交</el-button>
-        </el-row>
-      </el-form-item>
+            @click="next"
+            round
+            style="width:120px;height:40px;font-size: 14px;"
+          >下一步</el-button>
+        </el-form-item>
+      </dl>
+      <dl class="model more" v-if="tab === 2">
+        <dt>更多信息</dt>
+        <el-form-item label="民族" prop="nation">
+          <el-input class="w150" v-model="ruleForm.nation" placeholder="输入内容"></el-input>
+        </el-form-item>
+        <el-form-item label="年龄" prop="age">
+          <el-input class="w150" v-model="ruleForm.age" placeholder="输入内容"></el-input>
+        </el-form-item>
+        <el-form-item label="出生日期" prop="birthday">
+          <el-date-picker class="w150" type="date" placeholder="选择日期" v-model="ruleForm.birthday"></el-date-picker>
+        </el-form-item>
+        <el-form-item label="籍贯" prop="native">
+          <el-input class="w480" v-model="ruleForm.age" placeholder="输入内容"></el-input>
+        </el-form-item>
+        <el-form-item label="联系地址" prop="address">
+          <el-input class="w480" v-model="ruleForm.age" placeholder="输入内容"></el-input>
+        </el-form-item>
+        <el-form-item label="父母电话" prop="parentPhone">
+          <el-row>
+            <el-col :span="14">
+              <el-input v-model="ruleForm.parentPhone" placeholder="输入手机号码"></el-input>
+            </el-col>
+            <el-col :span="9">
+              <el-row style="margin-bottom:10px;">
+                <el-button style="color:#a9a9a9;border:none">
+                  <i class="el-icon-circle-plus-outline" style="margin-right: 4px;"></i>添加班级选项
+                </el-button>
+              </el-row>
+            </el-col>
+          </el-row>
+        </el-form-item>
+        <el-form-item label="备注" prop="remarks">
+          <el-input class="remarks" type="textarea" v-model="ruleForm.remarks" placeholder="输入内容"></el-input>
+        </el-form-item>
+        <el-form-item>
+          <el-row style="margin-bottom:10px;">
+            <!-- <el-button round>圆角按钮</el-button> -->
+            <el-button @click="back" round style="width:120px;height:40px;font-size: 14px;">上一步</el-button>
+            <el-button
+              @click="submit"
+              type="primary"
+              round
+              style="width:120px;height:40px;font-size: 14px;"
+            >提交</el-button>
+          </el-row>
+        </el-form-item>
+      </dl>
     </el-form>
 
     <!-- </form> -->
@@ -93,9 +141,10 @@ export default {
   data() {
     return {
       msg: "Welcome to Your Vue.js App",
+      tab: 1,
       ruleForm: {
         account: "", //账户
-        sex: "", //性别
+        sex: "男", //性别
         name: "", //用户名
         nickName: "", //昵称
         passWord: "", //密码
@@ -104,31 +153,38 @@ export default {
         email: "", //邮箱
         birthday: "", //出生年月
         grade: "", //年级
-        class: "" //班级
+        class: "", //班级
+        nation: "", //民族
+        age: "", //年龄
+        native: "", //籍贯
+        remarks: "" //备注
       },
-      rules: {
-        account: [
-          { required: true, message: "请输入账户", trigger: "blur" },
-          { min: 2, max: 11, message: "长度在 2 到 11 个字符", trigger: "blur" }
-        ],
-        name: [
-          { required: true, message: "请输入用户名", trigger: "blur" },
-          { min: 2, max: 10, message: "长度在 2 到 10 个字符", trigger: "blur" }
-        ],
-        nickName: [
-          { required: true, message: "请输入昵称", trigger: "blur" },
-          { min: 2, max: 10, message: "长度在 2 到 10 个字符", trigger: "blur" }
-        ],
-        passWord: [
-          { required: true, message: "请输入密码", trigger: "blur" },
-          { min: 2, max: 8, message: "长度在 2 到 8 个字符", trigger: "blur" }
-        ],
-        phone: [
-          { required: true, message: "请输入电话号码", trigger: "blur" },
-          { min: 8, max: 11, message: "长度在 8 到 11 个字符", trigger: "blur" }
-        ]
-      }
+      radio2: 3
     };
+  },
+  methods: {
+    checkTab: function(index) {
+      this.tab = index;
+    },
+    //下一步
+    next: function() {
+      this.tab++;
+    },
+    //上一步
+    back: function() {
+      this.tab--;
+    },
+    submit: function() {
+      this.$alert("提交成功，请等待审核！", "", {
+        confirmButtonText: "返回",
+        type: "success",
+        showClose: "",
+        confirmButtonClass: "round"
+        // center: true
+      }).then(() => {
+        this.$router.push({ path: "/admin" });
+      });
+    }
   }
 };
 </script>
@@ -140,15 +196,100 @@ export default {
   margin: 10px 10px 0 10px;
   min-height: 600px;
   .pageTitle {
-    font-size: 14px;
+    font-size: 30px;
+    color: #080808;
+    padding: 19px 21px 25px 0px;
+    background-color: #f3f3f5;
+  }
+  // 面包屑
+  .bread {
+    background-color: #f3f3f5;
+    font-size: 12px;
     font-weight: normal;
-    color: #000000;
-    padding: 19px 21px 25px;
+    font-stretch: normal;
+    padding-bottom: 15px;
+    letter-spacing: 0px;
+    color: #a9a9a9;
+    i {
+      display: inline-block;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      margin-right: 6px;
+      position: relative;
+      top: 1px;
+      background-color: #f3f3f5;
+      border: solid 1px #a9a9a9;
+    }
+    b {
+      padding: 0 4px;
+      position: relative;
+      top: -1px;
+    }
+    .selected {
+      color: #5693ff;
+      i {
+        background-color: #5693ff;
+        border: solid 1px #5693ff;
+      }
+    }
+  }
+  //下dl模板
+  .model {
+    padding: 34px 40px;
+    dt {
+      padding-bottom: 30px;
+    }
+    .w150 {
+      width: 150px;
+    }
+    .w480 {
+      width: 480px;
+    }
+  }
+  //more
+  .more {
+    padding: 34px 0px 34px 40px;
+  }
+
+  /deep/ .el-form-item {
+    margin-bottom: 30px;
+    // width: 100%;
+    .el-input__inner {
+      height: 30px;
+      line-height: 30px;
+    }
+  }
+  /deep/ .el-form-item__label {
+    font-size: 12px;
+    text-align: justify;
+    height: 30px;
+    overflow: hidden;
+  }
+  /deep/ .el-form-item__label:after {
+    display: inline-block;
+    width: 100%;
+    content: "";
+  }
+  /deep/ .el-select-dropdown__item.selected {
+    font-size: 12px;
+  }
+  /deep/ .el-select-dropdown__item {
+    font-size: 12px;
+  }
+  /deep/ .remarks {
+    textarea {
+      width: 493px;
+      height: 120px;
+    }
+  }
+  /deep/ .el-message-box__btns {
+    text-align: center;
   }
 }
 </style>
-<style>
-.el-form-item {
-  margin-bottom: 20px;
+<style lang="less">
+.el-message-box__content {
+  padding-left: 110px;
 }
 </style>
