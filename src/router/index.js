@@ -18,10 +18,15 @@ import DetailStudent from '@/components/detailStudent/detailStudent' //管理员
 import AddTeacher from '@/components/AddTeacher/AddTeacher' //添加教师
 import DetailTeacher from '@/components/detailTeacher/detailTeacher' //教师详情
 import ReqManager from '@/components/reqManager/reqManager' //邀请管理员
-import ExamineTeacher from '@/components/examineTeacher/examineTeacher' //教师审核详情
-import ExamineStudent from '@/components/examineStudent/examineStudent' //学生审核详情
+import ExamineTeacherDel from '@/components/examineTeacherDel/examineTeacherDEl' //教师审核详情
+import ExamineStudentDel from '@/components/examineStudentDel/examineStudentDel' //学生审核详情
 
-import TeacherManage from '@/components/teacherManage/teacherManage' //教师管理
+import TeacherManage from '@/components/teacherManage/teacherManage' //教师管理列表页
+import StudentManage from '@/components/studentManage/studentManage' //学生管理列表页
+import AdminUser from '@/components/adminUser/adminUser' //管理员管理列表页
+import StudentExamine from '@/components/studentExamine/studentExamine' //学生审核列表页
+import TeacherExamine from '@/components/teacherExamine/teacherExamine' //教师审核列表页
+
 
 Vue.use(Router)
 
@@ -87,24 +92,42 @@ export default new Router({
         component: ReqManager
       },
       { //学生审核详情
-        path: 'examineStudent',
-        name: 'examineStudent',
-        component: ExamineStudent
+        path: 'examineStudentDel',
+        name: 'examineStudentDel',
+        component: ExamineStudentDel
       },
       { //教师审核详情
-        path: 'examineTeacher',
-        name: 'examineTeacher',
-        component: ExamineTeacher
+        path: 'examineTeacherDel',
+        name: 'examineTeacherDel',
+        component: ExamineTeacherDel
       },
       {
         path: 'reqManager', //邀请页面
         name: 'reqManager',
         component: ReqManager
-        },{
-          path: "teacherManage",
-          name: "teacherManage",
-          component: TeacherManage
-        }
+      }, {
+        path: "teacherManage", //教师管理列表
+        name: "teacherManage",
+        component: TeacherManage
+      }, {
+        path: "studentManage", //学生管理列表
+        name: "studentManage",
+        component: StudentManage
+      },
+      {
+        path: "adminUser", //管理员管理列表
+        name: "adminUser",
+        component: AdminUser
+      },
+      {
+        path: 'studentExamine', //学生审核列表
+        name: 'studentExamine',
+        component: StudentExamine
+      }, {
+        path: 'teacherExamine', //教师审核列表
+        name: 'teacherExamine',
+        component: TeacherExamine
+      }
     ]
   }, {
     path: '/',

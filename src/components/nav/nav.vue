@@ -42,8 +42,8 @@
                 <span>审核管理</span>
             </template>
             <el-menu-item-group>
-                <el-menu-item index="/admin/examineTeacher">教师审核</el-menu-item>
-                <el-menu-item index="/admin/examineStudent">学生管理</el-menu-item>
+                <el-menu-item index="/admin/teacherExamine">教师审核</el-menu-item>
+                <el-menu-item index="/admin/studentExamine">学生管理</el-menu-item>
                 <el-menu-item index="">课程审核</el-menu-item>
                 <el-menu-item index="">考卷审核</el-menu-item>
             </el-menu-item-group>
