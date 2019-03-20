@@ -1,119 +1,230 @@
 <template>
-  <div class="addTeacher">
-    <h3 class="pageTitle">新增老师</h3>
+  <div class="addStudent">
+    <h3 class="pageTitle">新增教师</h3>
+    <el-row class="bread">
+      <span :class="{'selected':tab===1}" @click="checkTab(1)">
+        <i/>基本信息
+      </span>
+      <b>></b>
+      <span :class="{'selected':tab===2}" @click="checkTab(2)">
+        <i/>更多信息
+      </span>
+      <b>></b>
+      <span :class="{'selected':tab===3}" @click="checkTab(3)">
+        <i/>教师资质
+      </span>
+    </el-row>
     <!-- <form class="el-form demo-ruleForm"> -->
     <el-form
       :model="ruleForm"
-      :rules="rules"
       ref="ruleForm"
-      label-width="130px"
+      label-width="90px"
       class="demo-ruleForm"
-      style="width:550px"
+      style="width:390px"
+      size="mini"
     >
-      <el-form-item label="账号" prop="account">
-        <el-input v-model="ruleForm.account"></el-input>
-      </el-form-item>
-      <el-form-item label="性别" prop="sex">
-        <el-radio-group v-model="ruleForm.sex">
-          <el-radio label="男"></el-radio>
-          <el-radio label="女"></el-radio>
-        </el-radio-group>
-      </el-form-item>
-      <el-form-item label="姓名" prop="name">
-        <el-input v-model="ruleForm.name"></el-input>
-      </el-form-item>
-      <el-form-item label="昵称" prop="nickName">
-        <el-input v-model="ruleForm.nickName"></el-input>
-      </el-form-item>
-      <el-form-item label="密码" prop="passWord">
-        <el-input v-model="ruleForm.passWord"></el-input>
-      </el-form-item>
-      <el-form-item label="学校或机构" prop="school">
-        <el-select style="width:100%" v-model="ruleForm.school" placeholder="请选择活动区域">
-          <el-option label="北京市第一小学" value="shanghai"></el-option>
-          <el-option label="北京市第二小学" value="beijing"></el-option>
-        </el-select>
-      </el-form-item>
-      <el-form-item>
-        <el-row style="margin-bottom:10px;">
-          <el-button style="border:1px solid #2e8ed6">+ 添加</el-button>
-        </el-row>
-      </el-form-item>
-      <el-form-item label="联系电话" prop="phone">
-        <el-input v-model="ruleForm.phone"></el-input>
-      </el-form-item>
-      <el-form-item
-        prop="email"
-        label="邮箱"
-        :rules="[
-          { required: true, message: '请输入邮箱地址', trigger: 'blur' },
-          { type: 'email', message: '请输入正确的邮箱地址', trigger: ['blur', 'change'] }
-        ]"
-      >
-        <el-input v-model="ruleForm.email"></el-input>
-      </el-form-item>
-      <el-form-item label="出生年月" required>
-        <el-form-item prop="birthday">
-          <el-date-picker
-            type="date"
-            placeholder="选择日期"
-            v-model="ruleForm.birthday"
-            style="width: 100%;"
-          ></el-date-picker>
+      <dl class="model essential" v-if="tab === 1">
+        <dt>基本信息</dt>
+        <!-- <el-form-item label="账号" prop="account">
+          <el-input v-model="ruleForm.account" placeholder="账号"></el-input>
+        </el-form-item>-->
+        <el-form-item label="头像" prop="name">
+          <el-upload
+            class="avatar-uploader"
+            action="https://jsonplaceholder.typicode.com/posts/"
+            :show-file-list="false"
+          >
+            <img v-if="ruleForm.imageUrl" :src="ruleForm.imageUrl" class="avatar">
+            <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+          </el-upload>
         </el-form-item>
-      </el-form-item>
-      <el-form-item label="工作年限" prop="workLife">
-        <el-select style="width:100%" v-model="ruleForm.workLife" placeholder="请选择班级">
-          <el-option label="1-3年" value="1"></el-option>
-          <el-option label="3-10年" value="2"></el-option>
-          <el-option label="10年以上" value="3"></el-option>
-        </el-select>
-      </el-form-item>
-      <el-form-item label="教授科目" prop="subject">
-        <el-select style="width:100%" v-model="ruleForm.subject" placeholder="请选择班级">
-          <el-option label="英语" value="1"></el-option>
-          <el-option label="语文" value="2"></el-option>
-        </el-select>
-      </el-form-item>
-      <el-form-item>
-        <el-row style="margin-bottom:10px;">
-          <el-button style="border:1px solid #2e8ed6">+ 添加</el-button>
-        </el-row>
-      </el-form-item>
-      <el-form-item label="工作地址" prop="prefecture">
-        <el-input v-model="ruleForm.prefecture"></el-input>
-      </el-form-item>
-      <el-form-item label="教授年级" prop="grade">
-        <el-select style="width:100%" v-model="ruleForm.grade" placeholder="请选择年级">
-          <el-option label="三年级" value="3"></el-option>
-          <el-option label="四年级" value="4"></el-option>
-        </el-select>
-      </el-form-item>
-      <el-form-item label="职称" prop="teacherTitle">
-        <el-select style="width:100%" v-model="ruleForm.teacherTitle" placeholder="请选择年级">
-          <el-option label="初级教师" value="shanghai"></el-option>
-          <el-option label="中级教师" value="beijing"></el-option>
-        </el-select>
-      </el-form-item>
-      <el-form-item label="资格证书" prop="card">
-        <UpLoadImg></UpLoadImg>
-        <div class="tips">
-          <span class="tips">
-            <img src="./images/tis.png" alt>
-            请上传教师资格证照片页(jpeg,png格式图片,小于2M)
-          </span>
-          <div class="See">查看案例</div>
-        </div>
-        <!-- <el-input v-model="ruleForm.name"></el-input> -->
-      </el-form-item>
-      <el-form-item>
-        <el-row style="margin-bottom:10px;">
+
+        <el-form-item label="姓名" prop="name">
+          <el-input class="w150" v-model="ruleForm.name" placeholder="请输入真实姓名"></el-input>
+        </el-form-item>
+        <el-form-item label="昵称" prop="nickName">
+          <el-input class="w150" v-model="ruleForm.nickName" placeholder="输入昵称"></el-input>
+        </el-form-item>
+        <el-form-item label="联系电话" prop="phone">
+          <el-input class="w150" v-model="ruleForm.phone" placeholder="输入手机号"></el-input>
+        </el-form-item>
+        <el-form-item label="性别" prop="sex">
+          <el-select class="w150" v-model="ruleForm.sex" placeholder="请选择活动区域">
+            <el-option label="男" value="0"></el-option>
+            <el-option label="女" value="1"></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item prop="email" label="邮箱">
+          <el-input class="w480" v-model="ruleForm.email" placeholder="输入邮箱"></el-input>
+        </el-form-item>
+        <el-form-item label="所属机构" prop="school">
+          <el-select class="w480" v-model="ruleForm.school" placeholder="请选择">
+            <el-option label="北京市第一小学" value="shanghai"></el-option>
+            <el-option label="北京市第二小学" value="beijing"></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="教授科目" prop="subject">
+          <el-row class="w260">
+            <el-col :span="14">
+              <el-select style="width:100%" v-model="ruleForm.subject" placeholder="选择科目">
+                <el-option label="语文" value="shanghai"></el-option>
+                <el-option label="英语" value="beijing"></el-option>
+              </el-select>
+            </el-col>
+            <el-col :span="10">
+              <el-row style="margin-bottom:10px;">
+                <el-button style="border:none">
+                  <i class="el-icon-circle-plus-outline" style="color:#5693ff;margin-right: 4px;"></i>添加科目选项
+                </el-button>
+              </el-row>
+            </el-col>
+          </el-row>
+        </el-form-item>
+        <el-form-item label="所在班级" prop="class">
+          <el-row class="w260">
+            <el-col :span="14">
+              <el-select style="width:100%" v-model="ruleForm.class" placeholder="选择班级">
+                <el-option label="一班" value="shanghai"></el-option>
+                <el-option label="二班" value="beijing"></el-option>
+              </el-select>
+            </el-col>
+            <el-col :span="9">
+              <el-row style="margin-bottom:10px;">
+                <el-row style="margin-bottom:10px;">
+                  <el-button style="border:none">
+                    <i class="el-icon-circle-plus-outline" style="margin-right: 4px;"></i>添加班级选项
+                  </el-button>
+                </el-row>
+              </el-row>
+            </el-col>
+          </el-row>
+        </el-form-item>
+        <el-form-item>
           <el-button
-            style="width:120px;height:40px;margin:50px 0 58px;background:#2e8ed6"
             type="primary"
+            @click="next"
+            round
+            style="width:120px;height:40px;font-size: 14px;"
+          >下一步</el-button>
+        </el-form-item>
+      </dl>
+      <dl class="model more" v-if="tab === 2">
+        <dt>更多信息</dt>
+        <el-form-item label="民族" prop="nation">
+          <el-input class="w150" v-model="ruleForm.nation" placeholder="输入内容"></el-input>
+        </el-form-item>
+        <el-form-item label="年龄" prop="age">
+          <el-input class="w150" v-model="ruleForm.age" placeholder="输入内容"></el-input>
+        </el-form-item>
+        <el-form-item label="出生日期" prop="birthday">
+          <el-date-picker class="w150" type="date" placeholder="选择日期" v-model="ruleForm.birthday"></el-date-picker>
+        </el-form-item>
+        <el-form-item label="政治面貌" prop="outlook">
+          <el-select class="w150" v-model="ruleForm.outlook" placeholder="请选择">
+            <el-option label="群众" value="0"></el-option>
+            <el-option label="党员" value="1"></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="婚姻状况" prop="marriage">
+          <el-select class="w150" v-model="ruleForm.marriage" placeholder="请选择">
+            <el-option label="未婚" value="0"></el-option>
+            <el-option label="已婚" value="1"></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="籍贯" prop="native">
+          <el-input class="w480" v-model="ruleForm.native" placeholder="输入内容"></el-input>
+        </el-form-item>
+        <el-form-item label="身份证号" prop="idNumber">
+          <el-input class="w480" v-model="ruleForm.idNumber" placeholder="输入手机号码"></el-input>
+        </el-form-item>
+        <el-form-item label="常住地址" prop="address">
+          <el-input class="w480" v-model="ruleForm.address" placeholder="输入内容"></el-input>
+        </el-form-item>
+        <!-- <el-form-item label="备注" prop="remarks">
+          <el-input class="remarks" type="textarea" v-model="ruleForm.remarks" placeholder="输入内容"></el-input>
+        </el-form-item>-->
+        <el-form-item>
+          <el-row style="margin-bottom:10px;">
+            <!-- <el-button round>圆角按钮</el-button> -->
+            <el-button @click="back" round class="back">上一步</el-button>
+            <el-button
+              type="primary"
+              @click="next"
+              round
+              style="width:120px;height:40px;font-size: 14px;"
+            >下一步</el-button>
+          </el-row>
+        </el-form-item>
+      </dl>
+      <dl class="model aptitude" v-if="tab === 3">
+        <dt>教师资质</dt>
+        <el-form-item label="教龄" prop="teachingAge">
+          <el-input class="w150" v-model="ruleForm.teachingAge" placeholder="输入内容"></el-input>
+        </el-form-item>
+        <el-form-item label="学历" prop="education">
+          <el-select class="w150" v-model="ruleForm.education" placeholder="请选择">
+            <el-option label="未婚" value="0"></el-option>
+            <el-option label="已婚" value="1"></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="专业" prop="major">
+          <el-input class="w150" v-model="ruleForm.major" placeholder="输入内容"></el-input>
+        </el-form-item>
+        <el-form-item label="教学简介" prop="teachingBrief">
+          <el-input
+            class="remarks"
+            type="textarea"
+            v-model="ruleForm.teachingBrief"
+            placeholder="输入内容"
+          ></el-input>
+        </el-form-item>
+        <el-form-item label="资质证书" prop="certificate">
+          <el-row class="certificate" style="width:512px">
+            <el-col :span="8">
+              <el-upload
+                class="avatar-uploader"
+                action="https://jsonplaceholder.typicode.com/posts/"
+                :show-file-list="false"
+              >
+                <img v-if="ruleForm.imageUrl" :src="ruleForm.imageUrl" class="avatar">
+                <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+              </el-upload>
+              <div class="title">上传身份证照片</div>
+            </el-col>
+            <el-col :span="8">
+              <el-upload
+                class="avatar-uploader"
+                action="https://jsonplaceholder.typicode.com/posts/"
+                :show-file-list="false"
+              >
+                <img v-if="ruleForm.imageUrl" :src="ruleForm.imageUrl" class="avatar">
+                <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+              </el-upload>
+              <div class="title">上传身份证照片</div>
+            </el-col>
+            <el-col :span="8">
+              <el-upload
+                class="avatar-uploader"
+                action="https://jsonplaceholder.typicode.com/posts/"
+                :show-file-list="false"
+              >
+                <img v-if="ruleForm.imageUrl" :src="ruleForm.imageUrl" class="avatar">
+                <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+              </el-upload>
+              <div class="title">上传身份证照片</div>
+            </el-col>
+          </el-row>
+        </el-form-item>
+        <el-form-item>
+          <el-button @click="back" class="back" round>上一步</el-button>
+          <el-button
+            @click="submit"
+            type="primary"
+            round
+            style="width:120px;height:40px;font-size: 14px;"
           >提交</el-button>
-        </el-row>
-      </el-form-item>
+        </el-form-item>
+      </dl>
     </el-form>
 
     <!-- </form> -->
@@ -121,96 +232,226 @@
 </template>
 
 <script>
-import UpLoadImg from "../base/UpLoadImg/UpLoadImg";
 export default {
-  name: "AddTeacher",
+  name: "addStudent",
   data() {
     return {
       msg: "Welcome to Your Vue.js App",
+      tab: 1,
       ruleForm: {
+        imageUrl: "", //头像
         account: "", //账户
-        sex: "", //性别
+        sex: "男", //性别
         name: "", //用户名
         nickName: "", //昵称
         passWord: "", //密码
-        school: [{ name: "" }, { name: "" }], //学校
+        school: "", //学校
         phone: "", //电话
         email: "", //邮箱
         birthday: "", //出生年月
-        workLife: "", //工作年限
-        subject: "", //教育科目
-        prefecture: "", //工作地址
-        grade: "", //教授年纪
-        teacherTitle: "", //教育职称
-        card: "" // 教师资格证书
+        outlook: "", //政治面貌
+        subject: "", //教授科目
+        class: "", //班级
+        nation: "", //民族
+        age: "", //年龄
+        native: "", //籍贯
+        idNumber: "", //身份证号
+        teachingAge: "", //教龄
+        teachingBrief: "" //教学简介
       },
-      rules: {
-        account: [
-          { required: true, message: "请输入账户", trigger: "blur" },
-          { min: 2, max: 11, message: "长度在 2 到 11 个字符", trigger: "blur" }
-        ],
-        name: [
-          { required: true, message: "请输入用户名", trigger: "blur" },
-          { min: 2, max: 10, message: "长度在 2 到 10 个字符", trigger: "blur" }
-        ],
-        nickName: [
-          { required: true, message: "请输入昵称", trigger: "blur" },
-          { min: 2, max: 10, message: "长度在 2 到 10 个字符", trigger: "blur" }
-        ],
-        passWord: [
-          { required: true, message: "请输入密码", trigger: "blur" },
-          { min: 2, max: 8, message: "长度在 2 到 8 个字符", trigger: "blur" }
-        ],
-        phone: [
-          { required: true, message: "请输入电话号码", trigger: "blur" },
-          { min: 8, max: 11, message: "长度在 8 到 11 个字符", trigger: "blur" }
-        ]
-      }
+      radio2: 3
     };
   },
-  components: {
-    UpLoadImg
+  methods: {
+    checkTab: function(index) {
+      this.tab = index;
+    },
+    //下一步
+    next: function() {
+      this.tab++;
+    },
+    //上一步
+    back: function() {
+      this.tab--;
+    },
+    submit: function() {
+      this.$alert("提交成功，请等待审核！", "", {
+        confirmButtonText: "返回",
+        type: "success",
+        showClose: "",
+        confirmButtonClass: "round"
+        // center: true
+      }).then(() => {
+        this.$router.push({ path: "/admin" });
+      });
+    }
   }
 };
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="less" scoped>
-.addTeacher {
+.addStudent {
   background: #fff;
   margin: 10px 10px 0 10px;
   min-height: 600px;
   .pageTitle {
-    font-size: 14px;
-    font-weight: normal;
-    color: #000000;
-    padding: 19px 21px 25px;
+    font-size: 30px;
+    color: #080808;
+    padding: 19px 21px 25px 0px;
+    background-color: #f3f3f5;
   }
-  .tips {
-    line-height: 24px;
-    position: relative;
-    right: -26px;
-    top: -60px;
-    width: 538px;
-    text-align: right;
-    img {
+  // 面包屑
+  .bread {
+    background-color: #f3f3f5;
+    font-size: 12px;
+    font-weight: normal;
+    font-stretch: normal;
+    padding-bottom: 15px;
+    letter-spacing: 0px;
+    color: #a9a9a9;
+    i {
+      display: inline-block;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      margin-right: 6px;
       position: relative;
-      left: -4px;
-      top: 4px;
+      top: 1px;
+      background-color: #f3f3f5;
+      border: solid 1px #a9a9a9;
+    }
+    b {
+      padding: 0 4px;
+      position: relative;
+      top: -1px;
+    }
+    .selected {
+      color: #5693ff;
+      i {
+        background-color: #5693ff;
+        border: solid 1px #5693ff;
+      }
     }
   }
-  .See {
-    float: left;
-    position: relative;
-    left: 234px;
-    top: -28px;
-    color: #477fff;
-    cursor: pointer;
+  //下dl模板
+  .model {
+    padding: 34px 40px;
+    dt {
+      padding-bottom: 30px;
+    }
+    .back {
+      width: 120px;
+      height: 40px;
+      font-size: 14px;
+      color: #409eff;
+      border: 1px solid #409eff;
+    }
+    .w150 {
+      width: 150px;
+    }
+    .w480 {
+      width: 480px;
+    }
+    .w260 {
+      width: 260px;
+    }
+    // 头像
+    /deep/ .avatar-uploader {
+      height: 120px;
+    }
+    /deep/ .avatar-uploader .el-upload {
+      border: 1px dashed #d9d9d9;
+      border-radius: 6px;
+      cursor: pointer;
+      position: relative;
+
+      overflow: hidden;
+    }
+    /deep/ .avatar-uploader .el-upload:hover {
+      border-color: #409eff;
+    }
+    /deep/ .avatar-uploader-icon {
+      font-size: 28px;
+      color: #8c939d;
+      width: 120px;
+      height: 120px;
+      line-height: 120px;
+      text-align: center;
+    }
+    /deep/ .avatar {
+      width: 120px;
+      height: 120px;
+      display: block;
+    }
+    .certificate {
+      .title {
+        text-align: center;
+        font-size: 12px;
+        color: #666666;
+      }
+      /deep/ .avatar-uploader-icon {
+        width: 150px;
+        height: 120px;
+        line-height: 120px;
+      }
+      /deep/ .avatar {
+        width: 150px;
+        height: 120px;
+      }
+    }
+  }
+  // 设置label标题到右侧距离
+  /deep/ .el-form-item__label {
+    padding-right: 30px;
+  }
+  //more
+  .more {
+    padding: 34px 0px 34px 40px;
+  }
+  //教师资质
+  .aptitude {
+    padding: 34px 0px 34px 40px;
+  }
+
+  /deep/ .el-form-item {
+    margin-bottom: 30px;
+    // width: 100%;
+    .el-input__inner {
+      height: 30px;
+      line-height: 30px;
+    }
+  }
+  /deep/ .el-form-item__label {
+    font-size: 12px;
+    text-align: justify;
+    height: 30px;
+    overflow: hidden;
+  }
+  /deep/ .el-form-item__label:after {
+    display: inline-block;
+    width: 100%;
+    content: "";
+  }
+  /deep/ .el-select-dropdown__item.selected {
+    font-size: 12px;
+  }
+  /deep/ .el-select-dropdown__item {
+    font-size: 12px;
+  }
+  /deep/ .remarks {
+    textarea {
+      width: 493px;
+      height: 120px;
+    }
+  }
+  /deep/ .el-message-box__btns {
+    text-align: center;
   }
 }
 </style>
-<style>
-.el-form-item {
-  margin-bottom: 20px;
+<style lang="less">
+.el-message-box__content {
+  padding-left: 110px;
 }
 </style>

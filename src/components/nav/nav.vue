@@ -26,7 +26,7 @@
             </template>
             <el-menu-item-group>
                 <!-- <template slot="title">分组一</template> -->
-                <el-menu-item index="">课程管理</el-menu-item>
+                <el-menu-item index="/admin/courseManage">课程管理</el-menu-item>
                 <el-menu-item index="">试卷管理</el-menu-item>
             </el-menu-item-group>
         </el-submenu>

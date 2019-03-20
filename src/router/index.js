@@ -18,14 +18,19 @@ import DetailStudent from '@/components/detailStudent/detailStudent' //管理员
 import AddTeacher from '@/components/AddTeacher/AddTeacher' //添加教师
 import DetailTeacher from '@/components/detailTeacher/detailTeacher' //教师详情
 import ReqManager from '@/components/reqManager/reqManager' //邀请管理员
-import ExamineTeacherDel from '@/components/examineTeacherDel/examineTeacherDEl' //教师审核详情
-import ExamineStudentDel from '@/components/examineStudentDel/examineStudentDel' //学生审核详情
 
 import TeacherManage from '@/components/teacherManage/teacherManage' //教师管理列表页
 import StudentManage from '@/components/studentManage/studentManage' //学生管理列表页
 import AdminUser from '@/components/adminUser/adminUser' //管理员管理列表页
 import StudentExamine from '@/components/studentExamine/studentExamine' //学生审核列表页
 import TeacherExamine from '@/components/teacherExamine/teacherExamine' //教师审核列表页
+
+import ExamineTeacher from '@/components/examineTeacherDel/examineTeacherDel' //教师审核详情
+import ExamineStudent from '@/components/examineStudentDel/examineStudentDel' //学生审核详情
+import CourseManage from '@/components/courseManage/courseManage' //课程管理
+import NewCourseDetail from '@/components/courseManage/newCourseDetail' //新建课程详情
+import NewCourseUpload from '@/components/courseManage/newCourseUpload' //新建课程上传
+import UploadVideo from '@/components/courseManage/uploadVideo' //视频上传
 
 
 Vue.use(Router)
@@ -68,7 +73,6 @@ export default new Router({
         path: 'detailManager', //管理员详情
         name: 'detailManager',
         component: DetailManager
-
       }, {
         path: 'addStudent', //添加学生
         name: 'addStudent',
@@ -106,10 +110,6 @@ export default new Router({
         name: 'reqManager',
         component: ReqManager
       }, {
-        path: "teacherManage", //教师管理列表
-        name: "teacherManage",
-        component: TeacherManage
-      }, {
         path: "studentManage", //学生管理列表
         name: "studentManage",
         component: StudentManage
@@ -127,6 +127,29 @@ export default new Router({
         path: 'teacherExamine', //教师审核列表
         name: 'teacherExamine',
         component: TeacherExamine
+      },
+      {
+        path: 'courseManage', //课程管理
+        name: 'courseManage',
+        component: CourseManage,
+        children: [{ //新建课程详情
+          path: 'newCourseDetail',
+          name: 'newCourseDetail',
+          component: NewCourseDetail
+        }, { //新建课程上传
+          path: 'newCourseUpload',
+          name: 'newCourseUpload',
+          component: NewCourseUpload,
+          children: [{ //视频上传
+            path: 'uploadVideo',
+            name: 'uploadVideo',
+            component: UploadVideo
+          }]
+        }]
+      }, {
+        path: "teacherManage",
+        name: "teacherManage",
+        component: TeacherManage
       }
     ]
   }, {
