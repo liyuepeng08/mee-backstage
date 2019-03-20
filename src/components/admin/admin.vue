@@ -25,7 +25,7 @@ export default {
 <style lang="less" scoped>
 .el-row, .el-col {
     min-height: 100%;
-    background-color: #3F4464;
+    background-color: #fff;
 }
 .container {
     min-height: 100%;

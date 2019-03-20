@@ -1,21 +1,21 @@
 <template>
-    <div class="detailTeacher">
+    <div class="addManager">
         <p class="topNav">
             <el-breadcrumb separator-class="el-icon-arrow-right">
-                <el-breadcrumb-item>用户管理</el-breadcrumb-item>
-                <el-breadcrumb-item>教师管理</el-breadcrumb-item>
-                <el-breadcrumb-item class="active">教师详情</el-breadcrumb-item>
+                <el-breadcrumb-item>审核管理</el-breadcrumb-item>
+                <el-breadcrumb-item>教师审核</el-breadcrumb-item>
+                <el-breadcrumb-item class="active">审核详情</el-breadcrumb-item>
             </el-breadcrumb>
         </p>
         <el-row>
             <el-col :span="24">
-                <h3 class="pageTitle">教师详情</h3>
+                <h3 class="pageTitle">教师审核</h3>
             </el-col>
         </el-row>
         <div class="teacherInfo">
             <el-row>
                 <el-col :span="24">
-                    <p class="backBtn" @click="backPre">
+                    <p class="backBtn">
                         <i class="el-icon-arrow-left"></i>
                         <span>返回</span>
                     </p>
@@ -37,69 +37,44 @@
                         <li class="letWid">
                             姓
                             <i></i>
-                            名：
-                            <span>{{ruleForm.name}}</span>
+                            名：{{ruleForm.name}}
                         </li>
                         <li class="letWid">
                             昵
                             <i></i>
-                            称：
-                            <span>{{ruleForm.niceName}}</span>
+                            称：{{ruleForm.niceName}}
                         </li>
                         <li class="letWid">
                             性
                             <i></i>
-                            别：
-                            <span>{{ruleForm.sex}}</span>
+                            别：{{ruleForm.sex}}
                         </li>
                         <li class="letWid">
                             年
                             <i></i>
-                            龄：
-                            <span>{{ruleForm.age}}</span>
+                            龄：{{ruleForm.age}}
                         </li>
                         <li class="letWid">
                             民
                             <i></i>
-                            族：
-                            <span>{{ruleForm.nation}}</span>
+                            族：{{ruleForm.nation}}
                         </li>
-                        <li>
-                            出生年月：
-                            <span>{{ruleForm.birthday}}</span>
-                        </li>
-                        <li>
-                            政治面貌：
-                            <span>{{ruleForm.political}}</span>
-                        </li>
-                        <li>
-                            婚姻状况：
-                            <span>{{ruleForm.marriage}}</span>
-                        </li>
-                        <li>
-                            联系电话：
-                            <span>{{ruleForm.phone}}</span>
-                        </li>
+                        <li>出生年月：{{ruleForm.birthday}}</li>
+                        <li>政治面貌：{{ruleForm.political}}</li>
+                        <li>婚姻状况：{{ruleForm.marriage}}</li>
+                        <li>联系电话：{{ruleForm.phone}}</li>
                         <li class="letWid">
                             邮
                             <i></i>
-                            箱：
-                            <span>{{ruleForm.email}}</span>
+                            箱：{{ruleForm.email}}
                         </li>
-                        <li>
-                            身份证号：
-                            <span>{{ruleForm.idNumeber}}</span>
-                        </li>
+                        <li>身份证号：{{ruleForm.idNumeber}}</li>
                         <li class="letWid">
                             籍
                             <i></i>
-                            贯：
-                            <span>{{ruleForm.nativePlace}}</span>
+                            贯：{{ruleForm.nativePlace}}
                         </li>
-                        <li>
-                            常驻地址：
-                            <span>{{ruleForm.address}}</span>
-                        </li>
+                        <li>常驻地址：{{ruleForm.address}}</li>
                     </ul>
                 </el-col>
                 <el-col :span="8">
@@ -107,20 +82,17 @@
                         <li class="letWid">
                             教
                             <i></i>
-                            龄：
-                            <span>{{ruleForm.workLife}}</span>
+                            龄：{{ruleForm.workLife}}
                         </li>
                         <li class="letWid">
                             学
                             <i></i>
-                            历：
-                            <span>{{ruleForm.education}}</span>
+                            历：{{ruleForm.education}}
                         </li>
                         <li class="letWid">
                             专
                             <i></i>
-                            业：
-                            <span>{{ruleForm.major}}</span>
+                            业：{{ruleForm.major}}
                         </li>
                         <li class="clearfix">
                             <p class="fl">教授科目：</p>
@@ -157,6 +129,10 @@
                         <img src="./teacherCard.jpg" alt>
                     </li>
                 </ul>
+                <div class="submitBox clearfix">
+                    <p class="fl" @click="refuse">拒绝</p>
+                    <p class="fl active"  @click="allowed(txt)">通过</p>
+                </div>
             </div>
         </div>
     </div>
@@ -164,8 +140,10 @@
 
 <script>
 export default {
+    name: "AddManager",
     data() {
         return {
+            txt:true,
             ruleForm: {
                 name: "窦娥", //用户名
                 niceName: "梦里询他千百度", //昵称
@@ -174,7 +152,7 @@ export default {
                 nation: "汉族", //民族
                 birthday: "1981年05月15日", //出生年月
                 political: "党员",//政治面貌
-                marriage: "已婚",//婚姻状况
+                marriage: "",//婚姻状况
                 phone: "15010611993", //电话
                 email: "15010611993@163.com", //邮箱
                 idNumeber: 112233445566778899,//身份证号
@@ -187,11 +165,19 @@ export default {
                 classes: ["一年7班", "一年8班", "一年9班"], //所在班级
                 teachingBrief: "南京大麦网络大学蛤蜊英文专业毕业，从事教师行业13年，桃李满天下，下面随便写，不知道写啥，没空瞎编，看着写吧。我是案例，是个很长很长的案例",//教学简介
             }
-        }
+        };
     },
-    methods: {
-        backPre() {
-            history.back(-1);
+    methods:{
+        refuse(){
+            alert("拒绝！！！")
+        },
+        allowed(t){
+            this.$router.push({
+                name:'teacherManage', 
+                params:{
+                    bool:t
+                }             
+            })
         }
     }
 };
@@ -199,9 +185,7 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="less" scoped>
-.detailTeacher {
-    margin: 10px 10px 0 10px;
-    min-height: 600px;
+.addManager {
     .topNav {
         font-size: 12px;
         color: #a9a9a9;
@@ -249,19 +233,14 @@ export default {
             li {
                 margin-bottom: 22px;
                 font-size: 14px;
-                color: #a9a9a9;
                 .subject,
                 .classes {
                     p {
                         margin-bottom: 20px;
-                        color: #080808;
                     }
                     p:last-child {
                         margin-bottom: 0px;
                     }
-                }
-                span {
-                    color: #080808;
                 }
             }
             .letWid {
@@ -297,8 +276,8 @@ export default {
                 }
             }
             .showImg {
-                margin: 30px 0 0 220px;
-                padding-bottom: 60px;
+                margin-top: 30px;
+                margin-left: 220px;
                 li {
                     display: inline-block;
                     width: 220px;
@@ -311,6 +290,31 @@ export default {
                         height: 100%;
                         border-radius: 4px;
                     }
+                }
+            }
+            .submitBox {
+                width: 264px;
+                margin: 0 auto;
+                padding: 62px 0 51px 0;
+                p {
+                    width: 120px;
+                    height: 40px;
+                    line-height: 40px;
+                    text-align: center;
+                    margin-left: 20px;
+                    font-size: 14px;
+                    color: #5693ff;
+                    background-color: #ffffff;
+                    border-radius: 20px;
+                    border: solid 1px #5693ff;
+                    cursor: pointer;
+                }
+                p:first-child {
+                    margin-left: 0;
+                }
+                .active {
+                    background-color: #5693ff;
+                    color: #fff;
                 }
             }
         }
