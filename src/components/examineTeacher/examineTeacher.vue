@@ -1,5 +1,12 @@
 <template>
     <div class="addManager">
+        <p class="topNav">
+            <el-breadcrumb separator-class="el-icon-arrow-right">
+                <el-breadcrumb-item>审核管理</el-breadcrumb-item>
+                <el-breadcrumb-item>教师审核</el-breadcrumb-item>
+                <el-breadcrumb-item class="active">审核详情</el-breadcrumb-item>
+            </el-breadcrumb>
+        </p>
         <el-row>
             <el-col :span="24">
                 <h3 class="pageTitle">教师审核</h3>
@@ -123,8 +130,8 @@
                     </li>
                 </ul>
                 <div class="submitBox clearfix">
-                    <p class="fl">拒绝</p>
-                    <p class="fl active">通过</p>
+                    <p class="fl" @click="refuse">拒绝</p>
+                    <p class="fl active"  @click="allowed(txt)">通过</p>
                 </div>
             </div>
         </div>
@@ -136,6 +143,7 @@ export default {
     name: "AddManager",
     data() {
         return {
+            txt:true,
             ruleForm: {
                 name: "窦娥", //用户名
                 niceName: "梦里询他千百度", //昵称
@@ -158,6 +166,19 @@ export default {
                 teachingBrief: "南京大麦网络大学蛤蜊英文专业毕业，从事教师行业13年，桃李满天下，下面随便写，不知道写啥，没空瞎编，看着写吧。我是案例，是个很长很长的案例",//教学简介
             }
         };
+    },
+    methods:{
+        refuse(){
+            alert("拒绝！！！")
+        },
+        allowed(t){
+            this.$router.push({
+                name:'teacherManage', 
+                params:{
+                    bool:t
+                }             
+            })
+        }
     }
 };
 </script>
@@ -165,6 +186,15 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="less" scoped>
 .addManager {
+    .topNav {
+        font-size: 12px;
+        color: #a9a9a9;
+        .active {
+            /deep/.el-breadcrumb__inner {
+                color: #5693ff;
+            }
+        }
+    }
     .pageTitle {
         font-size: 18px;
         font-weight: normal;
@@ -263,9 +293,9 @@ export default {
                 }
             }
             .submitBox {
-              width: 264px;
-              margin: 0 auto;
-              padding: 62px 0 51px 0;
+                width: 264px;
+                margin: 0 auto;
+                padding: 62px 0 51px 0;
                 p {
                     width: 120px;
                     height: 40px;
@@ -279,12 +309,12 @@ export default {
                     border: solid 1px #5693ff;
                     cursor: pointer;
                 }
-                p:first-child{
-                  margin-left: 0;
+                p:first-child {
+                    margin-left: 0;
                 }
-                .active{
-                  background-color: #5693ff;
-                  color:#fff;
+                .active {
+                    background-color: #5693ff;
+                    color: #fff;
                 }
             }
         }
