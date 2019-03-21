@@ -25,8 +25,8 @@ import AdminUser from '@/components/adminUser/adminUser' //管理员管理列表
 import StudentExamine from '@/components/studentExamine/studentExamine' //学生审核列表页
 import TeacherExamine from '@/components/teacherExamine/teacherExamine' //教师审核列表页
 
-import ExamineTeacher from '@/components/examineTeacherDel/examineTeacherDel' //教师审核详情
-import ExamineStudent from '@/components/examineStudentDel/examineStudentDel' //学生审核详情
+import ExamineTeacherDel from '@/components/examineTeacherDel/examineTeacherDel' //教师审核详情
+import ExamineStudentDel from '@/components/examineStudentDel/examineStudentDel' //学生审核详情
 import CourseManage from '@/components/courseManage/courseManage' //课程管理
 import NewCourseDetail from '@/components/courseManage/newCourseDetail' //新建课程详情
 import NewCourseUpload from '@/components/courseManage/newCourseUpload' //新建课程上传
