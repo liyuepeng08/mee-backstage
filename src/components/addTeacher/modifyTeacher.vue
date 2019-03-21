@@ -1,6 +1,6 @@
 <template>
   <div class="addStudent">
-    <h3 class="pageTitle">新增教师</h3>
+    <h3 class="pageTitle">修改教师</h3>
     <el-row class="bread">
       <span :class="{'selected':tab===1}" @click="checkTab(1)">
         <i/>基本信息
@@ -43,13 +43,13 @@
           <el-input class="w150" v-model="ruleForm.userName" placeholder="请输入真实姓名"></el-input>
         </el-form-item>
         <el-form-item label="昵称" prop="nickName">
-          <el-input disabled class="w150" v-model="ruleForm.nickName" placeholder="输入昵称"></el-input>
+          <el-input class="w150" v-model="ruleForm.nickName" placeholder="输入昵称"></el-input>
         </el-form-item>
         <el-form-item label="联系电话" prop="mobile">
           <el-input class="w150" v-model="ruleForm.mobile" placeholder="输入手机号"></el-input>
         </el-form-item>
         <el-form-item label="性别" prop="gender">
-          <el-select class="w150" v-model="ruleForm.gender" placeholder="请选择活动区域">
+          <el-select class="w150" v-model="ruleForm.gender" placeholder="请选择性别">
             <el-option label="男" value="0"></el-option>
             <el-option label="女" value="1"></el-option>
           </el-select>
@@ -113,7 +113,7 @@
         <el-form-item label="民族" prop="nation">
           <el-input disabled class="w150" v-model="ruleForm.nation" placeholder="输入内容"></el-input>
         </el-form-item>
-        <el-form-item disabled label="年龄" prop="age">
+        <el-form-item label="年龄" prop="age">
           <el-input class="w150" v-model="ruleForm.age" placeholder="输入内容"></el-input>
         </el-form-item>
         <el-form-item label="出生日期" prop="birthday">
@@ -152,9 +152,9 @@
             style="width:120px;height:40px;font-size: 14px;"
           >提交</el-button>
         </el-form-item>
-
         <!-- <el-form-item>
           <el-row style="margin-bottom:10px;">
+          
             <el-button @click="back" round class="back">上一步</el-button>
             <el-button
               type="primary"
@@ -165,23 +165,22 @@
           </el-row>
         </el-form-item>-->
       </dl>
-      <dl style="display:none;" class="model aptitude" v-if="tab === 3">
+      <dl style="display:none" class="model aptitude" v-if="tab === 3">
         <dt>教师资质</dt>
         <el-form-item label="教龄" prop="teachingAge">
-          <el-input disabled class="w150" v-model="ruleForm.teachingAge" placeholder="输入内容"></el-input>
+          <el-input class="w150" v-model="ruleForm.teachingAge" placeholder="输入内容"></el-input>
         </el-form-item>
         <el-form-item label="学历" prop="education">
-          <el-select disabled class="w150" v-model="ruleForm.education" placeholder="请选择">
-            <el-option label="本科" value="0"></el-option>
-            <el-option label="硕士" value="1"></el-option>
+          <el-select class="w150" v-model="ruleForm.education" placeholder="请选择">
+            <el-option label="未婚" value="0"></el-option>
+            <el-option label="已婚" value="1"></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="专业" prop="subject">
-          <el-input class="w150" v-model="ruleForm.subject" placeholder="输入内容"></el-input>
+        <el-form-item label="专业" prop="major">
+          <el-input class="w150" v-model="ruleForm.major" placeholder="输入内容"></el-input>
         </el-form-item>
         <el-form-item label="教学简介" prop="teachingBrief">
           <el-input
-            disabled
             class="remarks"
             type="textarea"
             v-model="ruleForm.teachingBrief"
@@ -192,7 +191,6 @@
           <el-row class="certificate" style="width:512px">
             <el-col :span="8">
               <el-upload
-                disabled
                 class="avatar-uploader"
                 action="https://jsonplaceholder.typicode.com/posts/"
                 :show-file-list="false"
@@ -204,7 +202,6 @@
             </el-col>
             <el-col :span="8">
               <el-upload
-                disabled
                 class="avatar-uploader"
                 action="https://jsonplaceholder.typicode.com/posts/"
                 :show-file-list="false"
@@ -216,7 +213,6 @@
             </el-col>
             <el-col :span="8">
               <el-upload
-                disabled
                 class="avatar-uploader"
                 action="https://jsonplaceholder.typicode.com/posts/"
                 :show-file-list="false"
@@ -252,20 +248,26 @@ export default {
       msg: "Welcome to Your Vue.js App",
       tab: 1,
       ruleForm: {
+        uid: "", //用户ID
         userName: "", //用户名
         password: "", //用户密码
-        gender: "", //性别
+        gender: "男", //性别
         email: "", //邮箱
         mobile: "", //手机号
-        major: "", //专业，默认是22
-        title: "", //职称，默认是1
+        major: 22, //专业，默认是22
+        title: 1, //职称，默认是1
+        nickName: "", //昵称
+        address: "", //地址
 
         imageUrl: "", //头像
         account: "", //账户
         sex: "男", //性别
+        name: "", //用户名
         nickName: "", //昵称
+        passWord: "", //密码
         school: "", //学校
         phone: "", //电话
+        email: "", //邮箱
         birthday: "", //出生年月
         outlook: "", //政治面貌
         subject: "", //教授科目
@@ -293,42 +295,15 @@ export default {
       this.tab--;
     },
     submit: function() {
-      //新增
-      this.axios
-        .get("/user/create", {
-          params: {
-            params: {
-              userName: this.userName, //用户名
-              password: "000000", //用户密码
-              gender: this.gender, //性别
-              email: this.email, //邮箱
-              mobile: this.mobile, //手机号
-              major: "22", //专业，默认是22
-              title: "1" //职称，默认是1
-            }
-          }
-        })
-        .then(function(response) {
-          console.log(111);
-          let data = response.data;
-          console.log("-------data" + data);
-          if (data.code == 200) {
-            //提交弹出框
-            this.$alert("提交成功，请等待审核！", "", {
-              confirmButtonText: "返回",
-              type: "success",
-              showClose: "",
-              confirmButtonClass: "round"
-              // center: true
-            }).then(() => {
-              this.$router.push({ path: "/admin" });
-            });
-          }
-        })
-        .catch(function(error) {
-          console.log(2222);
-          console.log(error);
-        });
+      this.$alert("提交成功，请等待审核！", "", {
+        confirmButtonText: "返回",
+        type: "success",
+        showClose: "",
+        confirmButtonClass: "round"
+        // center: true
+      }).then(() => {
+        this.$router.push({ path: "/admin" });
+      });
     }
   }
 };
