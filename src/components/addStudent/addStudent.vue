@@ -175,6 +175,7 @@ export default {
       this.tab--;
     },
     submit: function() {
+      //提交弹出框
       this.$alert("提交成功，请等待审核！", "", {
         confirmButtonText: "返回",
         type: "success",
@@ -198,7 +199,7 @@ export default {
   .pageTitle {
     font-size: 18px;
     color: #080808;
-    padding: 19px 21px 25px 0px;
+    padding: 0px 21px 25px 0px;
     background-color: #f3f3f5;
   }
   // 面包屑
