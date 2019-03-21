@@ -12,7 +12,7 @@ module.exports = {
     assetsPublicPath: '/',
     proxyTable: {
       '/api': { //将跨域网址映射为/apis
-        target: 'http://192.168.191.1:8089', //请求的接口域名
+        target: 'http://192.168.191.4:8080', //请求的接口域名
         // secure: false,    //如果是https接口，才需要配置这个参数
         // changeOrigin: true, //是否跨域
         pathRewrite: {

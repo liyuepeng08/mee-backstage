@@ -12,25 +12,25 @@
 
             <el-table
                 :data="tableData"
+                v-loading="loading"
                 style="width: 100%; border: 1px solid #f1f1f1;">
 
                 <el-table-column
-                    prop="name"
                     label="课程信息"
                     width="360">
                     
                     <template slot-scope="scope">
                         <div class="msg-cont">
                             <div class="list-img">
-                                <img :src="scope.row.img" alt="">
+                                <img :src="scope.row.thumbnail" alt="">
                             </div>
                         
                             <div class="cont">
                                 <div class="title">
-                                    <a href="#">{{scope.row.name}}</a>
+                                    <a href="#">{{scope.row.title}}</a>
                                 </div>
 
-                                <p>{{scope.row.describe}}</p>
+                                <p>{{scope.row.tag}}</p>
                             </div>
                         </div>
                     </template>
@@ -38,7 +38,7 @@
                 </el-table-column>
 
                 <el-table-column
-                    prop="subject"
+                    prop="categoryName"
                     label="科目"
                     width="180">
                 </el-table-column>
@@ -49,7 +49,7 @@
                 </el-table-column>
 
                 <el-table-column
-                    prop="time"
+                    prop="createTime"
                     label="创建时间">
                 </el-table-column>
 
@@ -62,7 +62,7 @@
                     </template>
                 </el-table-column>
             </el-table>
-            <pages></pages>
+            <pages v-if="totalCount" :pageSize="10" @changeNum="changePage" :total="totalCount"></pages>
         </div>
         <router-view></router-view>
     </div>
@@ -76,42 +76,53 @@ import H2Title from '@/components/courseManage/h2'
 export default {
     data() {
         return {
-            tableData: [{
-                time: '2016-05-02',
-                name: '爱谁谁',
-                describe: '12-16岁，14-18岁',
-                img: 'https://ss1.baidu.com/6ONXsjip0QIZ8tyhnq/it/u=3546951286,2409603795&fm=173&app=49&f=JPEG?w=218&h=146&s=1786D60011BD1D827C210913010080E2',
-                subject: '英语',
-                chapter: 10
-            }, {
-                time: '2016-05-02',
-                name: '爱谁谁',
-                describe: '12-16岁，14-18岁',
-                img: 'https://ss1.baidu.com/6ONXsjip0QIZ8tyhnq/it/u=3546951286,2409603795&fm=173&app=49&f=JPEG?w=218&h=146&s=1786D60011BD1D827C210913010080E2',
-                subject: '英语',
-                chapter: 10
-            }, {
-                time: '2016-05-02',
-                name: '爱谁谁',
-                describe: '12-16岁，14-18岁',
-                img: 'https://ss1.baidu.com/6ONXsjip0QIZ8tyhnq/it/u=3546951286,2409603795&fm=173&app=49&f=JPEG?w=218&h=146&s=1786D60011BD1D827C210913010080E2',
-                subject: '英语',
-                chapter: 10
-            }, {
-                time: '2016-05-02',
-                name: '爱谁谁',
-                describe: '12-16岁，14-18岁',
-                img: 'https://ss1.baidu.com/6ONXsjip0QIZ8tyhnq/it/u=3546951286,2409603795&fm=173&app=49&f=JPEG?w=218&h=146&s=1786D60011BD1D827C210913010080E2',
-                subject: '英语',
-                chapter: 10
-            }]
+            tableData: [],
+            loading: true,           //保存是否请求表格数据的状态
+            totalCount: ''               //列表数据的总条数
+        }
+    },
+    async mounted() {
+        try {
+            
+            let {status, data: {data: dataMsg}} = await this.axios({
+                method: 'get',
+                url: '/material/course/listByPage',
+                params: {
+                    params: {
+                        pageIndex: 1,
+                        pageSize: 10
+                    }
+                }
+            })
+
+            if (status === 200 && dataMsg) {       //请求成功
+                this.loading = false
+                dataMsg.list.forEach((item) => {        //返回的数据处理
+                    item.tag = (item.tag1 || '') + ' ' +        //tag合并
+                                (item.tag2 || '') + ' ' + 
+                                (item.tag3 || '') + ' ' + 
+                                (item.tag4 || '') + ' ' + 
+                                (item.tag5 || '')
+
+                    console.log(item.tag)
+                })     
+                this.tableData = dataMsg.list    //赋值表格数据
+                this.totalCount = dataMsg.totalCount        //总条数赋值
+
+            }
+        }
+        catch(err) {
+            console.log(err)
         }
     },
     methods: {
         newCourse() {
-            this.$router.push({
+            this.$router.push({         //点击"新建"按钮，跳转到 新建课程详情页面
                 path: '/admin/courseManage/newCourseDetail'
             })
+        },
+        changePage(pageNum) {       //切换页码回调函数，参数是切换后的页码
+            console.log("页码：" + pageNum)
         }
     },
     components: {
