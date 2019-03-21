@@ -173,7 +173,7 @@ export default {
         },
         allowed(t){
             this.$router.push({
-                name:'teacherManage', 
+                name:'teacherExamine', 
                 params:{
                     bool:t
                 }             
