@@ -10,7 +10,7 @@
         <h2-title text="新建课程"></h2-title>
         <div class="uploadvideo-content">
             <a href="" class="goback">&lt; 返回</a>
-            <h2 class="h-title">上传视频</h2>
+            <h2 class="h-title">课件上传</h2>
             <el-row>
                 <el-col :span="3">章节名称：</el-col>
                 <el-col :span="10">
@@ -40,13 +40,6 @@
                         <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
                     </el-upload>
                     <p>这个是章节名称</p>
-                </el-col>
-            </el-row>
-            <el-row>
-                <el-col :span="3">视频时长：</el-col>
-                <el-col :span="10">
-                    <el-input placeholder="" :disabled="true">
-                    </el-input>
                 </el-col>
             </el-row>
             <el-row>

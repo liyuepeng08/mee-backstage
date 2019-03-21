@@ -24,7 +24,7 @@ import CourseManage from '@/components/courseManage/courseManage'   //课程管�
 import NewCourseDetail from '@/components/courseManage/newCourseDetail'      //新建课程详情
 import NewCourseUpload from '@/components/courseManage/newCourseUpload'        //新建课程上传
 import UploadVideo from '@/components/courseManage/uploadVideo'            //视频上传
-
+import UploadWord from '@/components/courseManage/UploadWord'             //课件上传
 import TeacherManage from '@/components/teacherManage/teacherManage' //教师管理
 
 Vue.use(Router)
@@ -120,11 +120,15 @@ export default new Router({
             path: 'uploadVideo',
             name: 'uploadVideo',
             component: UploadVideo
+          }, {
+            path: 'uploadWord',   //课件上传
+            name: 'uploadWord',
+            component: UploadWord
           }]
         }]
       }
         ,{
-          path: "teacherManage",
+          path: "teacherManage",    //教师管理
           name: "teacherManage",
           component: TeacherManage
         }

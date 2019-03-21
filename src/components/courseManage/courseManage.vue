@@ -132,6 +132,7 @@ export default {
 }
 .course-vue {
     position: relative;
+    min-height: 100%;
 }
 .msg-cont {
     &:after {
