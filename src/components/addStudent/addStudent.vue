@@ -196,7 +196,7 @@ export default {
   margin: 10px 10px 0 10px;
   min-height: 600px;
   .pageTitle {
-    font-size: 30px;
+    font-size: 18px;
     color: #080808;
     padding: 19px 21px 25px 0px;
     background-color: #f3f3f5;
