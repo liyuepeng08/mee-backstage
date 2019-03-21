@@ -31,29 +31,14 @@
             </el-table-column>
         </el-table>
         <pages/>
-        <!-- tip -->
-        <div class="tip" v-if="showTip">
-            <div class="info">
-                <img src="./tip.png" alt>
-                <span>操作成功，已通过审核！</span>
-            </div>
-        </div>
+       
     </div>
 </template>
 <script>
 import Pages from '../pages/pages'
 export default {
-    mounted() {
-        if (this.$route.params.bool) {
-            this.showTip = true;
-            setTimeout(() => {
-                this.showTip = false;
-            }, 2000)
-        }
-    },
     data() {
         return {
-            showTip: false,
             tableData: [{
                 name: '爱谁谁',
                 telephone: '18897689866',
@@ -173,35 +158,6 @@ export default {
             }
         }
     }
-    .tip {
-        width: 360px;
-        height: 120px;
-        line-height: 120px;
-        background-color: #f4f8ff;
-        box-shadow: 0px 4px 10px 0px rgba(0, 0, 0, 0.1);
-        border-radius: 4px;
-        border: solid 1px #cacaca;
-        position: fixed;
-        top: 40%;
-        left: 40%;
-        z-index: 1;
-        .info {
-            width: 250px;
-            margin: 0 auto;
-            text-align: center;
-            img {
-                width: 30px;
-                height: 30px;
-                border-radius: 50%;
-                position: relative;
-                top: 8px;
-                right: 10px;
-            }
-            span {
-                font-size: 18px;
-                color: #080808;
-            }
-        }
-    }
+    
 }
 </style>
