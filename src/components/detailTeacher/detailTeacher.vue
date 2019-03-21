@@ -166,6 +166,7 @@
 export default {
     data() {
         return {
+            uid: '',
             ruleForm: {
                 name: "窦娥", //用户名
                 niceName: "梦里询他千百度", //昵称
@@ -189,9 +190,32 @@ export default {
             }
         }
     },
+
+    mounted() {
+        this.uid = (this.$route.params.uid).toString()
+        this.getUserInfo()
+    },
     methods: {
         backPre() {
             history.back(-1);
+        },
+        getUserInfo() {
+            let params = { uid: this.uid };
+            this.axios.get('/user/getUserDetail', {
+                params: {
+                    params
+                }
+            }).then(res => {
+                if (res.status === 200) {
+                    if (res.data.code == 0) {
+                        console.log(res.data)
+                    }else{
+                        alert(res.data.msg)
+                    }
+                } else {
+                    alert('加载失败，请检查网络是否连接诶正常！')
+                }
+            })
         }
     }
 };
