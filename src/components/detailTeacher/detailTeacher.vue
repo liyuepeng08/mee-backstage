@@ -209,12 +209,14 @@ export default {
                 if (res.status === 200) {
                     if (res.data.code == 0) {
                         console.log(res.data)
-                    }else{
+                    } else {
                         alert(res.data.msg)
                     }
                 } else {
                     alert('加载失败，请检查网络是否连接诶正常！')
                 }
+            }).catch((error) => {
+                console.log(error)
             })
         }
     }

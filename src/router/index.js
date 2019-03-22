@@ -87,11 +87,11 @@ export default new Router({
         name: 'addStudent',
         component: AddStudent
       }, {
-        path: 'modifyStudent', //修改学生
+        path: 'modifyStudent/:uid', //修改学生
         name: 'modifyStudent',
         component: ModifyStudent
       }, {
-        path: 'detailStudent', //学生详情
+        path: 'detailStudent/:uid', //学生详情
         name: 'detailStudent',
         component: DetailStudent
       }, {
@@ -100,7 +100,7 @@ export default new Router({
         component: AddTeacher
 
       }, {
-        path: 'modifyTeacher', //修改教师
+        path: 'modifyTeacher/:uid', //修改教师
         name: 'modifyTeacher',
         component: ModifyTeacher
 
