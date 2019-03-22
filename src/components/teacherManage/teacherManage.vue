@@ -16,7 +16,7 @@
             <!-- <el-button class="teachBtn" type="primary" icon="el-icon-share" @click="invite">邀请</el-button> -->
             <new-search @getSearchData="searchData"></new-search>
         </div>
-        <el-table class="tablelInfo" :data="tableData">
+        <el-table class="tablelInfo" v-loading="loading" :data="tableData">
             <el-table-column prop="realName" label="名称"></el-table-column>
             <el-table-column prop="mobile" label="电话"></el-table-column>
             <el-table-column prop="classes" label="所在班级"></el-table-column>
@@ -49,6 +49,7 @@ export default {
             total: 1,//总条数
             pagerCount: 1, //总页数
             pageSize: 10,
+            loading: true
         };
     },
     mounted() {
@@ -64,6 +65,7 @@ export default {
                     params: { params }
                 }).then(res => {
                     if (res.status === 200) {
+                        this.loading = false;
                         if (res.data.code == 0) {
                             // console.log(res.data)
                             this.total = res.data.data.totalCount;
@@ -77,19 +79,17 @@ export default {
         },
         // 获得搜索信息
         searchData(data) {
-            if (data[0] == null) {
-                this.$alert('未查询到指定信息', {
-                    dangerouslyUseHTMLString: true
-                });
-                this.getTeacherList();
-            } else {
-                this.tableData = data;
-            }
-
+            // if (data[0] == null) {
+            //     this.getTeacherList();
+            // } else {
+            //     this.tableData = data;
+            // }
+            console.log(data)
+            this.tableData = data;
         },
         deleteMsg(scope, rows) {
             this.$confirm(
-                "确定要删除" + scope.row.realName + "用户吗？",
+                "确定要删除" +scope.row.realName +  "用户吗？",
                 "删除管理员",
                 {
                     confirmButtonText: "确定",
