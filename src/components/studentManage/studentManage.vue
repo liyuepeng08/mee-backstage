@@ -12,7 +12,7 @@
       <a href="#">
         <i class="el-icon-download"></i>下载模板
       </a>
-      <el-button class="addBtn teachBtn" type="primary" icon="el-icon-share" @click="invite">邀请</el-button>
+      <!-- <el-button class="addBtn teachBtn" type="primary" icon="el-icon-share" @click="invite">邀请</el-button> -->
     </div>
     <el-table class="studentInfo" :data="tableData">
       <el-table-column prop="name" label="名称"></el-table-column>
