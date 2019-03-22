@@ -282,6 +282,9 @@ export default {
       radio2: 3
     };
   },
+  mounted: function() {
+    this.details();
+  },
   methods: {
     checkTab: function(index) {
       this.tab = index;
@@ -304,6 +307,37 @@ export default {
       }).then(() => {
         this.$router.push({ path: "/admin" });
       });
+    },
+    //点击修改前数据
+    details: function() {
+      const uid = this.$route.params.uid;
+      console.log(1);
+      //渲染
+      this.axios
+        .get("/user/getUserDetail", {
+          params: {
+            params: {
+              uid: uid
+            }
+          }
+        })
+        .then(response => {
+          let data = response.data.data;
+          const that = this.ruleForm;
+          that.uid = data.uid; //用户ID
+          that.userName = data.realName; //用户名
+          that.nickName = data.nickName; //昵称
+          that.password = data.password; //用户密码
+          that.gender = data.gender ? "女" : "男"; //性别
+          that.email = data.email; //邮箱
+          that.mobile = data.mobile; //手机号
+          that.major = data.major; //专业，默认是22
+          that.title = data.title; //职称，默认是1
+          that.address = data.address; //地址
+        })
+        .catch(function(error) {
+          console.log(error);
+        });
     }
   }
 };
