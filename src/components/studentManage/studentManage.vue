@@ -30,7 +30,7 @@
                 <template slot-scope="scope">
                     <el-button type="text" size="small" @click="detailMsg(scope)">详情</el-button>
                     <el-button type="text" size="small" @click="modifyMsg(scope)">编辑</el-button>
-                    <el-button type="text" size="small" @click="deleteMsg(scope)">删除</el-button>
+                    <el-button type="text" size="small" @click="deleteMsg(scope,tableData)">删除</el-button>
                 </template>
             </el-table-column>
         </el-table>
@@ -89,7 +89,7 @@ export default {
             }
 
         },
-        deleteMsg(scope) {
+        deleteMsg(scope, rows) {
             this.$confirm(
                 "确定要删除" + scope.row.realName + "用户吗？",
                 "删除管理员",
@@ -106,10 +106,7 @@ export default {
                 }).then(res => {
                     if (res.status === 200) {
                         if (res.data.code == 0) {
-                            this.$message({
-                                type: "success",
-                                message: "删除成功!"
-                            });
+                            rows.splice(scope.$index, 1);
                         } else {
                             alert(res.data.msg);
                         }
