@@ -28,7 +28,7 @@
           <el-input class="w150" v-model="ruleForm.userName" placeholder="请输入姓名"></el-input>
         </el-form-item>
         <el-form-item label="昵称" prop="nickName">
-          <el-input disabled class="w150" v-model="ruleForm.nickName" placeholder="请输入昵称"></el-input>
+          <el-input class="w150" v-model="ruleForm.nickName" placeholder="请输入昵称"></el-input>
         </el-form-item>
         <el-form-item label="性别" prop="gender">
           <el-select class="w150" v-model="ruleForm.gender" placeholder="请选择活动区域">
@@ -94,10 +94,10 @@
           <el-date-picker class="w150" type="date" placeholder="选择日期" v-model="ruleForm.birthday"></el-date-picker>
         </el-form-item>
         <el-form-item label="籍贯" prop="native">
-          <el-input disabled class="w480" v-model="ruleForm.age" placeholder="输入内容"></el-input>
+          <el-input disabled class="w480" v-model="ruleForm.native" placeholder="输入内容"></el-input>
         </el-form-item>
         <el-form-item label="联系地址" prop="address">
-          <el-input disabled class="w480" v-model="ruleForm.age" placeholder="输入内容"></el-input>
+          <el-input disabled class="w480" v-model="ruleForm.address" placeholder="输入内容"></el-input>
         </el-form-item>
         <el-form-item label="父母电话" prop="parentPhone">
           <el-row>
@@ -185,18 +185,25 @@ export default {
       this.tab--;
     },
     submit: function() {
+      const tid = sessionStorage.getItem("tid");
+      let that = this.ruleForm;
       //新增
       this.axios
-        .get("/user/create", {
+        .get("/tenant/user/createUser", {
           params: {
             params: {
-              userName: this.userName, //用户名
+              userName: that.userName, //用户名
+              realName: that.userName, //用户名
+              nickName: that.nickName, //昵称
               password: "000000", //用户密码
-              gender: this.gender, //性别
-              email: this.email, //邮箱
-              mobile: this.mobile, //手机号
+              gender: that.gender, //性别
+              email: that.email, //邮箱
+              mobile: that.mobile, //手机号
               major: "22", //专业，默认是22
-              title: "1" //职称，默认是1
+              title: "1", //职称，默认是1
+              birthday: "", //生日
+              tenantId: tid, //机构
+              role: "2" //角色（老师：1；学生:2）
             }
           }
         })

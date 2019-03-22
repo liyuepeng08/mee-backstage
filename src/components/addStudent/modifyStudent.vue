@@ -127,7 +127,7 @@
             <!-- <el-button round>圆角按钮</el-button> -->
             <el-button @click="back" round style="width:120px;height:40px;font-size: 14px;">上一步</el-button>
             <el-button
-              @click="submit"
+              @click="submitSM"
               type="primary"
               round
               style="width:120px;height:40px;font-size: 14px;"
@@ -189,25 +189,27 @@ export default {
     back: function() {
       this.tab--;
     },
-    submit: function() {
+    submitSM: function() {
+      const that = this.ruleForm;
       //修改
       this.axios
         .get("/user/update", {
           params: {
             params: {
-              uid: this.uid,
-              nickName: this.nickName, //昵称
-              gender: this.gender == "男" ? 0 : 1, //性别
-              email: this.email, //邮箱
-              mobile: this.mobile, //手机号
-              address: this.address, //地址
+              uid: that.uid,
+              userName: that.userName, //用户名
+              nickName: that.nickName, //昵称
+              gender: that.gender == "男" ? 0 : 1, //性别
+              email: that.email, //邮箱
+              mobile: that.mobile, //手机号
+              address: that.address, //地址
               avatar: "http://jdcloud.image.com/4664.pgn" //头像
             }
           }
         })
         .then(function(response) {
           let data = response.data;
-          if (data.code == 200) {
+          if (data.code == 0) {
             //提交弹出框
             this.$alert("提交成功，请等待审核！", "", {
               confirmButtonText: "返回",
@@ -221,34 +223,34 @@ export default {
           }
         })
         .catch(function(error) {
-          console.log(2222);
           console.log(error);
         });
     },
     //点击修改前数据
     details: function() {
-      console.log(1);
+      const uid = this.$route.params.uid;
       //渲染
       this.axios
         .get("/user/getUserDetail", {
           params: {
             params: {
-              uid: "465213654126"
+              uid: uid
             }
           }
         })
-        .then(function(response) {
+        .then(response => {
           let data = response.data.data;
-          this.uid = data.uid; //用户ID
-          this.userName = data.userName; //用户名
-          this.password = data.password; //用户密码
-          this.gender = data.gender; //性别
-          this.email = data.email; //邮箱
-          this.mobile = data.mobile; //手机号
-          this.major = data.major; //专业，默认是22
-          this.title = data.title; //职称，默认是1
-          this.nickName = data.nickName; //昵称
-          this.address = data.address; //地址
+          const that = this.ruleForm;
+          that.uid = data.uid; //用户ID
+          that.userName = data.realName; //用户名
+          that.nickName = data.nickName; //昵称
+          that.password = data.password; //用户密码
+          that.gender = data.gender ? "女" : "男"; //性别
+          that.email = data.email; //邮箱
+          that.mobile = data.mobile; //手机号
+          that.major = data.major; //专业，默认是22
+          that.title = data.title; //职称，默认是1
+          that.address = data.address; //地址
         })
         .catch(function(error) {
           console.log(error);

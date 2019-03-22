@@ -40,7 +40,7 @@
         </el-form-item>
 
         <el-form-item label="姓名" prop="userName">
-          <el-input class="w150" v-model="ruleForm.userName" placeholder="请输入真实姓名"></el-input>
+          <el-input disabled class="w150" v-model="ruleForm.userName" placeholder="请输入真实姓名"></el-input>
         </el-form-item>
         <el-form-item label="昵称" prop="nickName">
           <el-input class="w150" v-model="ruleForm.nickName" placeholder="输入昵称"></el-input>
@@ -298,15 +298,40 @@ export default {
       this.tab--;
     },
     submit: function() {
-      this.$alert("提交成功，请等待审核！", "", {
-        confirmButtonText: "返回",
-        type: "success",
-        showClose: "",
-        confirmButtonClass: "round"
-        // center: true
-      }).then(() => {
-        this.$router.push({ path: "/admin" });
-      });
+      //修改
+      this.axios
+        .get("/user/update", {
+          params: {
+            params: {
+              uid: this.uid,
+              nickName: this.nickName, //昵称
+              gender: this.gender == "男" ? 0 : 1, //性别
+              email: this.email, //邮箱
+              mobile: this.mobile, //手机号
+              address: this.address, //地址
+              avatar: "http://jdcloud.image.com/4664.pgn" //头像
+            }
+          }
+        })
+        .then(function(response) {
+          let data = response.data;
+          if (data.code == 200) {
+            //提交弹出框
+            this.$alert("提交成功，请等待审核！", "", {
+              confirmButtonText: "返回",
+              type: "success",
+              showClose: "",
+              confirmButtonClass: "round"
+              // center: true
+            }).then(() => {
+              this.$router.push({ path: "/admin" });
+            });
+          }
+        })
+        .catch(function(error) {
+          console.log(2222);
+          console.log(error);
+        });
     },
     //点击修改前数据
     details: function() {
