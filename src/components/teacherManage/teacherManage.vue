@@ -41,6 +41,9 @@ export default {
     data() {
         return {
             tableData: [],
+            totalCount: '',
+            totalPage: '',
+            curPage: ''
         };
     },
     mounted() {
@@ -56,6 +59,9 @@ export default {
                 }).then(res => {
                     if (res.status === 200) {
                         if (res.data.code == 0) {
+                            this.totalCount = res.data.data.totalCount; //总条数
+                            this.totalPage = res.data.data.totalPage; //总页数
+                            this.curPage = res.data.data.curPage;  //当前页
                             this.tableData = res.data.data.list;
                         }
                     }
