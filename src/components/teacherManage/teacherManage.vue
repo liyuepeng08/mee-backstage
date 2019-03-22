@@ -8,19 +8,20 @@
     <h2>教师管理</h2>
     <div class="butt">
       <el-button class="teachBtn active" type="primary" icon="el-icon-plus" @click="addTeacher">新建</el-button>
-      <el-button class="teachBtn" type="primary" icon="el-icon-share" @click="invite">邀请</el-button>
+      <!-- <el-button class="teachBtn" type="primary" icon="el-icon-share" @click="invite">邀请</el-button> -->
+      <new-search></new-search>
     </div>
     <el-table class="tablelInfo" :data="tableData">
-      <el-table-column prop="name" label="名称"></el-table-column>
-      <el-table-column prop="telephone" label="电话"></el-table-column>
+      <el-table-column prop="realName" label="名称"></el-table-column>
+      <el-table-column prop="mobile" label="电话"></el-table-column>
       <el-table-column prop="classes" label="所在班级"></el-table-column>
       <el-table-column prop="subject" label="教授科目"></el-table-column>
       <el-table-column prop="mechanism" label="所属机构"></el-table-column>
-      <el-table-column prop="time" label="创建时间"></el-table-column>
+      <el-table-column prop="registerTime" label="创建时间"></el-table-column>
       <el-table-column label="操作">
         <template slot-scope="scope">
-          <el-button type="text" size="small" @click="detailMsg">详情</el-button>
-          <el-button type="text" size="small" @click="modifyMsg">编辑</el-button>
+          <el-button type="text" size="small" @click="detailMsg(scope)">详情</el-button>
+          <el-button type="text" size="small" @click="modifyMsg(scope)">编辑</el-button>
           <el-button type="text" size="small" @click="deleteMsg(scope)">删除</el-button>
         </template>
       </el-table-column>
@@ -30,49 +31,37 @@
 </template>
 <script>
 import Pages from "../pages/pages";
+import NewSearch from "../newSearch/newSearch";
 export default {
   data() {
     return {
-      tableData: [
-        {
-          name: "爱谁谁",
-          telephone: "18897689866",
-          classes: "猜猜看",
-          subject: "高数",
-          mechanism: "开普勒实验小学北京海淀分校",
-          time: "2019-02-19"
-        },
-        {
-          name: "爱谁谁",
-          telephone: "18897689866",
-          classes: "猜猜看",
-          subject: "高数",
-          mechanism: "开普勒实验小学北京海淀分校",
-          time: "2019-02-19"
-        },
-        {
-          name: "爱谁谁",
-          telephone: "18897689866",
-          classes: "猜猜看",
-          subject: "高数",
-          mechanism: "开普勒实验小学北京海淀分校",
-          time: "2019-02-19"
-        },
-        {
-          name: "爱谁谁",
-          telephone: "18897689866",
-          classes: "猜猜看",
-          subject: "高数",
-          mechanism: "开普勒实验小学北京海淀分校",
-          time: "2019-02-19"
-        }
-      ]
+      tableData: [],
+      uid: ""
     };
   },
+  mounted() {
+    this.getTeacherList();
+  },
   methods: {
+    getTeacherList() {
+      let tid = 1,
+        params = { role: 1, pageIndex: 1, pageSize: 10 }; // used for testing
+      this.axios
+        .get("/tenant/user/list/" + tid, {
+          params: { params }
+        })
+        .then(res => {
+          if (res.status === 200) {
+            if (res.data.code == 0) {
+              console.log(res.data.data);
+              this.tableData = res.data.data.list;
+            }
+          }
+        });
+    },
     deleteMsg(scope) {
       this.$confirm(
-        "确定要删除" + this.tableData[scope.$index].name + "用户吗？",
+        "确定要删除" + scope.row.realName + "用户吗？",
         "删除管理员",
         {
           confirmButtonText: "确定",
@@ -80,15 +69,28 @@ export default {
           type: "warning"
         }
       ).then(() => {
-        this.$message({
-          type: "success",
-          message: "删除成功!"
-        });
+        let params = { tid: 1, uid: scope.row.uid };
+        this.axios
+          .get("/tenant/user/delete", {
+            params: { params }
+          })
+          .then(res => {
+            if (res.status === 200) {
+              if (res.data.code == 0) {
+                this.$message({
+                  type: "success",
+                  message: "删除成功!"
+                });
+              } else {
+                alert(res.data.msg);
+              }
+            }
+          });
       });
     },
     detailMsg(scope) {
       this.$router.push({
-        path: "/admin/detailTeacher"
+        path: `detailTeacher/${scope.row.uid}`
       });
     },
     modifyMsg(scope) {
@@ -102,18 +104,19 @@ export default {
     },
     addTeacher() {
       this.$router.push({
-        path: "/admin/addTeacher"
+        path: "addTeacher"
       });
     },
     invite() {
       //邀请
       this.$router.push({
-        path: "/admin/reqManager"
+        path: "reqManager"
       });
     }
   },
   components: {
-    Pages
+    Pages,
+    NewSearch
   }
 };
 </script>
@@ -166,6 +169,9 @@ export default {
         padding-left: 20px;
       }
     }
+<<<<<<< HEAD
   }
+=======
+>>>>>>> 0f9b2ef3fead56cf4a5b740939cd8bee8f54cd9f
 }
 </style>

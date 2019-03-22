@@ -105,7 +105,7 @@ export default new Router({
         component: ModifyTeacher
 
       }, {
-        path: 'detailTeacher', //教师详情
+        path: 'detailTeacher/:uid', //教师详情
         name: 'detailTeacher',
         component: DetailTeacher
       }, {
