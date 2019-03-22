@@ -191,6 +191,16 @@ export default {
     },
     submitSM: function() {
       const that = this.ruleForm;
+      var birthday = new Date(that.birthday);
+      const year = birthday.getFullYear();
+      const month = birthday.getMonth() + 1;
+      const date = birthday.getDate();
+      var times =
+        year +
+        "" +
+        (month < 10 ? "0" + month : month) +
+        (date < 10 ? "0" + date : date);
+
       //修改
       this.axios
         .get("/user/update", {
@@ -201,13 +211,14 @@ export default {
               nickName: that.nickName, //昵称
               gender: that.gender == "男" ? 0 : 1, //性别
               email: that.email, //邮箱
+              birthday: times, //生日
               mobile: that.mobile, //手机号
               address: that.address, //地址
               avatar: "http://jdcloud.image.com/4664.pgn" //头像
             }
           }
         })
-        .then(function(response) {
+        .then(response => {
           let data = response.data;
           if (data.code == 0) {
             //提交弹出框
@@ -218,7 +229,7 @@ export default {
               confirmButtonClass: "round"
               // center: true
             }).then(() => {
-              this.$router.push({ path: "/admin" });
+              this.$router.push({ path: "/admin/studentManage" });
             });
           }
         })
@@ -241,6 +252,9 @@ export default {
         .then(response => {
           let data = response.data.data;
           const that = this.ruleForm;
+          let birthday = data.birthday;
+          // data.birthday.slice(0, [4]);
+          console.log(typeof data.birthday);
           that.uid = data.uid; //用户ID
           that.userName = data.realName; //用户名
           that.nickName = data.nickName; //昵称
@@ -251,6 +265,7 @@ export default {
           that.major = data.major; //专业，默认是22
           that.title = data.title; //职称，默认是1
           that.address = data.address; //地址
+          that.birthday = data.birthday; //生日
         })
         .catch(function(error) {
           console.log(error);

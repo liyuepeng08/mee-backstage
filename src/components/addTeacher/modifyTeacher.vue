@@ -313,9 +313,9 @@ export default {
             }
           }
         })
-        .then(function(response) {
+        .then(response => {
           let data = response.data;
-          if (data.code == 200) {
+          if (data.code == 0) {
             //提交弹出框
             this.$alert("提交成功，请等待审核！", "", {
               confirmButtonText: "返回",
@@ -324,7 +324,7 @@ export default {
               confirmButtonClass: "round"
               // center: true
             }).then(() => {
-              this.$router.push({ path: "/admin" });
+              this.$router.push({ path: "/admin/teacherManage" });
             });
           }
         })
