@@ -6,7 +6,9 @@
                 next-text="下一页"
                 prev-text="上一页"
                 layout="prev, pager, next"
-                :total="100"
+                :total="total"
+                :page-count="pagerCount"
+                :page-size="pageSize"
                 @current-change="operation"
             ></el-pagination>
         </div>
@@ -24,12 +26,12 @@ export default {
         },
         pagerCount: {       //页码按钮的数量
             type: Number,
-            default: 8
+            default: 10
         }
     },
-    methods: {
-        operation(pageNum) {        //切换页码回调函数。参数是切换后的 页码
 
+    methods: {
+        operation(pageNum) { //切换页码回调函数。参数是切换后的 页码
             this.$emit('changeNum', pageNum)        //触发父组件 changeNum事件，把pageNum传回去
         }
     }
@@ -46,6 +48,7 @@ export default {
                 border-radius: 50%;
                 border: 1px solid #a9a9a9;
                 color: #a9a9a9;
+                cursor: pointer;
             }
             .active {
                 border: 1px solid #5693ff;
@@ -63,6 +66,7 @@ export default {
             background-color: #f8fafc;
             border-radius: 15px;
             border: solid 1px #a9a9a9;
+            cursor: pointer;
         }
     }
 }

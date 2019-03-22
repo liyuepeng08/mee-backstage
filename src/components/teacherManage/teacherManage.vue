@@ -31,7 +31,7 @@
                 </template>
             </el-table-column>
         </el-table>
-        <pages/>
+        <pages @changeNum="getTeacherList" :pageSize="pageSize" :total="total" :pagerCount="pagerCount"></pages>
     </div>
 </template>
 <script>
@@ -41,27 +41,28 @@ export default {
     data() {
         return {
             tableData: [],
-            totalCount: '',
-            totalPage: '',
-            curPage: ''
+            total: 1,//总条数
+            pagerCount: 1, //总页数
+            pageSize: 10,
         };
     },
     mounted() {
         this.getTeacherList();
     },
     methods: {
-        getTeacherList() {
+        getTeacherList(pageNum) {
+            pageNum = pageNum || 1;
             let tid = sessionStorage.getItem('tid'),
-                params = { role: 1, pageIndex: 1, pageSize: 10 }; // used for testing
+                params = { role: 1, pageIndex: pageNum, pageSize: this.pageSize }; // used for testing
             this.axios
                 .get("/tenant/user/list/" + tid, {
                     params: { params }
                 }).then(res => {
                     if (res.status === 200) {
                         if (res.data.code == 0) {
-                            this.totalCount = res.data.data.totalCount; //总条数
-                            this.totalPage = res.data.data.totalPage; //总页数
-                            this.curPage = res.data.data.curPage;  //当前页
+                            // console.log(res.data)
+                            this.total = res.data.data.totalCount;
+                            this.pagerCount = res.data.data.totalPage;
                             this.tableData = res.data.data.list;
                         }
                     }

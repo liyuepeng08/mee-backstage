@@ -34,15 +34,24 @@
                 </template>
             </el-table-column>
         </el-table>
+        <pages
+            @changeNum="getStudentList"
+            :pageSize="pageSize"
+            :total="total"
+            :pagerCount="pagerCount"
+        ></pages>
     </div>
 </template>
 <script>
-// import Pages from "../pages/pages";
+import Pages from "../pages/pages";
 import NewSearch from "../newSearch/newSearch";
 export default {
     data() {
         return {
-            tableData: []
+            tableData: [],
+            total: 1,//总条数
+            pagerCount: 1, //总页数
+            pageSize: 10,
         };
     },
     mounted() {
@@ -50,7 +59,7 @@ export default {
     },
     methods: {
         // 获得学生信息列表
-        getStudentList() {
+        getStudentList(pageNum) {
             let tid = sessionStorage.getItem('tid'),
                 params = { role: 2, pageIndex: 1, pageSize: 10 }; // used for testing
             this.axios
@@ -59,6 +68,8 @@ export default {
                 }).then(res => {
                     if (res.status === 200) {
                         if (res.data.code == 0) {
+                            this.total = res.data.data.totalCount;
+                            this.pagerCount = res.data.data.totalPage;
                             this.tableData = res.data.data.list;
                         }
                     }
@@ -130,7 +141,7 @@ export default {
         }
     },
     components: {
-        // Pages,
+        Pages,
         NewSearch
     }
 };
