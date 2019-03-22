@@ -48,7 +48,7 @@ export default {
     },
     methods: {
         getTeacherList() {
-            let tid = 1,
+            let tid = sessionStorage.getItem('tid'),
                 params = { role: 1, pageIndex: 1, pageSize: 10 }; // used for testing
             this.axios
                 .get("/tenant/user/list/" + tid, {
