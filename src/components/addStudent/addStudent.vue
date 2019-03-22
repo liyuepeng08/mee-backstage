@@ -226,6 +226,7 @@ export default {
         })
         .catch(function(error) {
           console.log(2222);
+          alert("提交失败！");
           console.log(error);
         });
     }

@@ -298,17 +298,20 @@ export default {
       this.tab--;
     },
     submit: function() {
+      const that = this.ruleForm;
       //修改
       this.axios
         .get("/user/update", {
           params: {
             params: {
-              uid: this.uid,
-              nickName: this.nickName, //昵称
-              gender: this.gender == "男" ? 0 : 1, //性别
-              email: this.email, //邮箱
-              mobile: this.mobile, //手机号
-              address: this.address, //地址
+              uid: that.uid,
+              userName: that.userName, //用户名
+              nickName: that.nickName, //昵称
+              gender: that.gender == "男" ? 0 : 1, //性别
+              email: that.email, //邮箱
+              birthday: "", //生日
+              mobile: that.mobile, //手机号
+              address: that.address, //地址
               avatar: "http://jdcloud.image.com/4664.pgn" //头像
             }
           }
@@ -330,6 +333,7 @@ export default {
         })
         .catch(function(error) {
           console.log(2222);
+          alert("提交失败！");
           console.log(error);
         });
     },

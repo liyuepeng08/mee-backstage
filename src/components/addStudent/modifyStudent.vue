@@ -229,6 +229,7 @@ export default {
               confirmButtonClass: "round"
               // center: true
             }).then(() => {
+              alert("提交失败！");
               this.$router.push({ path: "/admin/studentManage" });
             });
           }
