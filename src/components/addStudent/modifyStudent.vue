@@ -1,6 +1,6 @@
 <template>
   <div class="addStudent">
-    <h3 class="pageTitle">新增学生</h3>
+    <h3 class="pageTitle">修改学生</h3>
     <el-row class="bread">
       <span :class="{'selected':tab===1}" @click="checkTab(1)">
         <i/>基本信息
@@ -25,7 +25,7 @@
           <el-input v-model="ruleForm.account" placeholder="账号"></el-input>
         </el-form-item>-->
         <el-form-item label="姓名" prop="userName">
-          <el-input class="w150" v-model="ruleForm.userName" placeholder="请输入姓名"></el-input>
+          <el-input disabled class="w150" v-model="ruleForm.userName" placeholder="请输入姓名"></el-input>
         </el-form-item>
         <el-form-item label="昵称" prop="nickName">
           <el-input class="w150" v-model="ruleForm.nickName" placeholder="请输入昵称"></el-input>
@@ -37,7 +37,7 @@
           </el-select>
         </el-form-item>
         <el-form-item label="年级" prop="grade">
-          <el-select style="width:100%" v-model="ruleForm.grade" placeholder="请选择年级">
+          <el-select disabled style="width:100%" v-model="ruleForm.grade" placeholder="请选择年级">
             <el-option label="三年级" value="shanghai"></el-option>
             <el-option label="四年级" value="beijing"></el-option>
           </el-select>
@@ -94,7 +94,7 @@
           <el-date-picker class="w150" type="date" placeholder="选择日期" v-model="ruleForm.birthday"></el-date-picker>
         </el-form-item>
         <el-form-item label="籍贯" prop="native">
-          <el-input disabled class="w480" v-model="ruleForm.native" placeholder="输入内容"></el-input>
+          <el-input disabled class="w480" v-model="ruleForm.age" placeholder="输入内容"></el-input>
         </el-form-item>
         <el-form-item label="联系地址" prop="address">
           <el-input disabled class="w480" v-model="ruleForm.address" placeholder="输入内容"></el-input>
@@ -127,7 +127,7 @@
             <!-- <el-button round>圆角按钮</el-button> -->
             <el-button @click="back" round style="width:120px;height:40px;font-size: 14px;">上一步</el-button>
             <el-button
-              @click="submit"
+              @click="submitSM"
               type="primary"
               round
               style="width:120px;height:40px;font-size: 14px;"
@@ -149,16 +149,18 @@ export default {
       msg: "Welcome to Your Vue.js App",
       tab: 1,
       ruleForm: {
+        uid: "", //用户ID
         userName: "", //用户名
         password: "", //用户密码
-        gender: "", //性别
+        gender: "男", //性别
         email: "", //邮箱
         mobile: "", //手机号
-        major: "", //专业，默认是22
-        title: "", //职称，默认是1
+        major: 22, //专业，默认是22
+        title: 1, //职称，默认是1
+        nickName: "", //昵称
+        address: "", //地址
 
         account: "", //账户
-        nickName: "", //昵称
         school: "", //学校
         phone: "", //电话
         birthday: "", //出生年月
@@ -172,6 +174,9 @@ export default {
       radio2: 3
     };
   },
+  mounted: function() {
+    this.details();
+  },
   methods: {
     checkTab: function(index) {
       this.tab = index;
@@ -184,33 +189,37 @@ export default {
     back: function() {
       this.tab--;
     },
-    submit: function() {
-      const tid = sessionStorage.getItem("tid");
-      let that = this.ruleForm;
-      //新增
+    submitSM: function() {
+      const that = this.ruleForm;
+      var birthday = new Date(that.birthday);
+      const year = birthday.getFullYear();
+      const month = birthday.getMonth() + 1;
+      const date = birthday.getDate();
+      var times =
+        year +
+        "" +
+        (month < 10 ? "0" + month : month) +
+        (date < 10 ? "0" + date : date);
+
+      //修改
       this.axios
-        .get("/tenant/user/createUser", {
+        .get("/user/update", {
           params: {
             params: {
+              uid: that.uid,
               userName: that.userName, //用户名
-              realName: that.userName, //用户名
               nickName: that.nickName, //昵称
-              password: "000000", //用户密码
-              gender: that.gender, //性别
+              gender: that.gender == "男" ? 0 : 1, //性别
               email: that.email, //邮箱
+              birthday: times, //生日
               mobile: that.mobile, //手机号
-              major: "22", //专业，默认是22
-              title: "1", //职称，默认是1
-              birthday: "", //生日
-              tenantId: tid, //机构
-              role: "2" //角色（老师：1；学生:2）
+              address: that.address, //地址
+              avatar: "http://jdcloud.image.com/4664.pgn" //头像
             }
           }
         })
         .then(response => {
-          console.log(111);
           let data = response.data;
-          console.log("-------data" + data);
           if (data.code == 0) {
             //提交弹出框
             this.$alert("提交成功，请等待审核！", "", {
@@ -220,13 +229,46 @@ export default {
               confirmButtonClass: "round"
               // center: true
             }).then(() => {
+              alert("提交失败！");
               this.$router.push({ path: "/admin/studentManage" });
             });
           }
         })
         .catch(function(error) {
-          console.log(2222);
-          alert("提交失败！");
+          console.log(error);
+        });
+    },
+    //点击修改前数据
+    details: function() {
+      const uid = this.$route.params.uid;
+      //渲染
+      this.axios
+        .get("/user/getUserDetail", {
+          params: {
+            params: {
+              uid: uid
+            }
+          }
+        })
+        .then(response => {
+          let data = response.data.data;
+          const that = this.ruleForm;
+          let birthday = data.birthday;
+          // data.birthday.slice(0, [4]);
+          console.log(typeof data.birthday);
+          that.uid = data.uid; //用户ID
+          that.userName = data.realName; //用户名
+          that.nickName = data.nickName; //昵称
+          that.password = data.password; //用户密码
+          that.gender = data.gender ? "女" : "男"; //性别
+          that.email = data.email; //邮箱
+          that.mobile = data.mobile; //手机号
+          that.major = data.major; //专业，默认是22
+          that.title = data.title; //职称，默认是1
+          that.address = data.address; //地址
+          that.birthday = data.birthday; //生日
+        })
+        .catch(function(error) {
           console.log(error);
         });
     }

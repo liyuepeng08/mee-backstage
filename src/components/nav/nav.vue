@@ -13,7 +13,7 @@
             <el-menu-item-group>
                 <!-- <template slot="title">分组一</template> -->
                 <el-menu-item index="/admin/adminUser">管理员管理</el-menu-item>
-                <el-menu-item index="/admin/school">机构管理</el-menu-item>
+                <el-menu-item index="">机构管理</el-menu-item>
                 <el-menu-item index="/admin/teacherManage">教师管理</el-menu-item>
                 <el-menu-item index="/admin/studentManage">学生管理</el-menu-item>
             </el-menu-item-group>
@@ -66,7 +66,7 @@ export default {
         }
     },
     mounted() {
-        console.log(this.$route.path)
+        // console.log(this.$route.path)
     },
     methods: {
         navClick(index, indexPath) {

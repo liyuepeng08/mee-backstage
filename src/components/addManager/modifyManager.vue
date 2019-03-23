@@ -1,6 +1,6 @@
 <template>
   <div class="addStudent">
-    <h3 class="pageTitle">新增学生</h3>
+    <h3 class="pageTitle">修改学生</h3>
     <el-row class="bread">
       <span :class="{'selected':tab===1}" @click="checkTab(1)">
         <i/>基本信息
@@ -25,7 +25,7 @@
           <el-input v-model="ruleForm.account" placeholder="账号"></el-input>
         </el-form-item>-->
         <el-form-item label="姓名" prop="userName">
-          <el-input class="w150" v-model="ruleForm.userName" placeholder="请输入姓名"></el-input>
+          <el-input disabled class="w150" v-model="ruleForm.userName" placeholder="请输入姓名"></el-input>
         </el-form-item>
         <el-form-item label="昵称" prop="nickName">
           <el-input class="w150" v-model="ruleForm.nickName" placeholder="请输入昵称"></el-input>
@@ -37,7 +37,7 @@
           </el-select>
         </el-form-item>
         <el-form-item label="年级" prop="grade">
-          <el-select style="width:100%" v-model="ruleForm.grade" placeholder="请选择年级">
+          <el-select disabled style="width:100%" v-model="ruleForm.grade" placeholder="请选择年级">
             <el-option label="三年级" value="shanghai"></el-option>
             <el-option label="四年级" value="beijing"></el-option>
           </el-select>
@@ -53,25 +53,6 @@
             <el-option label="北京市第一小学" value="shanghai"></el-option>
             <el-option label="北京市第二小学" value="beijing"></el-option>
           </el-select>
-        </el-form-item>
-        <el-form-item label="所在班级" prop="class">
-          <el-row>
-            <el-col :span="14">
-              <el-select disabled style="width:100%" v-model="ruleForm.class" placeholder="选择班级">
-                <el-option label="一班" value="shanghai"></el-option>
-                <el-option label="二班" value="beijing"></el-option>
-              </el-select>
-            </el-col>
-            <el-col :span="9">
-              <el-row style="margin-bottom:10px;">
-                <el-row style="margin-bottom:10px;">
-                  <el-button style="color:#a9a9a9;border:none">
-                    <i class="el-icon-circle-plus-outline" style="margin-right: 4px;"></i>添加班级选项
-                  </el-button>
-                </el-row>
-              </el-row>
-            </el-col>
-          </el-row>
         </el-form-item>
         <el-form-item>
           <el-button
@@ -94,33 +75,10 @@
           <el-date-picker class="w150" type="date" placeholder="选择日期" v-model="ruleForm.birthday"></el-date-picker>
         </el-form-item>
         <el-form-item label="籍贯" prop="native">
-          <el-input disabled class="w480" v-model="ruleForm.native" placeholder="输入内容"></el-input>
+          <el-input disabled class="w480" v-model="ruleForm.age" placeholder="输入内容"></el-input>
         </el-form-item>
         <el-form-item label="联系地址" prop="address">
           <el-input disabled class="w480" v-model="ruleForm.address" placeholder="输入内容"></el-input>
-        </el-form-item>
-        <el-form-item label="父母电话" prop="parentPhone">
-          <el-row>
-            <el-col :span="14">
-              <el-input disabled v-model="ruleForm.parentPhone" placeholder="输入手机号码"></el-input>
-            </el-col>
-            <el-col :span="9">
-              <el-row style="margin-bottom:10px;">
-                <el-button style="color:#a9a9a9;border:none">
-                  <i class="el-icon-circle-plus-outline" style="margin-right: 4px;"></i>添加班级选项
-                </el-button>
-              </el-row>
-            </el-col>
-          </el-row>
-        </el-form-item>
-        <el-form-item label="备注" prop="remarks">
-          <el-input
-            disabled
-            class="remarks"
-            type="textarea"
-            v-model="ruleForm.remarks"
-            placeholder="输入内容"
-          ></el-input>
         </el-form-item>
         <el-form-item>
           <el-row style="margin-bottom:10px;">
@@ -149,28 +107,27 @@ export default {
       msg: "Welcome to Your Vue.js App",
       tab: 1,
       ruleForm: {
+        uid: "", //用户ID
         userName: "", //用户名
         password: "", //用户密码
-        gender: "", //性别
+        gender: "男", //性别
         email: "", //邮箱
         mobile: "", //手机号
-        major: "", //专业，默认是22
-        title: "", //职称，默认是1
+        nickName: "", //昵称
+        address: "", //地址
 
         account: "", //账户
-        nickName: "", //昵称
-        school: "", //学校
         phone: "", //电话
         birthday: "", //出生年月
-        grade: "", //年级
-        class: "", //班级
         nation: "", //民族
         age: "", //年龄
-        native: "", //籍贯
-        remarks: "" //备注
+        native: "" //籍贯
       },
       radio2: 3
     };
+  },
+  mounted: function() {
+    // this.details();
   },
   methods: {
     checkTab: function(index) {
@@ -185,48 +142,42 @@ export default {
       this.tab--;
     },
     submit: function() {
-      const tid = sessionStorage.getItem("tid");
-      let that = this.ruleForm;
-      //新增
+      //修改
+      //提交弹出框
+      this.$alert("提交成功，请等待审核！", "", {
+        confirmButtonText: "返回",
+        type: "success",
+        showClose: "",
+        confirmButtonClass: "round"
+        // center: true
+      }).then(() => {
+        this.$router.push({ path: "/admin" });
+      });
+    },
+    //点击修改前数据
+    details: function() {
+      console.log(1);
+      //渲染
       this.axios
-        .get("/tenant/user/createUser", {
+        .get("/user/getUserDetail", {
           params: {
             params: {
-              userName: that.userName, //用户名
-              realName: that.userName, //用户名
-              nickName: that.nickName, //昵称
-              password: "000000", //用户密码
-              gender: that.gender, //性别
-              email: that.email, //邮箱
-              mobile: that.mobile, //手机号
-              major: "22", //专业，默认是22
-              title: "1", //职称，默认是1
-              birthday: "", //生日
-              tenantId: tid, //机构
-              role: "2" //角色（老师：1；学生:2）
+              uid: "465213654126"
             }
           }
         })
-        .then(response => {
-          console.log(111);
-          let data = response.data;
-          console.log("-------data" + data);
-          if (data.code == 0) {
-            //提交弹出框
-            this.$alert("提交成功，请等待审核！", "", {
-              confirmButtonText: "返回",
-              type: "success",
-              showClose: "",
-              confirmButtonClass: "round"
-              // center: true
-            }).then(() => {
-              this.$router.push({ path: "/admin/studentManage" });
-            });
-          }
+        .then(function(response) {
+          let data = response.data.data;
+          this.uid = data.uid; //用户ID
+          this.userName = data.userName; //用户名
+          this.password = data.password; //用户密码
+          this.gender = data.gender; //性别
+          this.email = data.email; //邮箱
+          this.mobile = data.mobile; //手机号
+          this.nickName = data.nickName; //昵称
+          this.address = data.address; //地址
         })
         .catch(function(error) {
-          console.log(2222);
-          alert("提交失败！");
           console.log(error);
         });
     }

@@ -14,9 +14,9 @@
                 @click="addTeacher"
             >新建</el-button>
             <!-- <el-button class="teachBtn" type="primary" icon="el-icon-share" @click="invite">邀请</el-button> -->
-            <new-search></new-search>
+            <new-search @getSearchData="searchData"></new-search>
         </div>
-        <el-table class="tablelInfo" :data="tableData">
+        <el-table class="tablelInfo" v-loading="loading" :data="tableData">
             <el-table-column prop="realName" label="名称"></el-table-column>
             <el-table-column prop="mobile" label="电话"></el-table-column>
             <el-table-column prop="classes" label="所在班级"></el-table-column>
@@ -26,81 +26,116 @@
             <el-table-column label="操作">
                 <template slot-scope="scope">
                     <el-button type="text" size="small" @click="detailMsg(scope)">详情</el-button>
-                    <el-button type="text" size="small">编辑</el-button>
-                    <el-button type="text" size="small" @click="deleteMsg(scope)">删除</el-button>
+                    <el-button type="text" size="small" @click="modifyMsg(scope)">编辑</el-button>
+                    <el-button type="text" size="small" @click="deleteMsg(scope,tableData)">删除</el-button>
                 </template>
             </el-table-column>
         </el-table>
-        <pages/>
+        <pages
+            @changeNum="getTeacherList"
+            :pageSize="pageSize"
+            :total="total"
+            :pagerCount="pagerCount"
+        ></pages>
     </div>
 </template>
 <script>
-import Pages from '../pages/pages'
-import NewSearch from '../newSearch/newSearch'
+import Pages from "../pages/pages";
+import NewSearch from "../newSearch/newSearch";
 export default {
     data() {
         return {
             tableData: [],
-            uid: '',
-
-        }
+            total: 1,//总条数
+            pagerCount: 1, //总页数
+            pageSize: 10,
+            loading: true
+        };
     },
     mounted() {
-        this.getTeacherList()
+        this.getTeacherList();
     },
     methods: {
-        getTeacherList() {
-            let tid = 1,
-                params = { role: 1, pageIndex: 1, pageSize: 10 };// used for testing
-            this.axios.get('/tenant/user/list/' + tid, {
-                params: { params }
-            }).then(res => {
-                if (res.status === 200) {
-                    if (res.data.code == 0) {
-                        console.log(res.data.data);
-                        this.tableData = res.data.data.list;
-                    }
-                }
-            })
-        },
-        deleteMsg(scope) {
-            this.$confirm('确定要删除' + scope.row.realName + '用户吗？', '删除管理员', {
-                confirmButtonText: '确定',
-                cancelButtonText: '取消',
-                type: 'warning'
-            }).then(() => {
-                let params = { "tid": 1, "uid": scope.row.uid };
-                this.axios.get('/tenant/user/delete', {
+        getTeacherList(pageNum) {
+            pageNum = pageNum || 1;
+            let tid = sessionStorage.getItem('tid'),
+                params = { role: 1, pageIndex: pageNum, pageSize: this.pageSize }; // used for testing
+            this.axios
+                .get("/tenant/user/list/" + tid, {
                     params: { params }
                 }).then(res => {
                     if (res.status === 200) {
+                        this.loading = false;
                         if (res.data.code == 0) {
-                            this.$message({
-                                type: 'success',
-                                message: '删除成功!'
-                            })
-                        } else {
-                            alert(res.data.msg)
+                            // console.log(res.data)
+                            this.total = res.data.data.totalCount;
+                            this.pagerCount = res.data.data.totalPage;
+                            this.tableData = res.data.data.list;
                         }
                     }
+                }).catch((error) => {
+                    console.log(error)
                 });
-
-            })
+        },
+        // 获得搜索信息
+        searchData(data) {
+            // if (data[0] == null) {
+            //     this.getTeacherList();
+            // } else {
+            //     this.tableData = data;
+            // }
+            console.log(data)
+            this.tableData = data;
+        },
+        deleteMsg(scope, rows) {
+            this.$confirm(
+                "确定要删除" +scope.row.realName +  "用户吗？",
+                "删除管理员",
+                {
+                    confirmButtonText: "确定",
+                    cancelButtonText: "取消",
+                    type: "warning"
+                }
+            ).then(() => {
+                let tid = sessionStorage.getItem('tid'),
+                    params = { tid: tid, uid: scope.row.uid };
+                this.axios
+                    .get("/tenant/user/delete", {
+                        params: { params }
+                    }).then(res => {
+                        if (res.status === 200) {
+                            if (res.data.code == 0) {
+                                rows.splice(scope.$index, 1);
+                            } else {
+                                alert(res.data.msg);
+                            }
+                        }
+                    }).catch((error) => {
+                        console.log(error)
+                    });
+            });
         },
         detailMsg(scope) {
             this.$router.push({
-                path: `detailTeacher/${scope.row.uid}`,               
-            })
+                path: `detailTeacher/${scope.row.uid}`
+            });
+        },
+        modifyMsg(scope) {
+            // 跳转到编辑
+            this.$router.push({
+                path: `modifyTeacher/${scope.row.uid}`
+            });
         },
         addTeacher() {
             this.$router.push({
-                path: 'addTeacher'
-            })
+                path: "addTeacher"
+            });
         },
-        invite() {//邀请
+        invite() {
+            //邀请
             this.$router.push({
-                path: 'reqManager'
-            })
+                path: "reqManager"
+            });
         }
     },
     components: {

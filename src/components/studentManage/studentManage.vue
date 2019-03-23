@@ -12,95 +12,136 @@
             <a href="#">
                 <i class="el-icon-download"></i>下载模板
             </a>
-            <el-button
+            <!-- <el-button
                 class="addBtn teachBtn"
                 type="primary"
                 icon="el-icon-share"
                 @click="invite"
-            >邀请</el-button>
+            >邀请</el-button>-->
+            <new-search @getSearchData="searchData"></new-search>
         </div>
-        <el-table class="studentInfo" :data="tableData">
-            <el-table-column prop="name" label="名称"></el-table-column>
-            <el-table-column prop="telephone" label="电话"></el-table-column>
+        <el-table class="studentInfo" v-loading="loading" :data="tableData">
+            <el-table-column prop="realName" label="名称"></el-table-column>
+            <el-table-column prop="mobile" label="电话"></el-table-column>
             <el-table-column prop="class" label="所在班级"></el-table-column>
             <el-table-column prop="mechanism" label="所属机构"></el-table-column>
-            <el-table-column prop="time" label="创建时间"></el-table-column>
+            <el-table-column prop="registerTime" label="创建时间"></el-table-column>
             <el-table-column label="操作">
                 <template slot-scope="scope">
                     <el-button type="text" size="small" @click="detailMsg(scope)">详情</el-button>
-                    <el-button type="text" size="small">编辑</el-button>
-                    <el-button type="text" size="small" @click="deleteMsg(scope)">删除</el-button>
+                    <el-button type="text" size="small" @click="modifyMsg(scope)">编辑</el-button>
+                    <el-button type="text" size="small" @click="deleteMsg(scope,tableData)">删除</el-button>
                 </template>
             </el-table-column>
         </el-table>
+        <pages
+            @changeNum="getStudentList"
+            :pageSize="pageSize"
+            :total="total"
+            :pagerCount="pagerCount"
+        ></pages>
     </div>
 </template>
 <script>
+import Pages from "../pages/pages";
+import NewSearch from "../newSearch/newSearch";
 export default {
     data() {
         return {
-            tableData: [{
-                date: '2016-05-02',
-                name: '爱谁谁',
-                nickname: '我是代理商',
-                mechanism: '开普勒实验小学北京海淀分校',
-                telephone: '18897689866',
-                time: '2019-02-19',
-                class: '二班'
-            }, {
-                date: '2016-05-02',
-                name: '爱谁谁',
-                nickname: '我是代理商',
-                mechanism: '开普勒实验小学北京海淀分校',
-                telephone: '18897689866',
-                time: '2019-02-19',
-                class: '二班'
-            }, {
-                date: '2016-05-02',
-                name: '爱谁谁',
-                nickname: '我是代理商',
-                mechanism: '开普勒实验小学北京海淀分校',
-                telephone: '18897689866',
-                time: '2019-02-19',
-                class: '二班'
-            }, {
-                date: '2016-05-02',
-                name: '爱谁谁',
-                nickname: '我是代理商',
-                mechanism: '开普勒实验小学北京海淀分校',
-                telephone: '18897689866',
-                time: '2019-02-19',
-                class: '二班'
-            }]
-        }
+            tableData: [],
+            total: 1,//总条数
+            pagerCount: 1, //总页数
+            pageSize: 10,
+            loading: true
+        };
+    },
+    mounted() {
+        this.getStudentList()
     },
     methods: {
-        deleteMsg(scope) {
-            this.$confirm('确定要删除' + this.tableData[scope.$index].name + '用户吗？', '删除管理员', {
-                confirmButtonText: '确定',
-                cancelButtonText: '取消',
-                type: 'warning'
-            }).then(() => {
-                this.$message({
-                    type: 'success',
-                    message: '删除成功!'
-                })
-            })
+        // 获得学生信息列表
+        getStudentList(pageNum) {
+            let tid = sessionStorage.getItem('tid'),
+                params = { role: 2, pageIndex: 1, pageSize: 10 }; // used for testing
+            this.axios
+                .get("/tenant/user/list/" + tid, {
+                    params: { params }
+                }).then(res => {
+                    if (res.status === 200) {
+                        this.loading = false;
+                        if (res.data.code == 0) {
+                            this.total = res.data.data.totalCount;
+                            this.pagerCount = res.data.data.totalPage;
+                            this.tableData = res.data.data.list;
+                        }
+                    }
+                }).catch((error) => {
+                    console.log(error)
+                });
+        },
+        // 获得搜索信息
+        searchData(data) {
+            // if (data[0] == null) {
+            //     this.$alert('未查询到指定信息', {
+            //         dangerouslyUseHTMLString: true
+            //     });
+            //     this.getStudentList();
+            // } else {
+            //     this.tableData = data;
+            // }
+            this.tableData = data;
+        },
+        deleteMsg(scope, rows) {
+            this.$confirm(
+                "确定要删除" + scope.row.realName + "用户吗？",
+                "删除管理员",
+                {
+                    confirmButtonText: "确定",
+                    cancelButtonText: "取消",
+                    type: "warning"
+                }
+            ).then(() => {
+                let tid = sessionStorage.getItem('tid'),
+                    params = { tid: tid, uid: scope.row.uid };
+                this.axios.get("/tenant/user/delete", {
+                    params: { params }
+                }).then(res => {
+                    if (res.status === 200) {
+                        if (res.data.code == 0) {
+                            rows.splice(scope.$index, 1);
+                        } else {
+                            alert(res.data.msg);
+                        }
+                    }
+                }).catch((error) => {
+                    console.log(error)
+                });
+            });
         },
         detailMsg(scope) {
             this.$router.push({
-                path: '/admin/detailStudent'
-            })
+                path: `detailStudent/${scope.row.uid}`
+            });
+        },
+        modifyMsg(scope) {
+            // 跳转到编辑
+            this.$router.push({
+                path: `modifyStudent/${scope.row.uid}`
+            });
         },
         addStudent() {
-            this.$router.push({ path: 'addStudent' })
+            this.$router.push({ path: "addStudent" });
         },
         importBtn() {
-            alert("你好啊")
+            alert("你好啊");
         },
         invite() {
-            this.$router.push({ path: 'reqManager' })
+            this.$router.push({ path: "reqManager" });
         }
+    },
+    components: {
+        Pages,
+        NewSearch
     }
 };
 </script>

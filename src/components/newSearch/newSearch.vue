@@ -27,19 +27,34 @@ export default {
             }
         }
     },
+
     methods: {
         getSearch() {
             let self = this, params;
-            if (self.search.email != '') {
-                params = { email: self.search.email }
-            } else if (self.search.uid !== '') {
-                params = { uid: self.search.uid }
-            } else {
-                params = { mobile: self.search.mobile }
-            }
-            this.axios.get('/user/getUser', { params: { params } }).then(res => {
-                console.log(res)
-            })
+            // params = {
+            //     realname: '',
+            //     gender: '',
+            //     email: '',
+            //     moblie: '',
+            //     status: ''
+
+            // }
+            // this.axios.get('/user/getUser', { params: { params } }).then(res => {
+            //     if (res.status === 200) {
+            //         console.log(res)
+            //         if (res.data.code == 0) {
+            //             let searchArr = [];
+            //             searchArr.push(res.data.data)
+            //             this.$emit('getSearchData', searchArr);
+            //         }
+            //     } else {
+            //         this.$alert('网络连接不畅...', {
+            //             dangerouslyUseHTMLString: true
+            //         });
+            //     }
+            // }).catch((error) => {
+            //     console.log(error)
+            // })
 
         },
     }
@@ -68,6 +83,9 @@ export default {
             position: relative;
             top: 10px;
         }
+    }
+    li:last-child {
+        cursor: pointer;
     }
 }
 </style>

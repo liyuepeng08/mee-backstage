@@ -12,10 +12,14 @@ import Account from '@/components/account/account' //账户管理
 import Examine from '@/components/examine/examine' //审核管理
 import Security from '@/components/security/security' //安全管理
 import AddManager from '@/components/addManager/addManager' //添加管理员
+import ModifyManager from '@/components/addManager/modifyManager' //修改管理员
 import DetailManager from '@/components/detailManager/detailManager' //管理员详情
 import AddStudent from '@/components/AddStudent/AddStudent' //添加学生
+import ModifyStudent from '@/components/AddStudent/modifyStudent' //修改学生
+
 import DetailStudent from '@/components/detailStudent/detailStudent' //管理员详情
-import AddTeacher from '@/components/AddTeacher/AddTeacher' //添加教师
+import AddTeacher from '@/components/AddTeacher/AddTeacher' //添加教师 
+import ModifyTeacher from '@/components/AddTeacher/modifyTeacher' //添加教师
 import DetailTeacher from '@/components/detailTeacher/detailTeacher' //教师详情
 import ReqManager from '@/components/reqManager/reqManager' //邀请管理员
 
@@ -31,7 +35,7 @@ import CourseManage from '@/components/courseManage/courseManage' //课程管理
 import NewCourseDetail from '@/components/courseManage/newCourseDetail' //新建课程详情
 import NewCourseUpload from '@/components/courseManage/newCourseUpload' //新建课程上传
 import UploadVideo from '@/components/courseManage/uploadVideo' //视频上传
-import UploadWord from '@/components/courseManage/UploadWord'             //课件上传
+import UploadWord from '@/components/courseManage/UploadWord' //课件上传
 
 Vue.use(Router)
 
@@ -70,6 +74,11 @@ export default new Router({
         component: AddManager
 
       }, {
+        path: 'modifyManager', //修改管理员
+        name: 'modifyManager',
+        component: ModifyManager
+
+      }, {
         path: 'detailManager', //管理员详情
         name: 'detailManager',
         component: DetailManager
@@ -78,13 +87,22 @@ export default new Router({
         name: 'addStudent',
         component: AddStudent
       }, {
-        path: 'detailStudent', //学生详情
+        path: 'modifyStudent/:uid', //修改学生
+        name: 'modifyStudent',
+        component: ModifyStudent
+      }, {
+        path: 'detailStudent/:uid', //学生详情
         name: 'detailStudent',
         component: DetailStudent
       }, {
         path: 'addTeacher', //添加教师
         name: 'addTeacher',
         component: AddTeacher
+
+      }, {
+        path: 'modifyTeacher/:uid', //修改教师
+        name: 'modifyTeacher',
+        component: ModifyTeacher
 
       }, {
         path: 'detailTeacher/:uid', //教师详情
@@ -145,7 +163,7 @@ export default new Router({
             name: 'uploadVideo',
             component: UploadVideo
           }, {
-            path: 'uploadWord',   //课件上传
+            path: 'uploadWord', //课件上传
             name: 'uploadWord',
             component: UploadWord
           }]

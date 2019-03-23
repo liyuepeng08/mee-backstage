@@ -25,42 +25,61 @@
                         <li class="letWid">
                             姓
                             <i></i>
-                            名：<span>{{ruleForm.name}}</span>
+                            名：
+                            <span>{{ruleForm.name}}</span>
                         </li>
                         <li class="letWid">
                             昵
                             <i></i>
-                            称：<span>{{ruleForm.niceName}}</span>
+                            称：
+                            <span>{{ruleForm.niceName}}</span>
                         </li>
                         <li class="letWid">
                             性
                             <i></i>
-                            别：<span>{{ruleForm.sex}}</span>
+                            别：
+                            <span>{{ruleForm.sex}}</span>
                         </li>
                         <li class="letWid">
                             年
                             <i></i>
-                            龄：<span>{{ruleForm.age}}</span>
+                            龄：
+                            <span>{{ruleForm.age}}</span>
                         </li>
                         <li class="letWid">
                             民
                             <i></i>
-                            族：<span>{{ruleForm.nation}}</span>
+                            族：
+                            <span>{{ruleForm.nation}}</span>
                         </li>
-                        <li>出生年月：<span>{{ruleForm.birthday}}</span></li>
-                        <li>联系电话：<span>{{ruleForm.phone}}</span></li>
+                        <li>
+                            出生年月：
+                            <span>{{ruleForm.birthday}}</span>
+                        </li>
+                        <li>
+                            联系电话：
+                            <span>{{ruleForm.phone}}</span>
+                        </li>
                         <li class="letWid">
                             邮
                             <i></i>
-                            箱：<span>{{ruleForm.email}}</span>
+                            箱：
+                            <span>{{ruleForm.email}}</span>
                         </li>
-                        <li>身份证号：<span>{{ruleForm.idNumeber}}</span></li>
+                        <li>
+                            身份证号：
+                            <span>{{ruleForm.idNumeber}}</span>
+                        </li>
                         <li class="letWid">
                             籍
                             <i></i>
-                            贯：<span>{{ruleForm.nativePlace}}</span>
+                            贯：
+                            <span>{{ruleForm.nativePlace}}</span>
                         </li>
-                        <li>常驻地址：<span>{{ruleForm.address}}</span></li>
+                        <li>
+                            常驻地址：
+                            <span>{{ruleForm.address}}</span>
+                        </li>
                     </ul>
                 </el-col>
                 <el-col :span="12">
@@ -75,7 +94,7 @@
                             <p class="fl">所在班级：</p>
                             <span class="fl classes">{{ruleForm.classes}}</span>
                         </li>
-                         <li class="clearfix">
+                        <li class="clearfix">
                             <p class="fl">父母电话：</p>
                             <div class="fl parentTel">
                                 <p v-for="v in ruleForm.parentTel" :key="v">{{v}}</p>
@@ -111,15 +130,39 @@ export default {
                 address: "北京市昌平区华家园东一区",//常住地址
                 institution: ["少儿英语", "艺术英语"],//所属机构
                 classes: "一年7班", //所在班级
-                parentTel:["13113113131","15715711571"],//父母电话
+                parentTel: ["13113113131", "15715711571"],//父母电话
                 teachingBrief: "南京大麦网络大学蛤蜊英文专业毕业，从事教师行业13年，桃李满天下，下面随便写，不知道写啥，没空瞎编，看着写吧。我是案例，是个很长很长的案例",//教学简介
             }
         }
     },
-    methods:{
-      backPre(){
-        history.back(-1);
-      }
+    mounted() {
+        this.uid = (this.$route.params.uid).toString()
+        this.getUserInfo()
+    },
+    methods: {
+        backPre() {
+            history.back(-1);
+        },
+        getUserInfo() {
+            let params = { uid: this.uid };
+            this.axios.get('/user/getUserDetail', {
+                params: {
+                    params
+                }
+            }).then(res => {
+                if (res.status === 200) {
+                    if (res.data.code == 0) {
+                        console.log(res.data)
+                    } else {
+                        alert(res.data.msg)
+                    }
+                } else {
+                    alert('加载失败，请检查网络是否连接诶正常！')
+                }
+            }).catch((error) => {
+                console.log(error)
+            })
+        }
     }
 };
 </script>
@@ -166,21 +209,21 @@ export default {
                 .parentTel {
                     p {
                         margin-bottom: 20px;
-                        color:#080808;
+                        color: #080808;
                     }
                     p:last-child {
                         margin-bottom: 0px;
                     }
                 }
-                span{
-                  color: #080808;
+                span {
+                    color: #080808;
                 }
             }
             .letWid {
                 i {
                     display: inline-block;
                     padding: 0 10px;
-                }            
+                }
             }
             .teachingBrief {
                 line-height: 20px;

@@ -38,13 +38,13 @@
                             姓
                             <i></i>
                             名：
-                            <span>{{ruleForm.name}}</span>
+                            <span>{{ruleForm.realName}}</span>
                         </li>
                         <li class="letWid">
                             昵
                             <i></i>
                             称：
-                            <span>{{ruleForm.niceName}}</span>
+                            <span>{{ruleForm.nickName}}</span>
                         </li>
                         <li class="letWid">
                             性
@@ -167,27 +167,7 @@ export default {
     data() {
         return {
             uid: '',
-            ruleForm: {
-                name: "窦娥", //用户名
-                niceName: "梦里询他千百度", //昵称
-                sex: "女", //性别
-                age: 33,
-                nation: "汉族", //民族
-                birthday: "1981年05月15日", //出生年月
-                political: "党员",//政治面貌
-                marriage: "已婚",//婚姻状况
-                phone: "15010611993", //电话
-                email: "15010611993@163.com", //邮箱
-                idNumeber: 112233445566778899,//身份证号
-                nativePlace: "北京市北京市北京市",//籍贯
-                address: "北京市昌平区华家园东一区",//常住地址
-                workLife: "10年以上", //教龄
-                education: "硕士",//学历
-                major: "英语", //专业
-                subject: ["少儿英语", "艺术英语"],//教授科目
-                classes: ["一年7班", "一年8班", "一年9班"], //所在班级
-                teachingBrief: "南京大麦网络大学蛤蜊英文专业毕业，从事教师行业13年，桃李满天下，下面随便写，不知道写啥，没空瞎编，看着写吧。我是案例，是个很长很长的案例",//教学简介
-            }
+            ruleForm: {}
         }
     },
 
@@ -208,13 +188,16 @@ export default {
             }).then(res => {
                 if (res.status === 200) {
                     if (res.data.code == 0) {
-                        console.log(res.data)
-                    }else{
+                        // console.log(res.data)
+                        this.ruleForm = res.data.data;
+                    } else {
                         alert(res.data.msg)
                     }
                 } else {
                     alert('加载失败，请检查网络是否连接诶正常！')
                 }
+            }).catch((error) => {
+                console.log(error)
             })
         }
     }
