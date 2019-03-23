@@ -12,27 +12,12 @@
         <div class="newCourseUpload-content">
             
             <h2 class="h-title">课件上传</h2>
-    
-            <el-row>
-                <el-col :span="3">课程封面：</el-col>
-                <el-col :span="10">
-                    <el-upload
-                        class="avatar-uploader"
-                        action="https://jsonplaceholder.typicode.com/posts/"
-                        :show-file-list="false"
-                        :on-success="handleAvatarSuccess"
-                        :before-upload="beforeAvatarUpload">
-                        <img v-if="imageUrl" :src="imageUrl" class="avatar">
-                        <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-                    </el-upload>
-                </el-col>
-            </el-row>
-            <el-row>
+            <!-- <el-row>
                 <el-col :span="3">课程介绍：</el-col>
                 <el-col :span="10">
                     <el-input type="textarea" placeholder="" :rows="4"></el-input>
                 </el-col>
-            </el-row>
+            </el-row> -->
             <el-row>
                 <el-col :span="3">上传视频：</el-col>
                 <el-col :span="15">
@@ -41,20 +26,21 @@
                            <tr>
                                <th class="left">名称</th>
                                <th>类型</th>
-                               <th>时长</th>
+                               <!-- <th>时长</th> -->
+                               <th>大小</th>
                                <th class="right">操作</th>
                            </tr>
-                           <tr>
+                           <!-- <tr>
                                <th colspan="3" class="left">Linux C语言结构体</th>
                                <th class="right"><el-button type="text">重命名</el-button></th>
-                           </tr>
+                           </tr> -->
                        </thead>
                        <tbody>
-                           <tr>
-                               <td class="left">某某内容第一课</td>
-                               <td>视频</td>
-                               <td>01:22:23</td>
-                               <td class="right"><el-button type="text">编辑</el-button> | <el-button type="text">删除</el-button></td>
+                           <tr v-for="(value, index) in videoAttachList" :key="index">
+                               <td class="left">{{value.name}}</td>
+                               <td>{{value.type}}</td>
+                               <td>{{value.size}}</td>
+                               <td class="right"><el-button type="text">编辑</el-button> | <el-button @click="deleteAttach(value.uri, 'video')" type="text">删除</el-button></td>
                            </tr>
                            <tr>
                                <td colspan="4">
@@ -76,17 +62,17 @@
                                <th>大小</th>
                                <th class="right">操作</th>
                            </tr>
-                           <tr>
+                           <!-- <tr>
                                <th colspan="3" class="left">Linux C语言结构体文档</th>
                                <th class="right"><el-button type="text">重命名</el-button></th>
-                           </tr>
+                           </tr> -->
                        </thead>
                        <tbody>
-                           <tr>
-                               <td class="left">某某内容第一课</td>
-                               <td>PPT</td>
-                               <td>2M</td>
-                               <td class="right"><el-button type="text">编辑</el-button> | <el-button type="text">删除</el-button></td>
+                           <tr v-for="(item, idx) in wordAttachList" :key="idx">
+                               <td class="left">{{item.name}}</td>
+                               <td>{{item.type}}</td>
+                               <td>{{item.size}}</td>
+                               <td class="right"><el-button type="text">编辑</el-button> | <el-button type="text" @click="deleteAttach(item.uri, 'word')">删除</el-button></td>
                            </tr>
                            <tr>
                                <!--  -->
@@ -103,8 +89,8 @@
                 <el-col :span="3">
                 </el-col>
                 <el-col :span="10" :offset="3" style="height: 122px; line-height: 122px;">
-                    <el-button round>上一步</el-button>
-                    <el-button type="primary" round style="width: 120px;">提交</el-button>
+                    <el-button round @click="$router.go(-1)">上一步</el-button>
+                    <el-button type="primary" round style="width: 120px;" @click="createAttach">提交</el-button>
                 </el-col>
             </el-row>
             
@@ -113,35 +99,161 @@
     </div>
 </template>
 <script>
+import {mapState, mapMutations} from 'vuex'
 import H2Title from '@/components/courseManage/h2'
 export default {
     data() {
         return {
-            imageUrl: ''
+
         }
     },
+    computed: {
+        // videoList() {
+        //     return this.attachList.map((item) => {
+        //         console.log("是否重新计算")
+        //         if (this.wordFormat.indexOf(item.type) < 0) {
+        //             return item
+        //         }
+        //     })
+        // },
+        // wordList() {
+        //     return this.attachList.map((item) => {
+        //         if (this.wordFormat.indexOf(item.type) >= 0) {
+        //             return item
+        //         }
+        //     })
+        // },
+        ...mapState([
+            'courseId',
+            'attachList',
+            'videoAttachList',
+            'wordAttachList'
+        ])
+    },
+    created() {
+        let courseId = this.$route.query.courseId
+        if (courseId) {
+            window.scrollTo(0, 0)
+            this.setCourseId(courseId),        //这里保存本地courseId是为了防止刷新vuex丢失课程id
+            this.getAttachList(courseId)        //根据courseId，来获取附件列表详情
+        }
+        else {
+            this.$router.push({path: '/admin/courseManage'})    //地址栏没有courseId，无法操作，则跳转至课程列表页。
+        }
+        
+        this.wordFormat = ['ppt', 'docx', 'pdf', 'doc']               //文档格式
+    },
     methods: {
-      handleAvatarSuccess(res, file) {
-        this.imageUrl = URL.createObjectURL(file.raw);
-      },
-      beforeAvatarUpload(file) {
-        const isJPG = file.type === 'image/jpeg';
-        const isLt2M = file.size / 1024 / 1024 < 2;
-
-        if (!isJPG) {
-          this.$message.error('上传头像图片只能是 JPG 格式!');
-        }
-        if (!isLt2M) {
-          this.$message.error('上传头像图片大小不能超过 2MB!');
-        }
-        return isJPG && isLt2M;
-      },
       addVideo() {          //跳转到 添加视频 页面
         this.$router.push({path: '/admin/courseManage/newCourseUpload/uploadVideo'})
       },
       addWord() {           //跳转到 添加文档 页面
-        // this.$router.push({path: '/admin/courseManage/newCourseUpload/uploadVideo'})
-      }
+        this.$router.push({path: '/admin/courseManage/newCourseUpload/uploadWord'})
+      },
+      async createAttach() {          //开始创建附件
+        try {
+            let totalAttach = this.videoAttachList.concat(this.wordAttachList)
+            let {status, data: {data: dataMsg}} = await this.axios({
+            url: '/material/course/attach/create',
+                method: 'post',
+                data: {
+                    courseId: this.courseId,
+                    attachList: totalAttach,
+                    role: 1             //1为老师可以看，2是学生可以看
+                }
+            })
+
+            if (status === 200 && dataMsg) {       //课程创建成功
+                console.log("附件创建成功！")
+
+                let timer = setTimeout(() => {      //倒计时跳转
+                    this.$router.push({     //跳转到列表页
+                        path: '/admin/courseManage'
+                    })
+                }, 3000)
+
+                this.$alert('3秒后返回上一级', '提交成功！', {
+                    confirmButtonText: '直接跳转',
+                    callback: action => {
+                        clearTimeout(timer)     //清除定时器
+                        this.$router.push({     //跳转到列表页
+                            path: '/admin/courseManage'
+                        })
+                    }
+                });
+                
+            }
+
+        }
+        catch(err) {
+            console.log(err)
+        }
+      },
+      async getAttachList(courseId) {             //根据courseId来获取附件列表信息
+            let {status, data: {data: attachList}} = await this.axios({
+                url: '/material/course/attach/' + courseId,
+                method: 'get',
+                params: {
+                    params: JSON.stringify({
+                        role: 1
+                    })
+                }
+            })
+
+            if (status === 200 && attachList) {
+
+                //过滤附件列表，分别放入视频 和 文档附件内
+                attachList.forEach((item) => {
+                    if (this.wordFormat.indexOf(item.type) >= 0) {
+                        //文档附件
+                        this.pushWordAttach(item)
+                    }
+                    else {
+                        //视频附件
+                        this.pushVideoAttach(item)
+                    }
+                })
+
+            }
+      },
+      async deleteAttach(uri, type) {          //删除附件
+        try {
+            let {status, data: {code}} = await this.axios({
+                url: '/oss/delete',
+                method: 'get',
+                params: {
+                    params: JSON.stringify({
+                        uid: "123",
+                        filePath: uri
+                    })
+                }
+            })
+
+            if (status === 200 && code === 0) {       //课程创建成功
+                console.log(uri)
+                //vuex中的附件列表做同步更新
+                type === 'video' ? this.deleteVideoAttach(uri) : this.deleteWordAttach(uri)
+                
+
+                this.$message('附件删除成功');
+                // this.$router.push({     //点击下一步，跳转到 课件上传页面
+                //     path: '/admin/courseManage/newCourseUpload'
+                // })
+            }
+
+        }
+        catch(err) {
+            console.log(err)
+        }
+      },
+      ...mapMutations([
+          'deleteAttachList',
+          'deleteVideoAttach',
+          'deleteWordAttach',
+          'setCourseId',
+          'pushWordAttach',
+          'pushVideoAttach'
+      ])
     },
     components: {
         H2Title
@@ -186,6 +298,9 @@ export default {
     background-color: #fff;
     padding: 30px;
 }
+/deep/ .el-button--default {
+    margin-right: 50px;
+}
 .table {
     border: solid 1px #f1f1f1;
     .left {
@@ -214,31 +329,6 @@ export default {
             }
         }
     }
-}
-.avatar-uploader /deep/ .el-upload {
-    border: 1px dashed #d9d9d9;
-    border-radius: 6px;
-    cursor: pointer;
-    position: relative;
-    overflow: hidden;
-    width: 180px;
-    height: 120px;
-}
-.avatar-uploader /deep/ .el-upload:hover {
-    border-color: #409EFF;
-}
-.avatar-uploader /deep/ .el-upload /deep/ .avatar-uploader-icon {
-    font-size: 28px;
-    color: #8c939d;
-    width: 180px;
-    height: 120px;
-    line-height: 120px;
-    text-align: center;
-}
-.avatar {
-    width: 178px;
-    height: 178px;
-    display: block;
 }
 .newCourseUpload-content /deep/ .el-col {
     margin-bottom: 40px;

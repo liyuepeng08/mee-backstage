@@ -16,6 +16,11 @@
 import LeftNav from "@/components/nav/nav";
 import Header from "@/components/base/Header/Header";
 export default {
+  data() {
+    return {
+      
+    }
+  },
   components: {
     LeftNav,
     Header

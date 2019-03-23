@@ -7,6 +7,7 @@ import ElementUI from 'element-ui'
 import './assets/css/reset.css'
 import 'element-ui/lib/theme-chalk/index.css'
 import {axios} from '@/config/axiosDefault'
+import store from '@/store/index'
 
 
 Vue.config.productionTip = false
@@ -19,6 +20,7 @@ Vue.prototype.axios = axios
 new Vue({
   el: '#app',
   router,
+  store,
   components: {
     App
   },

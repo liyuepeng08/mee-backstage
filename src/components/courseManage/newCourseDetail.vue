@@ -12,49 +12,53 @@
         <div class="newCourse-content">
             
             <h2 class="h-title">基本信息</h2>
-    
+            <el-row>
+                <el-col :span="3">课程封面：</el-col>
+                <el-col :span="4" v-loading="isUpload">
+                    <el-upload
+                        class="avatar-uploader"
+                        action="http://localhost:8080"
+                        :show-file-list="false"
+                        :on-success="handleAvatarSuccess"
+                        :before-upload="beforeAvatarUpload">
+                        <img v-if="$store.state.thumbnail" :src="$store.state.thumbnail" class="avatar">
+                        <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+                    </el-upload>
+                </el-col>
+            </el-row>
             <el-row>
                 <el-col :span="3">课程名称：</el-col>
                 <el-col :span="10">
-                    <el-input v-model="title"  placeholder=""></el-input>
+                    <el-input v-model="title"  placeholder="请输入课程名称"></el-input>
                 </el-col>
             </el-row>
             <el-row>
                 <el-col :span="3">副标题：</el-col>
                 <el-col :span="10">
-                    <el-input v-model="subtitle"  placeholder=""></el-input>
+                    <el-input v-model="subtitle"  placeholder="请输入副标题"></el-input>
                 </el-col>
             </el-row>
             <el-row>
                 <el-col :span="3">课程简介：</el-col>
                 <el-col :span="10">
-                    <el-input v-model="description" type="textarea" placeholder="" :rows="3"></el-input>
+                    <el-input v-model="description" type="textarea" placeholder="请输入课程简介" :rows="3"></el-input>
                 </el-col>
             </el-row>
             <el-row>
                 <el-col :span="3">课程类别：</el-col>
                 <el-col :span="3">
-                    <!-- <el-select v-model="value" placeholder="请选择">
-                        <el-option
-                        v-for="item in options"
-                        :key="item.value"
-                        :label="item.label"
-                        :value="item.value">
-                        </el-option>
-                    </el-select> -->
                     <el-cascader
                         :options="subjectList"
-                        @active-item-change="loadCatagoryList"
-                        v-model="subjectCategory"
-                        @change="subjectChange">
+                        v-model="categoryId"
+                        :props = 'subjectProps'
+                        :show-all-levels="false">
                     </el-cascader>
                 </el-col>
             </el-row>
             <el-row>
                 <el-col :span="3">年龄标签：</el-col>
-                <el-col :span="10">
-                    <el-tag round>0-6岁</el-tag> <el-tag>6-8岁</el-tag> <el-tag>9-12岁</el-tag> <el-tag>13-16岁</el-tag>
-                    <el-tag>16-18岁</el-tag>
+                <el-col :span="13">
+                    <el-tag v-for="(text, idx) in tagsText" :class='{tags: true,tagsSelected: selectedTagsText.indexOf(text) >= 0}' :key="idx" @click="clickTags(text)">{{text}}</el-tag>
                 </el-col>
             </el-row>
             <el-row>
@@ -72,11 +76,11 @@
                         <ul>
                             <li>
                                 <div>折扣价</div>
-                                <el-input v-model="price" placeholder="单位：元"></el-input>
+                                <el-input placeholder="单位：元"></el-input>
                             </li>
                             <li>
                                 <div>原价</div>
-                                <el-input placeholder="单位：元"></el-input>
+                                <el-input v-model="price" placeholder="单位：元"></el-input>
                             </li>
                         </ul>
                         <p>*如课程无折扣优惠可不填写</p>
@@ -87,7 +91,7 @@
                 <el-col :span="3">
                 </el-col>
                 <el-col :span="10" :offset="3" style="height: 122px; line-height: 122px;">
-                    <el-button type="primary" round @click="createCourse">下一步</el-button>
+                    <el-button type="primary" round @click="submit">下一步</el-button>
                 </el-col>
             </el-row>
             
@@ -96,218 +100,89 @@
 </template>
 <script>
 import H2Title from '@/components/courseManage/h2'
+import {mapState, mapMutations} from 'vuex'
 export default {
     data() {
         return {
             radio: "2",
-            title: '',              //课程名称
-            subtitle: '',           //课程副标题
-            description: '',         //课程简介
-            price: '',                  //价格
-            subjectCategory: [],        //默认选中的 课程类别ID 分级数组。
-            subjectList: [{
-          value: 'zhinan',
-          label: '指南',
-          children: [{
-            value: 'shejiyuanze',
-            label: '设计原则',
-            children: [{
-              value: 'yizhi',
-              label: '一致'
-            }, {
-              value: 'fankui',
-              label: '反馈'
-            }, {
-              value: 'xiaolv',
-              label: '效率'
-            }, {
-              value: 'kekong',
-              label: '可控'
-            }]
-          }, {
-            value: 'daohang',
-            label: '导航',
-            children: [{
-              value: 'cexiangdaohang',
-              label: '侧向导航'
-            }, {
-              value: 'dingbudaohang',
-              label: '顶部导航'
-            }]
-          }]
-        }, {
-          value: 'zujian',
-          label: '组件',
-          children: [{
-            value: 'basic',
-            label: 'Basic',
-            children: [{
-              value: 'layout',
-              label: 'Layout 布局'
-            }, {
-              value: 'color',
-              label: 'Color 色彩'
-            }, {
-              value: 'typography',
-              label: 'Typography 字体'
-            }, {
-              value: 'icon',
-              label: 'Icon 图标'
-            }, {
-              value: 'button',
-              label: 'Button 按钮'
-            }]
-          }, {
-            value: 'form',
-            label: 'Form',
-            children: [{
-              value: 'radio',
-              label: 'Radio 单选框'
-            }, {
-              value: 'checkbox',
-              label: 'Checkbox 多选框'
-            }, {
-              value: 'input',
-              label: 'Input 输入框'
-            }, {
-              value: 'input-number',
-              label: 'InputNumber 计数器'
-            }, {
-              value: 'select',
-              label: 'Select 选择器'
-            }, {
-              value: 'cascader',
-              label: 'Cascader 级联选择器'
-            }, {
-              value: 'switch',
-              label: 'Switch 开关'
-            }, {
-              value: 'slider',
-              label: 'Slider 滑块'
-            }, {
-              value: 'time-picker',
-              label: 'TimePicker 时间选择器'
-            }, {
-              value: 'date-picker',
-              label: 'DatePicker 日期选择器'
-            }, {
-              value: 'datetime-picker',
-              label: 'DateTimePicker 日期时间选择器'
-            }, {
-              value: 'upload',
-              label: 'Upload 上传'
-            }, {
-              value: 'rate',
-              label: 'Rate 评分'
-            }, {
-              value: 'form',
-              label: 'Form 表单'
-            }]
-          }, {
-            value: 'data',
-            label: 'Data',
-            children: [{
-              value: 'table',
-              label: 'Table 表格'
-            }, {
-              value: 'tag',
-              label: 'Tag 标签'
-            }, {
-              value: 'progress',
-              label: 'Progress 进度条'
-            }, {
-              value: 'tree',
-              label: 'Tree 树形控件'
-            }, {
-              value: 'pagination',
-              label: 'Pagination 分页'
-            }, {
-              value: 'badge',
-              label: 'Badge 标记'
-            }]
-          }, {
-            value: 'notice',
-            label: 'Notice',
-            children: [{
-              value: 'alert',
-              label: 'Alert 警告'
-            }, {
-              value: 'loading',
-              label: 'Loading 加载'
-            }, {
-              value: 'message',
-              label: 'Message 消息提示'
-            }, {
-              value: 'message-box',
-              label: 'MessageBox 弹框'
-            }, {
-              value: 'notification',
-              label: 'Notification 通知'
-            }]
-          }, {
-            value: 'navigation',
-            label: 'Navigation',
-            children: [{
-              value: 'menu',
-              label: 'NavMenu 导航菜单'
-            }, {
-              value: 'tabs',
-              label: 'Tabs 标签页'
-            }, {
-              value: 'breadcrumb',
-              label: 'Breadcrumb 面包屑'
-            }, {
-              value: 'dropdown',
-              label: 'Dropdown 下拉菜单'
-            }, {
-              value: 'steps',
-              label: 'Steps 步骤条'
-            }]
-          }, {
-            value: 'others',
-            label: 'Others',
-            children: [{
-              value: 'dialog',
-              label: 'Dialog 对话框'
-            }, {
-              value: 'tooltip',
-              label: 'Tooltip 文字提示'
-            }, {
-              value: 'popover',
-              label: 'Popover 弹出框'
-            }, {
-              value: 'card',
-              label: 'Card 卡片'
-            }, {
-              value: 'carousel',
-              label: 'Carousel 走马灯'
-            }, {
-              value: 'collapse',
-              label: 'Collapse 折叠面板'
-            }]
-          }]
-        }, {
-          value: 'ziyuan',
-          label: '资源',
-          children: [{
-            value: 'axure',
-            label: 'Axure Components'
-          }, {
-            value: 'sketch',
-            label: 'Sketch Templates'
-          }, {
-            value: 'jiaohu',
-            label: '组件交互文档'
-          }]
-        }]
+            tagsText: ['0-6岁', '6-8岁', '9-12岁', '13-16岁', '16-18岁'],                   //年龄标签内容
+            selectedTagsText: [],           //选中的tags索引值，是数组。因为可以选多个
+            // subjectCategory: [],        //默认选中的 课程类别ID 分级数组。
+            subjectProps: {
+                value: 'id',
+                children: 'childs',
+                label: 'name'
+            },
+            subjectList: [],             //课程分类的数据源
+            isUpload: false             //loading动画状态显示控制
         }
+    },
+    computed: {
+        title: {        //课程名称
+            get() {
+                return this.$store.state.title
+            },
+            set(value) {
+                this.setTitle(value)
+            }
+        },
+        subtitle: {     //课程副标题
+            get() {
+                return this.$store.state.subtitle
+            },
+            set(value) {
+                this.setSubtitle(value)
+            }
+        },
+        description: {          //课程描述
+            get() {
+                return this.$store.state.description
+            },
+            set(value) {
+                this.setDescription(value)
+            }
+        },
+        price: {            //课程价格
+            get() {
+                return this.$store.state.price
+            },
+            set(value) {        //判断是否免费
+                this.setPrice(this.radio == 2 ? value : 0)
+            }
+        },
+        categoryId: {       //课程分类id
+            get() {
+                return this.$store.state.categoryId
+            },
+            set(value) {        //参数是一个数组
+                
+                this.setCategoryId(value)
+            }
+        },
+        ...mapState([
+            'courseId'
+        ])
+    },
+    created() {         //查看地址栏是否有courseId，有的话就是 更新课程，否则就是 新建课程。
+
+        this.emptyCourseVuex()          //首先vuex关于课程的内容数据全清空
+        let courseId = this.$route.query.courseId
+
+        if (courseId) {       //有，就是更新课程，发送请求获取详情数据
+
+            this.setCourseId(courseId)        //保存到vuex中课程的courseId
+
+            this.getCourseDetail(courseId)      //请求获取课程详情数据
+
+        }
+
     },
     async mounted() {
         try {
 
-            //获取一级课程类别
+            //获取所有课程类别
             let {status, data: {data: dataMsg}} = await this.axios({
-                url: '/material/categroy/list/1',
+                url: '/material/categroy/list',
                 method: 'get',
                 params: {
                     params: {
@@ -317,15 +192,41 @@ export default {
             })
 
             if (status === 200 && dataMsg) {
-                this.subjectList = dataMsg.map((item) => {
-                    return {
-                        label: item.name,
-                        value: item.id,
-                        pid: item.pid,
-                        children: []
+
+                loopArr(dataMsg)
+
+                //循环数组
+                function loopArr(arr) {
+                    for (let i = 0; i < arr.length; i ++) {
+                        loopObj(arr[i])
                     }
-                })
+                }
+
+                //循环对象
+                function loopObj(obj) {
+                    var hasChilds = false
+                    for (var item in obj) {
+                        if (item === 'childs' && obj.childs.length) {
+                            hasChilds = true
+                        }
+                    }
+
+                    if (hasChilds) {
+                        loopArr(obj.childs)
+                    }
+                    else {
+                        delete obj.childs       //最后一级删除掉childs属性
+                    }
+                    
+                }
+
+                this.subjectList = dataMsg
+
             }
+
+
+            //接着如果有课程courseId的话，属于更新操作，就获取课程courseId
+            // this.$route.query.courseId && this.setCourseId(this.$route.query.courseId)
             
         }
         catch(err) {
@@ -333,63 +234,149 @@ export default {
         }
         
     },
-    created() {
-        this.options = [{
-          value: '选项1',
-          label: '黄金糕'
-        }, {
-          value: '选项2',
-          label: '双皮奶'
-        }, {
-          value: '选项3',
-          label: '蚵仔煎'
-        }, {
-          value: '选项4',
-          label: '龙须面'
-        }, {
-          value: '选项5',
-          label: '北京烤鸭'
-        }]
-    },
     methods: {
-        async createCourse() {              //点击下一步 ， 创建课程，并进行路由跳转
-            console.log("我点击事件了")
-            try {
-                let {status, data: {data: dataMsg}} = await this.axios({
-                url: '/material/course/create',
-                    method: 'post',
-                    data: {
-                        params: {
-                            categoryId:1,
-                            title:"Blocks of Grass",
-                            subtitle:"Completely flat world made of grass blocks.",
-                            description:"Plenty of space for building without distractions. ",
-                            price:98.00,
-                            thumbnail:"http://img.jdcloud.com/n0/1234.png",
-                            visible:2,
-                            creator:11111,
-                            tag1:"10-12岁,15-18岁",
-                            tag2:"计算机科学"
-                        }
-                    }
-                })
+        async submit() {              //点击下一步 ， 判断是 更新课程 还是 新建课程，分别对应不同的请求接口
+            this.$route.query.courseId ?
+                this.updateCourse()         //更新课程
+            :
+                this.createCourse()         //新建课程
+        },
+        async updateCourse() {          //更新课程
 
-                if (status === 200 && dataMsg.courseId) {       //课程创建成功
-
-                    this.$router.push({     //点击下一步，跳转到 课件上传页面
-                        path: '/admin/courseManage/newCourseUpload'
+            let {status, data: {data: dataMsg}} = await this.axios({
+                method: 'get',
+                url: '/material/course/update',
+                params: {
+                    params: JSON.stringify({
+                        id: Number(this.courseId),
+                        categoryId: this.categoryId[this.categoryId.length - 1],
+                        title: this.title,
+                        subtitle: this.subtitle,
+                        description: this.description,
+                        price: this.price,
+                        thumbnail: this.$store.state.thumbnail,
+                        visible: 1,
+                        creator: 111,
+                        tag1: this.$store.state.tag1
                     })
                 }
+            })
 
+            if (status === 200 && dataMsg) {
+                
+                this.$message("课程更新成功！")
+
+                this.$router.push({
+                    path: '/admin/courseManage/newCourseUpload',
+                    query: {
+                        courseId: this.courseId
+                    }
+                })
+            }
+        },
+        async createCourse() {          //新建课程
+            let {status, data: {data: courseId}} = await this.axios({
+                method: 'get',
+                url: '/material/course/create',
+                params: {
+                    params: JSON.stringify({
+                        categoryId: this.categoryId[this.categoryId.length - 1],
+                        title: this.title,
+                        subtitle: this.subtitle,
+                        description: this.description,
+                        price: this.price,
+                        thumbnail: this.$store.state.thumbnail,
+                        visible: 1,
+                        creator: 111,
+                        tag1: this.$store.state.tag1
+                    })
+                }
+            })
+
+            if (status === 200 && courseId) {
+
+                this.$message("课程新建成功！")
+
+                this.setCourseId(courseId)      //更新vuex中的课程courseId
+
+                this.$router.push({
+                    path: '/admin/courseManage/newCourseUpload',
+                    query: {
+                        courseId
+                    }
+                })
+            }
+        },
+        async getCourseDetail(courseId) {     //更新课程时，获取 课程详情数据
+            try {
+                let {status, data: {data: dataMsg}} = await this.axios({
+                    method: 'get',
+                    url: '/material/course/' + courseId
+                })
+
+                if (status === 200 && dataMsg) {
+                    this.setCourseDetail(dataMsg)       //将获取到的课程详情，存入到vuex中
+                    this.selectedTagsText = dataMsg.tag1.split(',')
+                }
             }
             catch(err) {
                 console.log(err)
             }
-
             
         },
-        subjectChange(val) {
-            console.log("看看什么时候执行：" + val)
+        clickTags(text) {          //点击tag标签选中效果，及数据赋值
+            let index = this.selectedTagsText.indexOf(text)
+
+            index >= 0 ?        //数组是否包含点击的tags内容
+                this.selectedTagsText.splice(index, 1)      //包含，则删除
+                : 
+                this.selectedTagsText.push(text)            //不包含，则添加
+            
+            this.setTag1(this.selectedTagsText.join(','))
+        },
+        handleAvatarSuccess(res, file) {      //图片上传成功后的回调
+            // this.imageUrl = URL.createObjectURL(file.raw);
+            console.log("这个是图片上传成功后返回的地址：" + this.imageUrl)
+        },
+        async beforeAvatarUpload(file) {        //上传图片前的回调
+            const isJPG = file.type === 'image/jpeg';
+            const isLt2M = file.size / 1024 / 1024 < 2;
+
+            if (!isJPG) {
+                this.$message.error('上传头像图片只能是 JPG 格式!');
+                return false
+            }
+            if (!isLt2M) {
+                this.$message.error('上传头像图片大小不能超过 2MB!');
+                return false
+            }
+            // return isJPG && isLt2M;
+            this.isUpload = true        //loading动画显示
+
+            let fd = new FormData()
+            fd.append('file', file)
+            fd.append('params', JSON.stringify({uid: '123'}))
+
+            try {
+                let {status, data:{data: dataMsg}} = await this.axios({
+                    url: '/oss/upload',
+                    method: 'post',
+                    data: fd,
+                    noQs: true,
+                    // headers: {
+                    //     'Content-type': 'multipart/form-data'
+                    // }
+                })
+
+                if (status === 200 && dataMsg) {
+                    this.setThumbnail(dataMsg.url)     //上传成功后返回服务器上的图片路径地址
+                    
+                    this.isUpload = false           //loading动画隐藏
+                }
+            }
+            catch(err) {
+                console.log(err)
+            }
         },
         async loadCatagoryList(id) {        //根据上一级分类的id，加载下一级。  参数是选中的value值，是一个数组，对应选中功能的一二级的value值
         
@@ -418,7 +405,19 @@ export default {
                     }
                 })
             }
-        }
+        },
+        ...mapMutations([
+            'setTitle',
+            'setSubtitle',
+            'setDescription',
+            'setPrice',
+            'setTag1',
+            'setCategoryId',
+            'setThumbnail',
+            'setCourseId',
+            'emptyCourseVuex',
+            'setCourseDetail'
+        ])
     },
     components: {
         H2Title
@@ -426,6 +425,31 @@ export default {
 }
 </script>
 <style lang="less" scoped>
+.avatar-uploader /deep/ .el-upload {
+    border: 1px dashed #d9d9d9;
+    border-radius: 6px;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    width: 180px;
+    height: 120px;
+}
+.avatar-uploader /deep/ .el-upload:hover {
+    border-color: #409EFF;
+}
+.avatar-uploader /deep/ .el-upload /deep/ .avatar-uploader-icon {
+    font-size: 28px;
+    color: #8c939d;
+    width: 180px;
+    height: 120px;
+    line-height: 120px;
+    text-align: center;
+}
+.avatar {
+    width: 178px;
+    height: 178px;
+    display: block;
+}
 .title {
     font-size: 12px;
 	font-weight: normal;
@@ -465,6 +489,17 @@ export default {
     border-radius: 4px;
     border: solid 1px #f1f1f1;
     margin-bottom: 30px;
+}
+.tags {
+    border-radius: 20px;
+    margin-right: 20px;
+    padding-left: 15px;
+    padding-right: 15px;
+    cursor: pointer;
+}
+.tagsSelected {
+    color: #fff;
+    background-color: #5693ff;
 }
 .charge {
     width: 240px;
