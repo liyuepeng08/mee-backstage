@@ -6,9 +6,16 @@
             <el-breadcrumb-item>课程列表</el-breadcrumb-item>
         </el-breadcrumb>
         <h2-title text="课程管理"></h2-title>
-        <search></search>
-        <div class="course-content">
-            <el-button type="primary" icon="el-icon-plus" @click="newCourse">新建</el-button>
+        <div class="course-operation">
+            <div class="course-butt">
+                <el-button type="primary" round icon="el-icon-plus" @click="newCourse">新建</el-button>
+            </div>
+            
+            <div class="course-search">
+                <search :config="searchConfig" @getSearchText="searchCourseList"></search>
+            </div>
+        </div>
+        <div class="course-content">  
 
             <el-table
                 :data="tableData"
@@ -78,24 +85,44 @@ export default {
         return {
             tableData: [],
             loading: true,           //保存是否请求表格数据的状态
-            totalCount: ''               //列表数据的总条数
+            totalCount: 0,               //列表数据的总条数
+
+            searchConfig: {            //搜索框配置
+                date: true,         //是否显示日期搜索组件
+                cascader1: {
+                    placeholder: '所属科目',
+                    data: []
+                },
+                text: {       //是否显示input搜索输入框
+                    placeholder: '输入课程名称'
+                }
+            },
+
+            params: {       //加载课程列表传参
+                title: '',
+                createTime: '',
+                categoryId: '',
+                pageIndex: 1,       
+                pageSize: 10,
+                status: 1
+            }
         }
     },
     mounted() {
-        this.loadCourseList(1, 10)
+        //首页加载数据
+        this.loadCourseList()
+
+        //加载分类数据，供 搜索用
+        this.loadSearchClassify()
     },
     methods: {
-        async loadCourseList(pageIndex, pageSize) {     //参数  当前页数， 每页显示条数
+        async loadCourseList() {     //参数  当前页数， 每页显示条数
             try {
                 let {status, data: {data: dataMsg}} = await this.axios({
                     method: 'get',
                     url: '/material/course/listByPage',
                     params: {
-                        params: {
-                            pageIndex,
-                            pageSize,
-                            status: 1
-                        }
+                        params: this.params
                     }
                 })
 
@@ -108,19 +135,69 @@ export default {
                                     (item.tag4 || '') + ' ' + 
                                     (item.tag5 || '')
 
-                        console.log(item.tag)
                     })     
                     this.tableData = dataMsg.list    //赋值表格数据
                     this.totalCount = dataMsg.totalCount        //总条数赋值
-
                 }
             }
             catch(err) {
                 console.log(err)
             }
         },
-        newCourse() {
-            this.$router.push({         //点击"新建"按钮，跳转到 新建课程详情页面
+        //加载 搜索用的 课程分类数据
+        async loadSearchClassify() {
+            try {
+
+                //获取所有课程类别
+                let {status, data: {data: dataMsg}} = await this.axios({
+                    url: '/material/categroy/list',
+                    method: 'get',
+                    params: {
+                        params: {
+                            status: 1
+                        }
+                    }
+                })
+
+                if (status === 200 && dataMsg) {
+
+                    loopArr(dataMsg)
+
+                    //循环数组
+                    function loopArr(arr) {
+                        for (let i = 0; i < arr.length; i ++) {
+                            loopObj(arr[i])
+                        }
+                    }
+
+                    //循环对象
+                    function loopObj(obj) {
+                        var hasChilds = false
+                        for (var item in obj) {
+                            if (item === 'childs' && obj.childs.length) {
+                                hasChilds = true
+                            }
+                        }
+
+                        if (hasChilds) {
+                            loopArr(obj.childs)
+                        }
+                        else {
+                            delete obj.childs       //最后一级删除掉childs属性
+                        }
+                        
+                    }
+
+                    this.searchConfig.cascader1.data = dataMsg      //赋值给搜索框配置json
+                }
+            }
+            catch(err) {
+                console.log(err)
+            }
+
+        },
+        newCourse() {       //点击"新建"按钮，跳转到 新建课程详情页面
+            this.$router.push({         
                 path: '/admin/courseManage/newCourseDetail'
             })
         },
@@ -171,6 +248,24 @@ export default {
         },
         changePage(pageNum) {       //切换页码回调函数，参数是切换后的页码
             this.loadCourseList(pageNum, 10)
+        },
+        searchCourseList(searchMsg) {           //点击搜索，调用的回调函数
+            console.log(searchMsg)
+            //搜索内容添加到要传递的参数中
+            this.params.createTime = searchMsg.date
+            this.params.categoryId = searchMsg.categoryId1[searchMsg.categoryId1.length - 1]
+            this.params.title = searchMsg.searchText
+            this.params.pageIndex = 1
+            // params: {       //加载课程列表传参
+            //     title: '',
+            //     createTime: '',
+            //     categoryId: '',
+            //     pageIndex: 1,       
+            //     pageSize: 10,
+            //     status: 1
+            // }
+            //重新加载表格数据
+            this.loadCourseList()
         }
     },
     watch: {
@@ -237,6 +332,23 @@ export default {
             text-overflow: ellipsis;
         }
     }
+}
+.course-operation {
+    margin-bottom: 20px;
+    &:after {
+        content: '';
+        clear: both;
+        display: block;
+    }
+    .course-butt {
+        float: left;
+        width: 20%;
+    }
+    .course-search {
+        width: 900px;
+        float: right
+    }
+
 }
 </style>
 

@@ -9,11 +9,11 @@
         <div class="title">
             <span class="selected"><i>●</i> &nbsp; 基本信息</span> &nbsp; &gt; &nbsp; <span><i>○</i> &nbsp; 课件上传</span>
         </div>
-        <div class="newCourse-content">
+        <div class="newCourse-content" v-loading="isLoad">
             
             <h2 class="h-title">基本信息</h2>
             <el-row>
-                <el-col :span="3">课程封面：</el-col>
+                <el-col :span="3"><i class="red">*</i>课程封面：</el-col>
                 <el-col :span="4" v-loading="isUpload">
                     <el-upload
                         class="avatar-uploader"
@@ -27,25 +27,25 @@
                 </el-col>
             </el-row>
             <el-row>
-                <el-col :span="3">课程名称：</el-col>
+                <el-col :span="3"><i class="red">*</i>课程名称：</el-col>
                 <el-col :span="10">
                     <el-input v-model="title"  placeholder="请输入课程名称"></el-input>
                 </el-col>
             </el-row>
             <el-row>
-                <el-col :span="3">副标题：</el-col>
+                <el-col :span="3"><i class="red">*</i>副标题：</el-col>
                 <el-col :span="10">
                     <el-input v-model="subtitle"  placeholder="请输入副标题"></el-input>
                 </el-col>
             </el-row>
             <el-row>
-                <el-col :span="3">课程简介：</el-col>
+                <el-col :span="3"><i class="red">*</i>课程简介：</el-col>
                 <el-col :span="10">
                     <el-input v-model="description" type="textarea" placeholder="请输入课程简介" :rows="3"></el-input>
                 </el-col>
             </el-row>
             <el-row>
-                <el-col :span="3">课程类别：</el-col>
+                <el-col :span="3"><i class="red">*</i>课程类别：</el-col>
                 <el-col :span="3">
                     <el-cascader
                         :options="subjectList"
@@ -56,13 +56,13 @@
                 </el-col>
             </el-row>
             <el-row>
-                <el-col :span="3">年龄标签：</el-col>
+                <el-col :span="3"><i class="red">*</i>年龄标签：</el-col>
                 <el-col :span="13">
                     <el-tag v-for="(text, idx) in tagsText" :class='{tags: true,tagsSelected: selectedTagsText.indexOf(text) >= 0}' :key="idx" @click="clickTags(text)">{{text}}</el-tag>
                 </el-col>
             </el-row>
             <el-row>
-                <el-col :span="3">付费模式：</el-col>
+                <el-col :span="3"><i class="red">*</i>付费模式：</el-col>
                 <el-col :span="10">
                     <el-radio v-model="radio" label="1">免费模式</el-radio>
                     <el-radio v-model="radio" label="2">收费模式</el-radio>
@@ -114,7 +114,8 @@ export default {
                 label: 'name'
             },
             subjectList: [],             //课程分类的数据源
-            isUpload: false             //loading动画状态显示控制
+            isUpload: false,             //上传图片loading动画状态显示控制
+            isLoad: false               //更新课程请求数据 页面loading动画控制
         }
     },
     computed: {
@@ -219,14 +220,10 @@ export default {
                     }
                     
                 }
-
+                console.log(JSON.stringify(dataMsg))
                 this.subjectList = dataMsg
 
             }
-
-
-            //接着如果有课程courseId的话，属于更新操作，就获取课程courseId
-            // this.$route.query.courseId && this.setCourseId(this.$route.query.courseId)
             
         }
         catch(err) {
@@ -309,6 +306,7 @@ export default {
         },
         async getCourseDetail(courseId) {     //更新课程时，获取 课程详情数据
             try {
+                this.isLoad = true          //加载数据loading动画显示
                 let {status, data: {data: dataMsg}} = await this.axios({
                     method: 'get',
                     url: '/material/course/' + courseId
@@ -317,6 +315,7 @@ export default {
                 if (status === 200 && dataMsg) {
                     this.setCourseDetail(dataMsg)       //将获取到的课程详情，存入到vuex中
                     this.selectedTagsText = dataMsg.tag1.split(',')
+                    this.isLoad = false     //加载数据loading动画隐藏
                 }
             }
             catch(err) {
@@ -544,5 +543,9 @@ export default {
 .newCourse-content /deep/ .el-col {
     height: 100px;
     line-height: 100px;
+}
+.red {
+    color: red;
+    margin-right: 10px;
 }
 </style>
