@@ -18,16 +18,17 @@
       class="demo-ruleForm"
       style="width:390px"
       size="mini"
+      :rules="rules"
     >
-      <dl class="model essential" v-if="tab === 1">
+      <dl class="model essential" v-show="tab === 1">
         <dt>基本信息</dt>
         <!-- <el-form-item label="账号" prop="account">
           <el-input v-model="ruleForm.account" placeholder="账号"></el-input>
         </el-form-item>-->
-        <el-form-item label="姓名" prop="userName">
+        <el-form-item label="姓名" prop="userName" class="validate">
           <el-input class="w150" v-model="ruleForm.userName" placeholder="请输入姓名"></el-input>
         </el-form-item>
-        <el-form-item label="昵称" prop="nickName">
+        <el-form-item label="昵称" prop="nickName" class="validate">
           <el-input class="w150" v-model="ruleForm.nickName" placeholder="请输入昵称"></el-input>
         </el-form-item>
         <el-form-item label="性别" prop="gender">
@@ -36,12 +37,12 @@
             <el-option label="女" value="1"></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="年级" prop="grade">
+        <!-- <el-form-item label="年级" prop="grade">
           <el-select style="width:100%" v-model="ruleForm.grade" placeholder="请选择年级">
             <el-option label="三年级" value="shanghai"></el-option>
             <el-option label="四年级" value="beijing"></el-option>
           </el-select>
-        </el-form-item>
+        </el-form-item>-->
         <el-form-item label="联系电话" prop="mobile">
           <el-input v-model="ruleForm.mobile"></el-input>
         </el-form-item>
@@ -82,7 +83,7 @@
           >下一步</el-button>
         </el-form-item>
       </dl>
-      <dl class="model more" v-if="tab === 2">
+      <ol class="model more" v-show="tab === 2">
         <dt>更多信息</dt>
         <el-form-item label="民族" prop="nation">
           <el-input disabled class="w150" v-model="ruleForm.nation" placeholder="输入内容"></el-input>
@@ -127,14 +128,14 @@
             <!-- <el-button round>圆角按钮</el-button> -->
             <el-button @click="back" round style="width:120px;height:40px;font-size: 14px;">上一步</el-button>
             <el-button
-              @click="submit"
+              @click="submit('ruleForm')"
               type="primary"
               round
               style="width:120px;height:40px;font-size: 14px;"
             >提交</el-button>
           </el-row>
         </el-form-item>
-      </dl>
+      </ol>
     </el-form>
 
     <!-- </form> -->
@@ -150,24 +151,33 @@ export default {
       tab: 1,
       ruleForm: {
         userName: "", //用户名
+        nickName: "", //昵称
         password: "", //用户密码
         gender: "", //性别
         email: "", //邮箱
         mobile: "", //手机号
         major: "", //专业，默认是22
         title: "", //职称，默认是1
-
         account: "", //账户
-        nickName: "", //昵称
         school: "", //学校
         phone: "", //电话
         birthday: "", //出生年月
-        grade: "", //年级
+        // grade: "", //年级
         class: "", //班级
         nation: "", //民族
         age: "", //年龄
         native: "", //籍贯
         remarks: "" //备注
+      },
+      rules: {
+        userName: [
+          { required: true, message: "请输入活动名称", trigger: "blur" },
+          { min: 2, max: 5, message: "长度在 2 到 5 个字符", trigger: "blur" }
+        ],
+        nickName: [
+          { required: true, message: "请输入活动名称", trigger: "blur" },
+          { min: 1, max: 5, message: "长度在 2 到 5 个字符", trigger: "blur" }
+        ]
       },
       radio2: 3
     };
@@ -184,51 +194,58 @@ export default {
     back: function() {
       this.tab--;
     },
-    submit: function() {
+    submit(formName) {
       const tid = sessionStorage.getItem("tid");
       let that = this.ruleForm;
-      //新增
-      this.axios
-        .get("/tenant/user/createUser", {
-          params: {
-            params: {
-              userName: that.userName, //用户名
-              realName: that.userName, //用户名
-              nickName: that.nickName, //昵称
-              password: "000000", //用户密码
-              gender: that.gender, //性别
-              email: that.email, //邮箱
-              mobile: that.mobile, //手机号
-              major: "22", //专业，默认是22
-              title: "1", //职称，默认是1
-              birthday: "", //生日
-              tenantId: tid, //机构
-              role: "2" //角色（老师：1；学生:2）
-            }
-          }
-        })
-        .then(response => {
-          console.log(111);
-          let data = response.data;
-          console.log("-------data" + data);
-          if (data.code == 0) {
-            //提交弹出框
-            this.$alert("提交成功，请等待审核！", "", {
-              confirmButtonText: "返回",
-              type: "success",
-              showClose: "",
-              confirmButtonClass: "round"
-              // center: true
-            }).then(() => {
-              this.$router.push({ path: "/admin/studentManage" });
+      this.$refs[formName].validate(valid => {
+        if (valid) {
+          //新增
+          this.axios
+            .get("/tenant/user/createUser", {
+              params: {
+                params: {
+                  userName: that.userName, //用户名
+                  realName: that.userName, //用户名
+                  nickName: that.nickName, //昵称
+                  password: "000000", //用户密码
+                  gender: that.gender, //性别
+                  email: that.email, //邮箱
+                  mobile: that.mobile, //手机号
+                  major: "22", //专业，默认是22
+                  title: "1", //职称，默认是1
+                  birthday: "", //生日
+                  tenantId: tid, //机构
+                  role: "2" //角色（老师：1；学生:2）
+                }
+              }
+            })
+            .then(response => {
+              console.log(111);
+              let data = response.data;
+              console.log("-------data" + data);
+              if (data.code == 0) {
+                //提交弹出框
+                this.$alert("提交成功，请等待审核！", "", {
+                  confirmButtonText: "返回",
+                  type: "success",
+                  showClose: "",
+                  confirmButtonClass: "round"
+                  // center: true
+                }).then(() => {
+                  this.$router.push({ path: "/admin/studentManage" });
+                });
+              }
+            })
+            .catch(function(error) {
+              alert("提交失败！");
+              console.log(error);
             });
-          }
-        })
-        .catch(function(error) {
-          console.log(2222);
-          alert("提交失败！");
-          console.log(error);
-        });
+        } else {
+          console.log("error submit!!");
+          alert("请填写所有带*号的必填项！");
+          return false;
+        }
+      });
     }
   }
 };
@@ -295,6 +312,18 @@ export default {
   //more
   .more {
     padding: 34px 0px 34px 40px;
+  }
+  // 验证
+  .validate {
+    position: relative;
+  }
+  // 验证子项
+  /deep/
+    .el-form-item.is-required:not(.is-no-asterisk)
+    > .el-form-item__label:before {
+    position: absolute;
+    left: -12px;
+    top: 2px;
   }
 
   /deep/ .el-form-item {

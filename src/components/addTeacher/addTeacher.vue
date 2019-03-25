@@ -22,12 +22,10 @@
       class="demo-ruleForm"
       style="width:390px"
       size="mini"
+      :rules="rules"
     >
-      <dl class="model essential" v-if="tab === 1">
+      <dl class="model essential" v-show="tab === 1">
         <dt>基本信息</dt>
-        <!-- <el-form-item label="账号" prop="account">
-          <el-input v-model="ruleForm.account" placeholder="账号"></el-input>
-        </el-form-item>-->
         <el-form-item label="头像" prop="name">
           <el-upload
             class="avatar-uploader"
@@ -39,13 +37,13 @@
           </el-upload>
         </el-form-item>
 
-        <el-form-item label="姓名" prop="userName">
+        <el-form-item label="姓名" prop="userName" class="validate">
           <el-input class="w150" v-model="ruleForm.userName" placeholder="请输入真实姓名"></el-input>
         </el-form-item>
-        <el-form-item label="昵称" prop="nickName">
+        <el-form-item label="昵称" prop="nickName" class="validate">
           <el-input class="w150" v-model="ruleForm.nickName" placeholder="输入昵称"></el-input>
         </el-form-item>
-        <el-form-item label="联系电话" prop="mobile">
+        <el-form-item label="联系电话" prop="mobile" class="validate">
           <el-input class="w150" v-model="ruleForm.mobile" placeholder="输入手机号"></el-input>
         </el-form-item>
         <el-form-item label="性别" prop="gender">
@@ -63,7 +61,7 @@
             <el-option label="北京市第二小学" value="beijing"></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="教授科目" prop="major">
+        <!-- <el-form-item label="教授科目" prop="major">
           <el-row class="w260">
             <el-col :span="14">
               <el-select style="width:100%" v-model="ruleForm.major" placeholder="选择科目">
@@ -71,13 +69,6 @@
                 <el-option label="英语" value="beijing"></el-option>
               </el-select>
             </el-col>
-            <!-- <el-col :span="10">
-              <el-row style="margin-bottom:10px;">
-                <el-button style="border:none">
-                  <i class="el-icon-circle-plus-outline" style="color:#5693ff;margin-right: 4px;"></i>添加科目选项
-                </el-button>
-              </el-row>
-            </el-col>-->
           </el-row>
         </el-form-item>
         <el-form-item label="所在班级" prop="class">
@@ -98,7 +89,7 @@
               </el-row>
             </el-col>
           </el-row>
-        </el-form-item>
+        </el-form-item>-->
         <el-form-item>
           <el-button
             type="primary"
@@ -108,7 +99,7 @@
           >下一步</el-button>
         </el-form-item>
       </dl>
-      <dl class="model more" v-if="tab === 2">
+      <dl class="model more" v-show="tab === 2">
         <dt>更多信息</dt>
         <el-form-item label="民族" prop="nation">
           <el-input disabled class="w150" v-model="ruleForm.nation" placeholder="输入内容"></el-input>
@@ -146,7 +137,7 @@
         <el-form-item>
           <el-button @click="back" class="back" round>上一步</el-button>
           <el-button
-            @click="submit"
+            @click="submit('ruleForm')"
             type="primary"
             round
             style="width:120px;height:40px;font-size: 14px;"
@@ -165,7 +156,7 @@
           </el-row>
         </el-form-item>-->
       </dl>
-      <dl style="display:none;" class="model aptitude" v-if="tab === 3">
+      <dl style="display:none;" class="model aptitude" v-show="tab === 3">
         <dt>教师资质</dt>
         <el-form-item label="教龄" prop="teachingAge">
           <el-input disabled class="w150" v-model="ruleForm.teachingAge" placeholder="输入内容"></el-input>
@@ -231,7 +222,7 @@
         <el-form-item>
           <el-button @click="back" class="back" round>上一步</el-button>
           <el-button
-            @click="submit"
+            @click="submit('ruleForm')"
             type="primary"
             round
             style="width:120px;height:40px;font-size: 14px;"
@@ -277,9 +268,28 @@ export default {
         teachingAge: "", //教龄
         teachingBrief: "" //教学简介
       },
+      rules: {
+        userName: [
+          { required: true, message: "请输入活动名称", trigger: "blur" },
+          { min: 2, max: 5, message: "长度在 2 到 5 个字符", trigger: "blur" }
+        ],
+        nickName: [
+          { required: true, message: "请输入活动名称", trigger: "blur" },
+          { min: 1, max: 5, message: "长度在 2 到 5 个字符", trigger: "blur" }
+        ],
+        mobile: [
+          { required: true, message: "请输入手机号", trigger: "blur" },
+          {
+            pattern: /^1[34578]\d{9}$/,
+            message: "手机号格式错误",
+            trigger: "blur"
+          }
+        ]
+      },
       radio2: 3
     };
   },
+
   methods: {
     checkTab: function(index) {
       this.tab = index;
@@ -292,51 +302,59 @@ export default {
     back: function() {
       this.tab--;
     },
-    submit: function() {
+    submit: function(formName) {
       const tid = sessionStorage.getItem("tid");
       let that = this.ruleForm;
-      //新增
-      this.axios
-        .get("/tenant/user/createUser", {
-          params: {
-            params: {
-              userName: that.userName, //用户名
-              realName: that.userName, //用户名
-              nickName: that.nickName, //昵称
-              password: "000000", //用户密码
-              gender: that.gender, //性别
-              email: that.email, //邮箱
-              mobile: that.mobile, //手机号
-              major: "22", //专业，默认是22
-              title: "1", //职称，默认是1
-              birthday: "", //生日
-              tenantId: tid, //机构
-              role: "1" //角色（老师：1；0：学生）
-            }
-          }
-        })
-        .then(response => {
-          console.log(111);
-          let data = response.data;
-          console.log("-------data" + data);
-          if (data.code == 0) {
-            //提交弹出框
-            this.$alert("提交成功，请等待审核！", "", {
-              confirmButtonText: "返回",
-              type: "success",
-              showClose: "",
-              confirmButtonClass: "round"
-              // center: true
-            }).then(() => {
-              this.$router.push({ path: "/admin/teacherManage" });
+      this.$refs[formName].validate(valid => {
+        if (valid) {
+          //新增
+          this.axios
+            .get("/tenant/user/createUser", {
+              params: {
+                params: {
+                  userName: that.userName, //用户名
+                  realName: that.userName, //用户名
+                  nickName: that.nickName, //昵称
+                  password: "000000", //用户密码
+                  gender: that.gender, //性别
+                  email: that.email, //邮箱
+                  mobile: that.mobile, //手机号
+                  major: "22", //专业，默认是22
+                  title: "1", //职称，默认是1
+                  birthday: "", //生日
+                  tenantId: tid, //机构
+                  role: "1" //角色（老师：1；0：学生）
+                }
+              }
+            })
+            .then(response => {
+              console.log(111);
+              let data = response.data;
+              console.log("-------data" + data);
+              if (data.code == 0) {
+                //提交弹出框
+                this.$alert("提交成功，请等待审核！", "", {
+                  confirmButtonText: "返回",
+                  type: "success",
+                  showClose: "",
+                  confirmButtonClass: "round"
+                  // center: true
+                }).then(() => {
+                  this.$router.push({ path: "/admin/teacherManage" });
+                });
+              }
+            })
+            .catch(function(error) {
+              alert("提交失败！");
+              console.log(error);
             });
-          }
-        })
-        .catch(function(error) {
-          console.log(2222);
-          alert("提交失败！");
-          console.log(error);
-        });
+        } else {
+          console.log("error submit!!");
+          alert("请填写所有带*号的必填项！");
+          return false;
+        }
+        //新增
+      });
     }
   }
 };
@@ -461,6 +479,18 @@ export default {
   //more
   .more {
     padding: 34px 0px 34px 40px;
+  }
+  // 验证
+  .validate {
+    position: relative;
+  }
+  // 验证子项
+  /deep/
+    .el-form-item.is-required:not(.is-no-asterisk)
+    > .el-form-item__label:before {
+    position: absolute;
+    left: -12px;
+    top: 2px;
   }
   //教师资质
   .aptitude {
