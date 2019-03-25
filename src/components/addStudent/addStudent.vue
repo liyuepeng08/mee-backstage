@@ -55,25 +55,6 @@
             <el-option label="北京市第二小学" value="beijing"></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="所在班级" prop="class">
-          <el-row>
-            <el-col :span="14">
-              <el-select disabled style="width:100%" v-model="ruleForm.class" placeholder="选择班级">
-                <el-option label="一班" value="shanghai"></el-option>
-                <el-option label="二班" value="beijing"></el-option>
-              </el-select>
-            </el-col>
-            <el-col :span="9">
-              <el-row style="margin-bottom:10px;">
-                <el-row style="margin-bottom:10px;">
-                  <el-button style="color:#a9a9a9;border:none">
-                    <i class="el-icon-circle-plus-outline" style="margin-right: 4px;"></i>添加班级选项
-                  </el-button>
-                </el-row>
-              </el-row>
-            </el-col>
-          </el-row>
-        </el-form-item>
         <el-form-item>
           <el-button
             type="primary"
@@ -86,24 +67,27 @@
       <ol class="model more" v-show="tab === 2">
         <dt>更多信息</dt>
         <el-form-item label="民族" prop="nation">
-          <el-input disabled class="w150" v-model="ruleForm.nation" placeholder="输入内容"></el-input>
-        </el-form-item>
-        <el-form-item label="年龄" prop="age">
-          <el-input class="w150" v-model="ruleForm.age" placeholder="输入内容"></el-input>
+          <el-input class="w150" v-model="ruleForm.nation" placeholder="输入内容"></el-input>
         </el-form-item>
         <el-form-item label="出生日期" prop="birthday">
           <el-date-picker class="w150" type="date" placeholder="选择日期" v-model="ruleForm.birthday"></el-date-picker>
         </el-form-item>
         <el-form-item label="籍贯" prop="native">
-          <el-input disabled class="w480" v-model="ruleForm.native" placeholder="输入内容"></el-input>
+          <el-input class="w480" v-model="ruleForm.native" placeholder="输入内容" maxlength="50"></el-input>
         </el-form-item>
         <el-form-item label="联系地址" prop="address">
-          <el-input disabled class="w480" v-model="ruleForm.address" placeholder="输入内容"></el-input>
+          <el-input
+            disabled
+            class="w480"
+            v-model="ruleForm.address"
+            placeholder="输入内容"
+            maxlength="50"
+          ></el-input>
         </el-form-item>
         <el-form-item label="父母电话" prop="parentPhone">
           <el-row>
             <el-col :span="14">
-              <el-input disabled v-model="ruleForm.parentPhone" placeholder="输入手机号码"></el-input>
+              <el-input disabled v-model="ruleForm.parentPhone" placeholder="输入手机号码" maxlength="11"></el-input>
             </el-col>
             <el-col :span="9">
               <el-row style="margin-bottom:10px;">
@@ -224,25 +208,33 @@ export default {
               let data = response.data;
               console.log("-------data" + data);
               if (data.code == 0) {
-                //提交弹出框
-                this.$alert("提交成功，请等待审核！", "", {
-                  confirmButtonText: "返回",
-                  type: "success",
-                  showClose: "",
-                  confirmButtonClass: "round"
-                  // center: true
-                }).then(() => {
-                  this.$router.push({ path: "/admin/studentManage" });
+                let timer = setTimeout(() => {
+                  //倒计时跳转
+                  this.$router.push({
+                    //跳转到列表页
+                    path: "/admin/courseManage"
+                  });
+                }, 3000);
+
+                this.$alert("3秒后返回上一级", "提交成功，请等待审核！！", {
+                  confirmButtonText: "直接跳转",
+                  callback: action => {
+                    clearTimeout(timer); //清除定时器
+                    this.$router.push({
+                      //跳转到列表页
+                      path: "/admin/studentManage"
+                    });
+                  }
                 });
               }
             })
             .catch(function(error) {
-              alert("提交失败！");
+              this.$message("提交失败！");
               console.log(error);
             });
         } else {
           console.log("error submit!!");
-          alert("请填写所有带*号的必填项！");
+          this.$message("请填写所有带*号的必填项！");
           return false;
         }
       });

@@ -123,13 +123,31 @@
           </el-select>
         </el-form-item>
         <el-form-item label="籍贯" prop="native">
-          <el-input disabled class="w480" v-model="ruleForm.native" placeholder="输入内容"></el-input>
+          <el-input
+            disabled
+            class="w480"
+            maxlength="50"
+            v-model="ruleForm.native"
+            placeholder="输入内容"
+          ></el-input>
         </el-form-item>
         <el-form-item label="身份证号" prop="idNumber">
-          <el-input disabled class="w480" v-model="ruleForm.idNumber" placeholder="输入手机号码"></el-input>
+          <el-input
+            disabled
+            class="w480"
+            maxlength="18"
+            v-model="ruleForm.idNumber"
+            placeholder="输入手机号码"
+          ></el-input>
         </el-form-item>
         <el-form-item label="常住地址" prop="address">
-          <el-input disabled class="w480" v-model="ruleForm.address" placeholder="输入内容"></el-input>
+          <el-input
+            disabled
+            maxlength="50"
+            class="w480"
+            v-model="ruleForm.address"
+            placeholder="输入内容"
+          ></el-input>
         </el-form-item>
         <!-- <el-form-item label="备注" prop="remarks">
           <el-input class="remarks" type="textarea" v-model="ruleForm.remarks" placeholder="输入内容"></el-input>
@@ -332,25 +350,33 @@ export default {
               let data = response.data;
               console.log("-------data" + data);
               if (data.code == 0) {
-                //提交弹出框
-                this.$alert("提交成功，请等待审核！", "", {
-                  confirmButtonText: "返回",
-                  type: "success",
-                  showClose: "",
-                  confirmButtonClass: "round"
-                  // center: true
-                }).then(() => {
-                  this.$router.push({ path: "/admin/teacherManage" });
+                let timer = setTimeout(() => {
+                  //倒计时跳转
+                  this.$router.push({
+                    //跳转到列表页
+                    path: "/admin/courseManage"
+                  });
+                }, 3000);
+
+                this.$alert("3秒后返回上一级", "提交成功，请等待审核！！", {
+                  confirmButtonText: "直接跳转",
+                  callback: action => {
+                    clearTimeout(timer); //清除定时器
+                    this.$router.push({
+                      //跳转到列表页
+                      path: "/admin/studentManage"
+                    });
+                  }
                 });
               }
             })
             .catch(function(error) {
-              alert("提交失败！");
+              this.$message("提交失败！");
               console.log(error);
             });
         } else {
           console.log("error submit!!");
-          alert("请填写所有带*号的必填项！");
+          this.$message("请填写所有带*号的必填项！");
           return false;
         }
         //新增
