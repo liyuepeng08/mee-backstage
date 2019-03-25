@@ -170,6 +170,8 @@ export default {
                     this.$router.push({     //跳转到列表页
                         path: '/admin/courseManage'
                     })
+                    //模拟点击关闭按钮
+                    document.getElementsByClassName('el-message-box__close')[0].click()
                 }, 3000)
 
                 this.$alert('3秒后返回上一级', '提交成功！', {
@@ -245,6 +247,14 @@ export default {
         catch(err) {
             console.log(err)
         }
+      },
+      deleteAlert() {
+          //删除弹窗
+        let alertBox = document.getElementsByClassName('el-message-box__wrapper')[0]
+        alertBox.parentNode.removeChild(alertBox)
+        //还有弹窗背景
+        let alertBj = document.getElementsByClassName('v-modal')[0]
+        alertBj.parentNode.removeChild(alertBj)
       },
       ...mapMutations([
           'deleteAttachList',
