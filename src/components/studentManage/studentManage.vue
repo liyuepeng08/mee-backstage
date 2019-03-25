@@ -115,12 +115,21 @@ export default {
                     if (res.status === 200) {
                         if (res.data.code == 0) {
                             rows.splice(scope.$index, 1);
+                            this.$message({
+                                type: 'success',
+                                message: '删除成功!'
+                            });
                         } else {
                             alert(res.data.msg);
                         }
                     }
                 }).catch((error) => {
                     console.log(error)
+                });
+            }).catch(() => {
+                this.$message({
+                    type: 'info',
+                    message: '已取消删除'
                 });
             });
         },

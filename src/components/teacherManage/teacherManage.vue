@@ -52,8 +52,12 @@ export default {
             pageSize: 10,
             loading: true,
             showPage: true,
-            paramsData: {}
+            paramsData: {},
+            tid: ''
         };
+    },
+    beforeMount() {
+        this.tid = sessionStorage.getItem('tid');
     },
     mounted() {
         this.getTeacherList();
@@ -62,14 +66,13 @@ export default {
     methods: {
         getTeacherList(pageNum) {
             pageNum = pageNum || 1;
-            let tid = sessionStorage.getItem('tid');
             if (JSON.stringify(this.paramsData) === "{}") {
                 this.paramsData = { role: 1, pageIndex: pageNum, pageSize: this.pageSize }
             } else {
                 this.paramsData.pageIndex = pageNum;
             }
             this.axios
-                .get("/tenant/user/list/" + tid, {
+                .get("/tenant/user/list/" + this.tid, {
                     params: { params: this.paramsData }
                 }).then(res => {
                     if (res.status === 200) {
@@ -95,7 +98,7 @@ export default {
             this.paramsData = params;
             this.getTeacherList()
         },
-        
+
         deleteMsg(scope, rows) {
             this.$confirm(
                 "确定要删除" + scope.row.realName + "用户吗？",
@@ -106,8 +109,7 @@ export default {
                     type: "warning"
                 }
             ).then(() => {
-                let tid = sessionStorage.getItem('tid'),
-                    params = { tid: tid, uid: scope.row.uid };
+                let params = { tid: this.tid, uid: scope.row.uid };
                 this.axios
                     .get("/tenant/user/delete", {
                         params: { params }
@@ -115,6 +117,10 @@ export default {
                         if (res.status === 200) {
                             if (res.data.code == 0) {
                                 rows.splice(scope.$index, 1);
+                                this.$message({
+                                    type: 'success',
+                                    message: '删除成功!'
+                                });
                             } else {
                                 alert(res.data.msg);
                             }
@@ -122,7 +128,12 @@ export default {
                     }).catch((error) => {
                         console.log(error)
                     });
-            });
+            }).catch(() => {
+                this.$message({
+                    type: 'info',
+                    message: '已取消删除'
+                });
+            })
         },
         detailMsg(scope) {
             this.$router.push({
