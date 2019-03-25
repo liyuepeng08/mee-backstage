@@ -18,28 +18,23 @@
       class="demo-ruleForm"
       style="width:390px"
       size="mini"
+      :rules="rules"
     >
       <dl class="model essential" v-if="tab === 1">
         <dt>基本信息</dt>
         <!-- <el-form-item label="账号" prop="account">
           <el-input v-model="ruleForm.account" placeholder="账号"></el-input>
         </el-form-item>-->
-        <el-form-item label="姓名" prop="userName">
+        <el-form-item label="姓名" prop="userName" class="validate">
           <el-input disabled class="w150" v-model="ruleForm.userName" placeholder="请输入姓名"></el-input>
         </el-form-item>
-        <el-form-item label="昵称" prop="nickName">
+        <el-form-item label="昵称" prop="nickName" class="validate">
           <el-input class="w150" v-model="ruleForm.nickName" placeholder="请输入昵称"></el-input>
         </el-form-item>
         <el-form-item label="性别" prop="gender">
           <el-select class="w150" v-model="ruleForm.gender" placeholder="请选择活动区域">
             <el-option label="男" value="0"></el-option>
             <el-option label="女" value="1"></el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="年级" prop="grade">
-          <el-select disabled style="width:100%" v-model="ruleForm.grade" placeholder="请选择年级">
-            <el-option label="三年级" value="shanghai"></el-option>
-            <el-option label="四年级" value="beijing"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="联系电话" prop="mobile">
@@ -127,7 +122,7 @@
             <!-- <el-button round>圆角按钮</el-button> -->
             <el-button @click="back" round style="width:120px;height:40px;font-size: 14px;">上一步</el-button>
             <el-button
-              @click="submitSM"
+              @click="submitSM('ruleForm')"
               type="primary"
               round
               style="width:120px;height:40px;font-size: 14px;"
@@ -171,6 +166,16 @@ export default {
         native: "", //籍贯
         remarks: "" //备注
       },
+      rules: {
+        userName: [
+          { required: true, message: "请输入活动名称", trigger: "blur" },
+          { min: 2, max: 5, message: "长度在 2 到 5 个字符", trigger: "blur" }
+        ],
+        nickName: [
+          { required: true, message: "请输入活动名称", trigger: "blur" },
+          { min: 1, max: 5, message: "长度在 2 到 5 个字符", trigger: "blur" }
+        ]
+      },
       radio2: 3
     };
   },
@@ -189,7 +194,8 @@ export default {
     back: function() {
       this.tab--;
     },
-    submitSM: function() {
+    submitSM(formName) {
+      const tid = sessionStorage.getItem("tid");
       const that = this.ruleForm;
       var birthday = new Date(that.birthday);
       const year = birthday.getFullYear();
@@ -200,43 +206,50 @@ export default {
         "" +
         (month < 10 ? "0" + month : month) +
         (date < 10 ? "0" + date : date);
-
-      //修改
-      this.axios
-        .get("/user/update", {
-          params: {
-            params: {
-              uid: that.uid,
-              userName: that.userName, //用户名
-              nickName: that.nickName, //昵称
-              gender: that.gender == "男" ? 0 : 1, //性别
-              email: that.email, //邮箱
-              birthday: times, //生日
-              mobile: that.mobile, //手机号
-              address: that.address, //地址
-              avatar: "http://jdcloud.image.com/4664.pgn" //头像
-            }
-          }
-        })
-        .then(response => {
-          let data = response.data;
-          if (data.code == 0) {
-            //提交弹出框
-            this.$alert("提交成功，请等待审核！", "", {
-              confirmButtonText: "返回",
-              type: "success",
-              showClose: "",
-              confirmButtonClass: "round"
-              // center: true
-            }).then(() => {
-              alert("提交失败！");
-              this.$router.push({ path: "/admin/studentManage" });
+      this.$refs[formName].validate(valid => {
+        if (valid) {
+          //修改
+          this.axios
+            .get("/user/update", {
+              params: {
+                params: {
+                  uid: that.uid,
+                  userName: that.userName, //用户名
+                  nickName: that.nickName, //昵称
+                  gender: that.gender == "男" ? 0 : 1, //性别
+                  email: that.email, //邮箱
+                  birthday: times, //生日
+                  mobile: that.mobile, //手机号
+                  address: that.address, //地址
+                  avatar: "http://jdcloud.image.com/4664.pgn" //头像
+                }
+              }
+            })
+            .then(response => {
+              let data = response.data;
+              if (data.code == 0) {
+                //提交弹出框
+                this.$alert("提交成功，请等待审核！", "", {
+                  confirmButtonText: "返回",
+                  type: "success",
+                  showClose: "",
+                  confirmButtonClass: "round"
+                  // center: true
+                }).then(() => {
+                  alert("提交失败！");
+                  this.$router.push({ path: "/admin/studentManage" });
+                });
+              }
+            })
+            .catch(function(error) {
+              console.log(error);
             });
-          }
-        })
-        .catch(function(error) {
-          console.log(error);
-        });
+        } else {
+          console.log("error submit!!");
+          alert("请填写所有带*号的必填项！");
+          return false;
+        }
+      });
     },
     //点击修改前数据
     details: function() {
@@ -338,7 +351,18 @@ export default {
   .more {
     padding: 34px 0px 34px 40px;
   }
-
+  // 验证
+  .validate {
+    position: relative;
+  }
+  // 验证子项
+  /deep/
+    .el-form-item.is-required:not(.is-no-asterisk)
+    > .el-form-item__label:before {
+    position: absolute;
+    left: -12px;
+    top: 2px;
+  }
   /deep/ .el-form-item {
     margin-bottom: 30px;
     // width: 100%;

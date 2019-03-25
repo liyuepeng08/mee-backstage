@@ -36,11 +36,12 @@ export default {
         signin() {//点击按钮登录
             let self = this;
             if (self.user.userName == '' && self.user.password != '') {
-                this.$message('请输入用户名！');
+                // this.$message('请输入用户名！');
+                this.$alert('请输入用户名！');
             } else if (self.user.password == '' && self.user.userName != '') {
-                this.$message('请输入密码！');
+                this.$alert('请输入密码！');
             } else if (self.user.userName == '' && self.user.password == '') {
-                this.$message('信息不能为空！');
+                this.$alert('信息不能为空！');
             } else {
                 let params = {
                     username: self.user.userName,
@@ -59,7 +60,7 @@ export default {
                                 path: '/admin/adminUser'
                             })
                         } else {
-                            this.$alert(res.data.msg, {
+                            this.$alert(res.data.data, {
                                 dangerouslyUseHTMLString: true
                             });
                         }

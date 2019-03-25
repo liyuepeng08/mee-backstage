@@ -14,7 +14,7 @@
                 @click="addTeacher"
             >新建</el-button>
             <!-- <el-button class="teachBtn" type="primary" icon="el-icon-share" @click="invite">邀请</el-button> -->
-            <new-search @getSearchData="searchData"></new-search>
+            <new-search @getSearchData="getSearchInfo"></new-search>
         </div>
         <el-table class="tablelInfo" v-loading="loading" :data="tableData">
             <el-table-column prop="realName" label="名称"></el-table-column>
@@ -32,6 +32,7 @@
             </el-table-column>
         </el-table>
         <pages
+            v-if="showPage"
             @changeNum="getTeacherList"
             :pageSize="pageSize"
             :total="total"
@@ -49,47 +50,58 @@ export default {
             total: 1,//总条数
             pagerCount: 1, //总页数
             pageSize: 10,
-            loading: true
+            loading: true,
+            showPage: true,
+            paramsData: {},
+            tid: ''
         };
+    },
+    beforeMount() {
+        this.tid = sessionStorage.getItem('tid');
     },
     mounted() {
         this.getTeacherList();
+
     },
     methods: {
         getTeacherList(pageNum) {
             pageNum = pageNum || 1;
-            let tid = sessionStorage.getItem('tid'),
-                params = { role: 1, pageIndex: pageNum, pageSize: this.pageSize }; // used for testing
+            if (JSON.stringify(this.paramsData) === "{}") {
+                this.paramsData = { role: 1, pageIndex: pageNum, pageSize: this.pageSize }
+            } else {
+                this.paramsData.pageIndex = pageNum;
+            }
             this.axios
-                .get("/tenant/user/list/" + tid, {
-                    params: { params }
+                .get("/tenant/user/list/" + this.tid, {
+                    params: { params: this.paramsData }
                 }).then(res => {
                     if (res.status === 200) {
-                        this.loading = false;
+                        this.loading = false
                         if (res.data.code == 0) {
                             // console.log(res.data)
                             this.total = res.data.data.totalCount;
                             this.pagerCount = res.data.data.totalPage;
                             this.tableData = res.data.data.list;
+                            if (res.data.data.list == '') {
+                                this.showPage = false
+                            }
                         }
+                    } else {
+                        this.loading = true
                     }
                 }).catch((error) => {
                     console.log(error)
                 });
         },
         // 获得搜索信息
-        searchData(data) {
-            // if (data[0] == null) {
-            //     this.getTeacherList();
-            // } else {
-            //     this.tableData = data;
-            // }
-            console.log(data)
-            this.tableData = data;
+        getSearchInfo(params) {
+            this.paramsData = params;
+            this.getTeacherList()
         },
+
         deleteMsg(scope, rows) {
             this.$confirm(
-                "确定要删除" +scope.row.realName +  "用户吗？",
+                "确定要删除" + scope.row.realName + "用户吗？",
                 "删除管理员",
                 {
                     confirmButtonText: "确定",
@@ -97,8 +109,7 @@ export default {
                     type: "warning"
                 }
             ).then(() => {
-                let tid = sessionStorage.getItem('tid'),
-                    params = { tid: tid, uid: scope.row.uid };
+                let params = { tid: this.tid, uid: scope.row.uid };
                 this.axios
                     .get("/tenant/user/delete", {
                         params: { params }
@@ -106,6 +117,10 @@ export default {
                         if (res.status === 200) {
                             if (res.data.code == 0) {
                                 rows.splice(scope.$index, 1);
+                                this.$message({
+                                    type: 'success',
+                                    message: '删除成功!'
+                                });
                             } else {
                                 alert(res.data.msg);
                             }
@@ -113,7 +128,12 @@ export default {
                     }).catch((error) => {
                         console.log(error)
                     });
-            });
+            }).catch(() => {
+                this.$message({
+                    type: 'info',
+                    message: '已取消删除'
+                });
+            })
         },
         detailMsg(scope) {
             this.$router.push({

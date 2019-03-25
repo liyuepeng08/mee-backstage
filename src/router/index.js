@@ -8,7 +8,6 @@ import Header from 'base/Header/Header'
 import Admin from '@/components/admin/admin' //后台首页
 import Agent from '@/components/agent/agent' //代理商管理
 import School from '@/components/school/school' //学校管理
-import Account from '@/components/account/account' //账户管理
 import Examine from '@/components/examine/examine' //审核管理
 import Security from '@/components/security/security' //安全管理
 import AddManager from '@/components/addManager/addManager' //添加管理员
@@ -53,11 +52,6 @@ export default new Router({
         path: 'school', //学校管理
         name: 'school',
         component: School
-      },
-      {
-        path: 'account', //账号管理
-        name: 'account',
-        component: Account
       },
       {
         path: 'examine', //审核管理

@@ -194,7 +194,7 @@ export default {
                         alert(res.data.msg)
                     }
                 } else {
-                    alert('加载失败，请检查网络是否连接诶正常！')
+                    alert('加载失败，请检查网络是否连接正常！')
                 }
             }).catch((error) => {
                 console.log(error)

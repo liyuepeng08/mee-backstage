@@ -5,10 +5,6 @@
       <span :class="{'selected':tab===1}" @click="checkTab(1)">
         <i/>基本信息
       </span>
-      <b>></b>
-      <span :class="{'selected':tab===2}" @click="checkTab(2)">
-        <i/>更多信息
-      </span>
     </el-row>
     <!-- <form class="el-form demo-ruleForm"> -->
     <el-form
@@ -27,16 +23,7 @@
         <el-form-item label="姓名" prop="userName">
           <el-input class="w150" v-model="ruleForm.userName" placeholder="请输入姓名"></el-input>
         </el-form-item>
-        <el-form-item label="昵称" prop="nickName">
-          <el-input disabled class="w150" v-model="ruleForm.nickName" placeholder="请输入昵称"></el-input>
-        </el-form-item>
-        <el-form-item label="性别" prop="gender">
-          <el-select class="w150" v-model="ruleForm.gender" placeholder="请选择活动区域">
-            <el-option label="男" value="0"></el-option>
-            <el-option label="女" value="1"></el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="电话" prop="mobile">
+        <el-form-item label="手机号" prop="mobile">
           <el-input v-model="ruleForm.mobile"></el-input>
         </el-form-item>
         <el-form-item prop="email" label="邮箱">
@@ -49,34 +36,7 @@
           </el-select>
         </el-form-item>
         <el-form-item>
-          <el-button
-            type="primary"
-            @click="next"
-            round
-            style="width:120px;height:40px;font-size: 14px;"
-          >下一步</el-button>
-        </el-form-item>
-      </dl>
-      <dl class="model more" v-if="tab === 2">
-        <dt>更多信息</dt>
-        <el-form-item label="民族" prop="nation">
-          <el-input disabled class="w150" v-model="ruleForm.nation" placeholder="输入内容"></el-input>
-        </el-form-item>
-        <el-form-item label="年龄" prop="age">
-          <el-input class="w150" v-model="ruleForm.age" placeholder="输入内容"></el-input>
-        </el-form-item>
-        <el-form-item label="出生日期" prop="birthday">
-          <el-date-picker class="w150" type="date" placeholder="选择日期" v-model="ruleForm.birthday"></el-date-picker>
-        </el-form-item>
-        <el-form-item label="籍贯" prop="native">
-          <el-input disabled class="w480" v-model="ruleForm.age" placeholder="输入内容"></el-input>
-        </el-form-item>
-        <el-form-item label="联系地址" prop="address">
-          <el-input disabled class="w480" v-model="ruleForm.age" placeholder="输入内容"></el-input>
-        </el-form-item>
-        <el-form-item>
           <el-row style="margin-bottom:10px;">
-            <el-button @click="back" round style="width:120px;height:40px;font-size: 14px;">上一步</el-button>
             <el-button
               @click="submit"
               type="primary"
@@ -100,25 +60,11 @@ export default {
       msg: "Welcome to Your Vue.js App",
       tab: 1,
       ruleForm: {
+        uid: "", //用户ID
         userName: "", //用户名
         password: "", //用户密码
-        gender: "", //性别
         email: "", //邮箱
-        mobile: "", //手机号
-        major: "", //专业，默认是22
-        title: "", //职称，默认是1
-
-        account: "", //账户
-        nickName: "", //昵称
-        school: "", //学校
-        phone: "", //电话
-        birthday: "", //出生年月
-        grade: "", //年级
-        class: "", //班级
-        nation: "", //民族
-        age: "", //年龄
-        native: "", //籍贯
-        remarks: "" //备注
+        mobile: "" //手机号
       },
       radio2: 3
     };
@@ -145,9 +91,7 @@ export default {
               password: "000000", //用户密码
               gender: this.gender, //性别
               email: this.email, //邮箱
-              mobile: this.mobile, //手机号
-              major: "22", //专业，默认是22
-              title: "1" //职称，默认是1
+              mobile: this.mobile //手机号
             }
           }
         })

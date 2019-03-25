@@ -18,7 +18,7 @@
                 icon="el-icon-share"
                 @click="invite"
             >邀请</el-button>-->
-            <new-search @getSearchData="searchData"></new-search>
+            <new-search @getSearchData="getSearchInfo"></new-search>
         </div>
         <el-table class="studentInfo" v-loading="loading" :data="tableData">
             <el-table-column prop="realName" label="名称"></el-table-column>
@@ -35,6 +35,7 @@
             </el-table-column>
         </el-table>
         <pages
+            v-if="showpage"
             @changeNum="getStudentList"
             :pageSize="pageSize"
             :total="total"
@@ -52,7 +53,9 @@ export default {
             total: 1,//总条数
             pagerCount: 1, //总页数
             pageSize: 10,
-            loading: true
+            loading: true,
+            showpage: true,
+            paramsData: {}
         };
     },
     mounted() {
@@ -61,11 +64,16 @@ export default {
     methods: {
         // 获得学生信息列表
         getStudentList(pageNum) {
-            let tid = sessionStorage.getItem('tid'),
-                params = { role: 2, pageIndex: 1, pageSize: 10 }; // used for testing
+            pageNum = pageNum || 1;
+            if (JSON.stringify(this.paramsData) === "{}") {
+                this.paramsData = { role: 2, pageIndex: pageNum, pageSize: this.pageSize }
+            } else {
+                this.paramsData.pageIndex = pageNum;
+            }
+            let tid = sessionStorage.getItem('tid');
             this.axios
                 .get("/tenant/user/list/" + tid, {
-                    params: { params }
+                    params: { params: this.paramsData }
                 }).then(res => {
                     if (res.status === 200) {
                         this.loading = false;
@@ -73,23 +81,21 @@ export default {
                             this.total = res.data.data.totalCount;
                             this.pagerCount = res.data.data.totalPage;
                             this.tableData = res.data.data.list;
+                            if (res.data.data.list == '') {
+                                this.showPage = false
+                            }
                         }
+                    } else {
+                        this.loading = true
                     }
                 }).catch((error) => {
                     console.log(error)
                 });
         },
         // 获得搜索信息
-        searchData(data) {
-            // if (data[0] == null) {
-            //     this.$alert('未查询到指定信息', {
-            //         dangerouslyUseHTMLString: true
-            //     });
-            //     this.getStudentList();
-            // } else {
-            //     this.tableData = data;
-            // }
-            this.tableData = data;
+        getSearchInfo(params) {
+            this.paramsData = params;
+            this.getTeacherList()
         },
         deleteMsg(scope, rows) {
             this.$confirm(
@@ -109,12 +115,21 @@ export default {
                     if (res.status === 200) {
                         if (res.data.code == 0) {
                             rows.splice(scope.$index, 1);
+                            this.$message({
+                                type: 'success',
+                                message: '删除成功!'
+                            });
                         } else {
                             alert(res.data.msg);
                         }
                     }
                 }).catch((error) => {
                     console.log(error)
+                });
+            }).catch(() => {
+                this.$message({
+                    type: 'info',
+                    message: '已取消删除'
                 });
             });
         },

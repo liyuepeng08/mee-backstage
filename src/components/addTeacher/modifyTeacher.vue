@@ -22,8 +22,9 @@
       class="demo-ruleForm"
       style="width:390px"
       size="mini"
+      :rules="rules"
     >
-      <dl class="model essential" v-if="tab === 1">
+      <dl class="model essential" v-show="tab === 1">
         <dt>基本信息</dt>
         <!-- <el-form-item label="账号" prop="account">
           <el-input v-model="ruleForm.account" placeholder="账号"></el-input>
@@ -39,13 +40,13 @@
           </el-upload>
         </el-form-item>
 
-        <el-form-item label="姓名" prop="userName">
+        <el-form-item label="姓名" prop="userName" class="validate">
           <el-input disabled class="w150" v-model="ruleForm.userName" placeholder="请输入真实姓名"></el-input>
         </el-form-item>
-        <el-form-item label="昵称" prop="nickName">
+        <el-form-item label="昵称" prop="nickName" class="validate">
           <el-input class="w150" v-model="ruleForm.nickName" placeholder="输入昵称"></el-input>
         </el-form-item>
-        <el-form-item label="联系电话" prop="mobile">
+        <el-form-item label="联系电话" prop="mobile" class="validate">
           <el-input class="w150" v-model="ruleForm.mobile" placeholder="输入手机号"></el-input>
         </el-form-item>
         <el-form-item label="性别" prop="gender">
@@ -108,7 +109,7 @@
           >下一步</el-button>
         </el-form-item>
       </dl>
-      <dl class="model more" v-if="tab === 2">
+      <dl class="model more" v-show="tab === 2">
         <dt>更多信息</dt>
         <el-form-item label="民族" prop="nation">
           <el-input disabled class="w150" v-model="ruleForm.nation" placeholder="输入内容"></el-input>
@@ -165,7 +166,7 @@
           </el-row>
         </el-form-item>-->
       </dl>
-      <dl style="display:none" class="model aptitude" v-if="tab === 3">
+      <dl style="display:none" class="model aptitude" v-show="tab === 3">
         <dt>教师资质</dt>
         <el-form-item label="教龄" prop="teachingAge">
           <el-input class="w150" v-model="ruleForm.teachingAge" placeholder="输入内容"></el-input>
@@ -227,7 +228,7 @@
         <el-form-item>
           <el-button @click="back" class="back" round>上一步</el-button>
           <el-button
-            @click="submit"
+            @click="submit('ruleForm')"
             type="primary"
             round
             style="width:120px;height:40px;font-size: 14px;"
@@ -299,43 +300,47 @@ export default {
     },
     submit: function() {
       const that = this.ruleForm;
-      //修改
-      this.axios
-        .get("/user/update", {
-          params: {
-            params: {
-              uid: that.uid,
-              userName: that.userName, //用户名
-              nickName: that.nickName, //昵称
-              gender: that.gender == "男" ? 0 : 1, //性别
-              email: that.email, //邮箱
-              birthday: "", //生日
-              mobile: that.mobile, //手机号
-              address: that.address, //地址
-              avatar: "http://jdcloud.image.com/4664.pgn" //头像
-            }
-          }
-        })
-        .then(response => {
-          let data = response.data;
-          if (data.code == 0) {
-            //提交弹出框
-            this.$alert("提交成功，请等待审核！", "", {
-              confirmButtonText: "返回",
-              type: "success",
-              showClose: "",
-              confirmButtonClass: "round"
-              // center: true
-            }).then(() => {
-              this.$router.push({ path: "/admin/teacherManage" });
+      this.$refs[formName].validate(valid => {
+        if (valid) {
+          this.axios
+            .get("/user/update", {
+              params: {
+                params: {
+                  uid: that.uid,
+                  userName: that.userName, //用户名
+                  nickName: that.nickName, //昵称
+                  gender: that.gender == "男" ? 0 : 1, //性别
+                  email: that.email, //邮箱
+                  birthday: "", //生日
+                  mobile: that.mobile, //手机号
+                  address: that.address, //地址
+                  avatar: "http://jdcloud.image.com/4664.pgn" //头像
+                }
+              }
+            })
+            .then(response => {
+              let data = response.data;
+              if (data.code == 0) {
+                //提交弹出框
+                this.$alert("提交成功，请等待审核！", "", {
+                  confirmButtonText: "返回",
+                  type: "success",
+                  showClose: "",
+                  confirmButtonClass: "round"
+                  // center: true
+                }).then(() => {
+                  this.$router.push({ path: "/admin/teacherManage" });
+                });
+              }
+            })
+            .catch(function(error) {
+              console.log(2222);
+              alert("提交失败！");
+              console.log(error);
             });
-          }
-        })
-        .catch(function(error) {
-          console.log(2222);
-          alert("提交失败！");
-          console.log(error);
-        });
+        }
+      });
+      //修改
     },
     //点击修改前数据
     details: function() {
@@ -491,6 +496,18 @@ export default {
   //more
   .more {
     padding: 34px 0px 34px 40px;
+  }
+  // 验证
+  .validate {
+    position: relative;
+  }
+  // 验证子项
+  /deep/
+    .el-form-item.is-required:not(.is-no-asterisk)
+    > .el-form-item__label:before {
+    position: absolute;
+    left: -12px;
+    top: 2px;
   }
   //教师资质
   .aptitude {
