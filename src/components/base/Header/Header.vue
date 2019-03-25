@@ -12,7 +12,7 @@
             <img src="./images/photo.jpg" alt>
           </b>
           <span>ADMIN</span>|
-          <span @click="signOut">退出</span>
+          <span style="cursor:pointer" @click="signOut">退出</span>
           <img class="youx" src="./images/youx.png" alt>
         </div>
       </el-col>
