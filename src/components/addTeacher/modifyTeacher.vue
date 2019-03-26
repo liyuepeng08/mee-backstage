@@ -342,7 +342,7 @@ export default {
             .get("/user/update", {
               params: {
                 params: {
-                  uid: that.uid,
+                  uid: that.uid, //京东云ID
                   userName: that.userName, //用户名
                   nickName: that.nickName, //昵称
                   gender: that.gender == "男" ? 0 : 1, //性别

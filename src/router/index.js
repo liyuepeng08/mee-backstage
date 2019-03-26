@@ -68,7 +68,7 @@ export default new Router({
         component: AddManager
 
       }, {
-        path: 'modifyManager', //修改管理员
+        path: 'modifyManager/:uid', //修改管理员
         name: 'modifyManager',
         component: ModifyManager
 
