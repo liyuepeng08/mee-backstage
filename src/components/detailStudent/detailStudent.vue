@@ -83,7 +83,7 @@
                             籍
                             <i></i>
                             贯：
-                            <span>{{ruleForm.native_address}}</span>
+                            <span>{{ruleForm.nativeAddress}}</span>
                         </li>
                         <li>
                             常驻地址：
