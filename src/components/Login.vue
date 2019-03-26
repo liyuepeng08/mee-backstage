@@ -77,7 +77,8 @@ export default {
             this.axios.get('/tenant/user/getTenant/' + uid).then(res => {
                 if (res.status === 200) {
                     if (res.data.code == 0) {
-                        sessionStorage.setItem('tid', res.data.data)
+                        sessionStorage.setItem('tid', res.data.data.id)
+                        sessionStorage.setItem('tTame', res.data.data.name)
                     }
                 } else {
                     this.$alert('网络连接不畅...', {
