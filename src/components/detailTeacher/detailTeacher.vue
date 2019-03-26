@@ -92,7 +92,7 @@
                             籍
                             <i></i>
                             贯：
-                            <span>{{ruleForm.native_address}}</span>
+                            <span>{{ruleForm.nativeAddress}}</span>
                         </li>
                         <li>
                             常驻地址：
@@ -223,7 +223,7 @@ export default {
         font-size: 18px;
         font-weight: normal;
         color: #000000;
-        padding: 19px 21px 31px;
+        padding: 19px 21px 31px 0;
     }
     .teacherInfo {
         width: 100%;

@@ -1,5 +1,12 @@
 <template>
   <div class="addStudent">
+    <p class="topNav">
+      <el-breadcrumb separator-class="el-icon-arrow-right">
+        <el-breadcrumb-item>用户管理</el-breadcrumb-item>
+        <el-breadcrumb-item>学生管理</el-breadcrumb-item>
+        <el-breadcrumb-item class="active">学生编辑</el-breadcrumb-item>
+      </el-breadcrumb>
+    </p>
     <h3 class="pageTitle">修改学生</h3>
     <el-row class="bread">
       <span :class="{'selected':tab===1}" @click="checkTab(1)">
@@ -142,9 +149,8 @@ export default {
     checkTab: function(index) {
       this.tab = index;
     },
-    //下一步
-    next: function() {
-      this.tab++;
+    mounted: function() {
+      this.details();
     },
     //上一步
     back: function() {
@@ -217,6 +223,41 @@ export default {
         }
       });
     },
+    //点击修改前数据
+    details: function() {
+      const uid = this.$route.params.uid;
+      //渲染
+      this.axios
+        .get("/user/getUserDetail", {
+          params: {
+            params: {
+              uid: uid
+            }
+          }
+        })
+        .then(response => {
+          let data = response.data.data;
+          const that = this.ruleForm;
+          let birthday = data.birthday;
+          // data.birthday.slice(0, [4]);
+          console.log(typeof data.birthday);
+          that.uid = data.uid; //用户ID
+          that.userName = data.realName; //用户名
+          that.nickName = data.nickName; //昵称
+          that.password = data.password; //用户密码
+          that.gender = data.gender ? "女" : "男"; //性别
+          that.email = data.email; //邮箱
+          that.mobile = data.mobile; //手机号
+          that.major = data.major; //专业，默认是22
+          that.title = data.title; //职称，默认是1
+          that.address = data.address; //地址
+          that.birthday = data.birthday; //生日
+        })
+        .catch(function(error) {
+          console.log(error);
+        });
+    },
+
     //获取当前信息
     obtain: function() {
       // this.ruleForm.tid = sessionStorage.getItem("tid");
@@ -284,10 +325,20 @@ export default {
   background: #fff;
   margin: 10px 10px 0 10px;
   min-height: 600px;
+  .topNav {
+    background-color: #f3f3f5;
+    font-size: 12px;
+    color: #a9a9a9;
+    .active {
+      /deep/.el-breadcrumb__inner {
+        color: #5693ff;
+      }
+    }
+  }
   .pageTitle {
     font-size: 18px;
     color: #080808;
-    padding: 0px 21px 25px 0px;
+    padding: 19px 21px 31px 0;
     background-color: #f3f3f5;
   }
   // 面包屑

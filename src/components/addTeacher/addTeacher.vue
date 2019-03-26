@@ -1,5 +1,12 @@
 <template>
   <div class="addStudent">
+    <p class="topNav">
+      <el-breadcrumb separator-class="el-icon-arrow-right">
+        <el-breadcrumb-item>用户管理</el-breadcrumb-item>
+        <el-breadcrumb-item>学生管理</el-breadcrumb-item>
+        <el-breadcrumb-item class="active">学生编辑</el-breadcrumb-item>
+      </el-breadcrumb>
+    </p>
     <h3 class="pageTitle">新增教师</h3>
     <el-row class="bread">
       <span :class="{'selected':tab===1}" @click="checkTab(1)">
@@ -61,35 +68,6 @@
             <el-option label="北京市第二小学" value="beijing"></el-option>
           </el-select>
         </el-form-item>
-        <!-- <el-form-item label="教授科目" prop="major">
-          <el-row class="w260">
-            <el-col :span="14">
-              <el-select style="width:100%" v-model="ruleForm.major" placeholder="选择科目">
-                <el-option label="语文" value="shanghai"></el-option>
-                <el-option label="英语" value="beijing"></el-option>
-              </el-select>
-            </el-col>
-          </el-row>
-        </el-form-item>
-        <el-form-item label="所在班级" prop="class">
-          <el-row class="w260">
-            <el-col :span="14">
-              <el-select disabled style="width:100%" v-model="ruleForm.class" placeholder="选择班级">
-                <el-option label="一班" value="shanghai"></el-option>
-                <el-option label="二班" value="beijing"></el-option>
-              </el-select>
-            </el-col>
-            <el-col :span="9">
-              <el-row style="margin-bottom:10px;">
-                <el-row style="margin-bottom:10px;">
-                  <el-button style="border:none">
-                    <i class="el-icon-circle-plus-outline" style="margin-right: 4px;"></i>添加班级选项
-                  </el-button>
-                </el-row>
-              </el-row>
-            </el-col>
-          </el-row>
-        </el-form-item>-->
         <el-form-item>
           <el-button
             type="primary"
@@ -161,18 +139,6 @@
             style="width:120px;height:40px;font-size: 14px;"
           >提交</el-button>
         </el-form-item>
-
-        <!-- <el-form-item>
-          <el-row style="margin-bottom:10px;">
-            <el-button @click="back" round class="back">上一步</el-button>
-            <el-button
-              type="primary"
-              @click="next"
-              round
-              style="width:120px;height:40px;font-size: 14px;"
-            >下一步</el-button>
-          </el-row>
-        </el-form-item>-->
       </dl>
       <dl style="display:none;" class="model aptitude" v-show="tab === 3">
         <dt>教师资质</dt>
@@ -395,6 +361,16 @@ export default {
   background: #fff;
   margin: 10px 10px 0 10px;
   min-height: 600px;
+  .topNav {
+    background-color: #f3f3f5;
+    font-size: 12px;
+    color: #a9a9a9;
+    .active {
+      /deep/.el-breadcrumb__inner {
+        color: #5693ff;
+      }
+    }
+  }
   .pageTitle {
     font-size: 18px;
     color: #080808;

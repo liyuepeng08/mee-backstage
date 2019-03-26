@@ -1,5 +1,12 @@
 <template>
   <div class="addStudent">
+    <p class="topNav">
+      <el-breadcrumb separator-class="el-icon-arrow-right">
+        <el-breadcrumb-item>用户管理</el-breadcrumb-item>
+        <el-breadcrumb-item>教师管理</el-breadcrumb-item>
+        <el-breadcrumb-item class="active">教师编辑</el-breadcrumb-item>
+      </el-breadcrumb>
+    </p>
     <h3 class="pageTitle">修改教师</h3>
     <el-row class="bread">
       <span :class="{'selected':tab===1}" @click="checkTab(1)">
@@ -330,99 +337,111 @@ export default {
     next: function() {
       this.tab++;
     },
-    //上一步
-    back: function() {
-      this.tab--;
+    mounted: function() {
+      this.details();
     },
-    submit: function() {
-      const that = this.ruleForm;
-      this.$refs[formName].validate(valid => {
-        if (valid) {
-          this.axios
-            .get("/user/update", {
-              params: {
+    methods: {
+      checkTab: function(index) {
+        this.tab = index;
+      },
+      //下一步
+      next: function() {
+        this.tab++;
+      },
+      //上一步
+      back: function() {
+        this.tab--;
+      },
+      submit: function() {
+        const that = this.ruleForm;
+        this.$refs[formName].validate(valid => {
+          if (valid) {
+            this.axios
+              .get("/user/update", {
                 params: {
-                  uid: that.uid, //京东云ID
-                  userName: that.userName, //用户名
-                  nickName: that.nickName, //昵称
-                  gender: that.gender == "男" ? 0 : 1, //性别
-                  email: that.email, //邮箱
-                  birthday: "", //生日
-                  mobile: that.mobile, //手机号
-                  address: that.address, //地址
-                  avatar: "http://jdcloud.image.com/4664.pgn" //头像
+                  params: {
+                    uid: that.uid, //京东云ID
+                    userName: that.userName, //用户名
+                    nickName: that.nickName, //昵称
+                    gender: that.gender == "男" ? 0 : 1, //性别
+                    email: that.email, //邮箱
+                    birthday: "", //生日
+                    mobile: that.mobile, //手机号
+                    address: that.address, //地址
+                    avatar: "http://jdcloud.image.com/4664.pgn" //头像
+                  }
                 }
-              }
-            })
-            .then(response => {
-              let data = response.data;
-              if (data.code == 0) {
-                let timer = setTimeout(() => {
-                  //倒计时跳转
-                  this.$router.push({
-                    //跳转到列表页
-                    path: "/admin/courseManage"
-                  });
-                  //模拟点击关闭按钮
-                  document
-                    .getElementsByClassName("el-message-box__close")[0]
-                    .click();
-                }, 3000);
-
-                this.$alert("3秒后返回上一级", "提交成功，请等待审核！！", {
-                  confirmButtonText: "直接跳转",
-                  callback: action => {
-                    clearTimeout(timer); //清除定时器
+              })
+              .then(response => {
+                let data = response.data;
+                if (data.code == 0) {
+                  let timer = setTimeout(() => {
+                    //倒计时跳转
                     this.$router.push({
                       //跳转到列表页
-                      path: "/admin/teacherManage"
+                      path: "/admin/courseManage"
                     });
-                  }
-                });
-              }
-            })
-            .catch(error => {
-              this.$message("提交失败！");
-              console.log(error);
-            });
-        } else {
-          console.log("error submit!!");
-          this.$message("请填写所有带*号的必填项！");
-          return false;
-        }
-      });
-      //修改
-    },
-    //点击修改前数据
-    details: function() {
-      const uid = this.$route.params.uid;
-      console.log(1);
-      //渲染
-      this.axios
-        .get("/user/getUserDetail", {
-          params: {
-            params: {
-              uid: uid
-            }
+                    //模拟点击关闭按钮
+                    document
+                      .getElementsByClassName("el-message-box__close")[0]
+                      .click();
+                  }, 3000);
+
+                  this.$alert("3秒后返回上一级", "提交成功，请等待审核！！", {
+                    confirmButtonText: "直接跳转",
+                    callback: action => {
+                      clearTimeout(timer); //清除定时器
+                      this.$router.push({
+                        //跳转到列表页
+                        path: "/admin/teacherManage"
+                      });
+                    }
+                  });
+                }
+              })
+              .catch(error => {
+                this.$message("提交失败！");
+                console.log(error);
+              });
+          } else {
+            console.log("error submit!!");
+            this.$message("请填写所有带*号的必填项！");
+            return false;
           }
-        })
-        .then(response => {
-          let data = response.data.data;
-          const that = this.ruleForm;
-          that.uid = data.uid; //用户ID
-          that.userName = data.realName; //用户名
-          that.nickName = data.nickName; //昵称
-          that.password = data.password; //用户密码
-          that.gender = data.gender ? "女" : "男"; //性别
-          that.email = data.email; //邮箱
-          that.mobile = data.mobile; //手机号
-          that.major = data.major; //专业，默认是22
-          that.title = data.title; //职称，默认是1
-          that.address = data.address; //地址
-        })
-        .catch(function(error) {
-          console.log(error);
         });
+        //修改
+      },
+      //点击修改前数据
+      details: function() {
+        const uid = this.$route.params.uid;
+        console.log(1);
+        //渲染
+        this.axios
+          .get("/user/getUserDetail", {
+            params: {
+              params: {
+                uid: uid
+              }
+            }
+          })
+          .then(response => {
+            let data = response.data.data;
+            const that = this.ruleForm;
+            that.uid = data.uid; //用户ID
+            that.userName = data.realName; //用户名
+            that.nickName = data.nickName; //昵称
+            that.password = data.password; //用户密码
+            that.gender = data.gender ? "女" : "男"; //性别
+            that.email = data.email; //邮箱
+            that.mobile = data.mobile; //手机号
+            that.major = data.major; //专业，默认是22
+            that.title = data.title; //职称，默认是1
+            that.address = data.address; //地址
+          })
+          .catch(function(error) {
+            console.log(error);
+          });
+      }
     }
   }
 };
@@ -434,10 +453,20 @@ export default {
   background: #fff;
   margin: 10px 10px 0 10px;
   min-height: 600px;
+  .topNav {
+    background-color: #f3f3f5;
+    font-size: 12px;
+    color: #a9a9a9;
+    .active {
+      /deep/.el-breadcrumb__inner {
+        color: #5693ff;
+      }
+    }
+  }
   .pageTitle {
     font-size: 18px;
     color: #080808;
-    padding: 0px 21px 25px 0px;
+    padding: 19px 21px 31px 0;
     background-color: #f3f3f5;
   }
   // 面包屑
