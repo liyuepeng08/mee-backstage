@@ -33,27 +33,18 @@
         </el-form-item>
         <el-form-item label="性别" prop="gender">
           <el-select class="w150" v-model="ruleForm.gender" placeholder="请选择活动区域">
-            <el-option label="男" value="0"></el-option>
-            <el-option label="女" value="1"></el-option>
+            <el-option label="女" value="0"></el-option>
+            <el-option label="男" value="1"></el-option>
           </el-select>
         </el-form-item>
-        <!-- <el-form-item label="年级" prop="grade">
-          <el-select style="width:100%" v-model="ruleForm.grade" placeholder="请选择年级">
-            <el-option label="三年级" value="shanghai"></el-option>
-            <el-option label="四年级" value="beijing"></el-option>
-          </el-select>
-        </el-form-item>-->
-        <el-form-item label="联系电话" prop="mobile">
+        <el-form-item label="手机号" prop="mobile">
           <el-input v-model="ruleForm.mobile"></el-input>
         </el-form-item>
         <el-form-item prop="email" label="邮箱">
           <el-input v-model="ruleForm.email"></el-input>
         </el-form-item>
         <el-form-item label="所属机构" prop="school">
-          <el-select disabled style="width:100%" v-model="ruleForm.school" placeholder="请选择活动区域">
-            <el-option label="北京市第一小学" value="shanghai"></el-option>
-            <el-option label="北京市第二小学" value="beijing"></el-option>
-          </el-select>
+          <el-select disabled style="width:100%" v-model="ruleForm.school" placeholder="请选择活动区域"></el-select>
         </el-form-item>
         <el-form-item>
           <el-button
@@ -72,40 +63,21 @@
         <el-form-item label="出生日期" prop="birthday">
           <el-date-picker class="w150" type="date" placeholder="选择日期" v-model="ruleForm.birthday"></el-date-picker>
         </el-form-item>
-        <el-form-item label="籍贯" prop="native">
-          <el-input class="w480" v-model="ruleForm.native" placeholder="输入内容" maxlength="50"></el-input>
+        <el-form-item label="籍贯" prop="nativeAddress">
+          <el-input class="w480" v-model="ruleForm.nativeAddress" placeholder="输入内容" maxlength="50"></el-input>
         </el-form-item>
         <el-form-item label="联系地址" prop="address">
-          <el-input
-            disabled
-            class="w480"
-            v-model="ruleForm.address"
-            placeholder="输入内容"
-            maxlength="50"
-          ></el-input>
+          <el-input class="w480" v-model="ruleForm.address" placeholder="输入内容" maxlength="50"></el-input>
         </el-form-item>
-        <el-form-item label="父母电话" prop="parentPhone">
+        <el-form-item label="父母电话" prop="parentsMobile">
           <el-row>
             <el-col :span="14">
-              <el-input disabled v-model="ruleForm.parentPhone" placeholder="输入手机号码" maxlength="11"></el-input>
-            </el-col>
-            <el-col :span="9">
-              <el-row style="margin-bottom:10px;">
-                <el-button style="color:#a9a9a9;border:none">
-                  <i class="el-icon-circle-plus-outline" style="margin-right: 4px;"></i>添加班级选项
-                </el-button>
-              </el-row>
+              <el-input v-model="ruleForm.parentsMobile" placeholder="输入手机号码" maxlength="11"></el-input>
             </el-col>
           </el-row>
         </el-form-item>
-        <el-form-item label="备注" prop="remarks">
-          <el-input
-            disabled
-            class="remarks"
-            type="textarea"
-            v-model="ruleForm.remarks"
-            placeholder="输入内容"
-          ></el-input>
+        <el-form-item label="备注" prop="remark">
+          <el-input class="remarks" type="textarea" v-model="ruleForm.remark" placeholder="输入内容"></el-input>
         </el-form-item>
         <el-form-item>
           <el-row style="margin-bottom:10px;">
@@ -140,31 +112,31 @@ export default {
         gender: "", //性别
         email: "", //邮箱
         mobile: "", //手机号
-        major: "", //专业，默认是22
-        title: "", //职称，默认是1
-        account: "", //账户
         school: "", //学校
         phone: "", //电话
         birthday: "", //出生年月
-        // grade: "", //年级
-        class: "", //班级
         nation: "", //民族
-        age: "", //年龄
-        native: "", //籍贯
-        remarks: "" //备注
+        nativeAddress: "", //籍贯
+        address: "", //所在地址
+        parentsMobile: "", //父母电话
+        remark: "" //备注
       },
       rules: {
         userName: [
-          { required: true, message: "请输入活动名称", trigger: "blur" },
+          { required: true, message: "请输入真实姓名", trigger: "blur" },
           { min: 1, max: 20, message: "长度在 1 到 20 个字符", trigger: "blur" }
         ],
         nickName: [
-          { required: true, message: "请输入活动名称", trigger: "blur" },
+          { required: true, message: "请输入昵称", trigger: "blur" },
           { min: 1, max: 20, message: "长度在 1 到 20 个字符", trigger: "blur" }
         ]
       },
       radio2: 3
     };
+  },
+
+  mounted: function() {
+    this.obtain(); //获取当前信息
   },
   methods: {
     checkTab: function(index) {
@@ -181,6 +153,7 @@ export default {
     submit(formName) {
       const tid = sessionStorage.getItem("tid");
       let that = this.ruleForm;
+      // this.birthdayTime();
       this.$refs[formName].validate(valid => {
         if (valid) {
           //新增
@@ -189,15 +162,18 @@ export default {
               params: {
                 params: {
                   userName: that.userName, //用户名
-                  realName: that.userName, //用户名
+                  realName: that.userName, //真实名
                   nickName: that.nickName, //昵称
                   password: "000000", //用户密码
-                  gender: that.gender, //性别
+                  gender: that.gender == "" ? "2" : that.gender, //性别
                   email: that.email, //邮箱
                   mobile: that.mobile, //手机号
-                  major: "22", //专业，默认是22
-                  title: "1", //职称，默认是1
-                  birthday: "", //生日
+                  nation: that.nation, //民族
+                  birthday: this.birthdayTime(), //生日
+                  nativeAddress: that.nativeAddress, //籍贯
+                  address: that.address, //所在地址
+                  parentsMobile: that.parentsMobile, //父母电话
+                  remark: that.remark, //备注
                   tenantId: tid, //机构
                   role: "2" //角色（老师：1；学生:2）
                 }
@@ -242,6 +218,24 @@ export default {
           return false;
         }
       });
+    },
+    birthdayTime: function() {
+      var birthday = new Date(this.ruleForm.birthday);
+      const year = birthday.getFullYear();
+      const month = birthday.getMonth() + 1;
+      const date = birthday.getDate();
+      var times =
+        year +
+        "" +
+        (month < 10 ? "0" + month : month) +
+        (date < 10 ? "0" + date : date);
+      return times;
+      console.log(times);
+    },
+    //获取当前信息
+    obtain: function() {
+      // this.ruleForm.tid = sessionStorage.getItem("tid");
+      this.ruleForm.school = sessionStorage.getItem("tTame");
     }
   }
 };

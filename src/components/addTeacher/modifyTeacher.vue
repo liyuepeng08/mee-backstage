@@ -46,13 +46,13 @@
         <el-form-item label="昵称" prop="nickName" class="validate">
           <el-input class="w150" v-model="ruleForm.nickName" placeholder="输入昵称"></el-input>
         </el-form-item>
-        <el-form-item label="联系电话" prop="mobile" class="validate">
+        <el-form-item label="手机号" prop="mobile" class="validate">
           <el-input class="w150" v-model="ruleForm.mobile" placeholder="输入手机号"></el-input>
         </el-form-item>
         <el-form-item label="性别" prop="gender">
           <el-select class="w150" v-model="ruleForm.gender" placeholder="请选择性别">
-            <el-option label="男" value="0"></el-option>
-            <el-option label="女" value="1"></el-option>
+            <el-option label="女" value="0"></el-option>
+            <el-option label="男" value="1"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item prop="email" label="邮箱">
@@ -300,11 +300,11 @@ export default {
       },
       rules: {
         userName: [
-          { required: true, message: "请输入活动名称", trigger: "blur" },
+          { required: true, message: "请输入真实姓名", trigger: "blur" },
           { min: 1, max: 20, message: "长度在 1 到 20 个字符", trigger: "blur" }
         ],
         nickName: [
-          { required: true, message: "请输入活动名称", trigger: "blur" },
+          { required: true, message: "请输入昵称", trigger: "blur" },
           { min: 1, max: 20, message: "长度在 1 到 20 个字符", trigger: "blur" }
         ],
         mobile: [

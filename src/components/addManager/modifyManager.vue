@@ -21,7 +21,7 @@
         <el-form-item label="姓名" prop="userName" class="validate">
           <el-input disabled class="w150" v-model="ruleForm.userName" placeholder="请输入真实姓名"></el-input>
         </el-form-item>
-        <el-form-item label="联系电话" prop="mobile" class="validate">
+        <el-form-item label="手机号" prop="mobile" class="validate">
           <el-input class="w150" v-model="ruleForm.mobile" placeholder="输入手机号"></el-input>
         </el-form-item>
         <el-form-item prop="email" label="邮箱" class="validate">
@@ -65,7 +65,7 @@ export default {
       },
       rules: {
         userName: [
-          { required: true, message: "请输入活动名称", trigger: "blur" },
+          { required: true, message: "请输入真实姓名", trigger: "blur" },
           { min: 1, max: 20, message: "长度在 1 到 20 个字符", trigger: "blur" }
         ],
         mobile: [
