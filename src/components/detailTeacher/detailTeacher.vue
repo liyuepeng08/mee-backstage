@@ -26,7 +26,7 @@
                     <p class="title">基本资料</p>
                 </el-col>
             </el-row>
-            <el-row class="infomation">
+            <el-row class="infomation" v-loading="loading">
                 <el-col :span="4">
                     <div class="photo">
                         <img :src="ruleForm.avatar" alt>
@@ -137,7 +137,7 @@
                             <span>{{ruleForm.teachingBrief}}</span>
                         </li>
                     </ul>
-                </el-col> -->
+                </el-col>-->
             </el-row>
             <!-- <div class="aptitudeBox">
                 <p class="aptitudeTitle pos1">
@@ -155,7 +155,7 @@
                         <img src="./teacherCard.jpg" alt>
                     </li>
                 </ul>
-            </div> -->
+            </div>-->
         </div>
     </div>
 </template>
@@ -165,7 +165,8 @@ export default {
     data() {
         return {
             uid: '',
-            ruleForm: {}
+            ruleForm: {},
+            loading: true
         }
     },
 
@@ -186,10 +187,12 @@ export default {
             }).then(res => {
                 if (res.status === 200) {
                     if (res.data.code == 0) {
-                        console.log(res.data)
+                        this.loading = false;
                         this.ruleForm = res.data.data;
                     } else {
-                        alert(res.data.msg)
+                        this.$alert(res.data.msg, {
+                            dangerouslyUseHTMLString: true
+                        });
                     }
                 } else {
                     alert('加载失败，请检查网络是否连接正常！')

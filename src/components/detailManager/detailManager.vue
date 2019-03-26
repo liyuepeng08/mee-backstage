@@ -26,39 +26,12 @@
                             姓
                             <i></i>
                             名：
-                            <span>{{ruleForm.name}}</span>
+                            <span>{{ruleForm.realName}}</span>
                         </li>
-                        <li class="letWid">
-                            昵
-                            <i></i>
-                            称：
-                            <span>{{ruleForm.nickName}}</span>
-                        </li>
-                        <li class="letWid">
-                            性
-                            <i></i>
-                            别：
-                            <span>{{ruleForm.sex}}</span>
-                        </li>
-                        <li class="letWid">
-                            年
-                            <i></i>
-                            龄：
-                            <span>{{ruleForm.age}}</span>
-                        </li>
-                        <li class="letWid">
-                            民
-                            <i></i>
-                            族：
-                            <span>{{ruleForm.nation}}</span>
-                        </li>
-                        <li>
-                            出生年月：
-                            <span>{{ruleForm.birthday}}</span>
-                        </li>
+
                         <li>
                             联系电话：
-                            <span>{{ruleForm.phone}}</span>
+                            <span>{{ruleForm.mobile}}</span>
                         </li>
                         <li class="letWid">
                             邮
@@ -67,22 +40,8 @@
                             <span>{{ruleForm.email}}</span>
                         </li>
                         <li>
-                            身份证号：
-                            <span>{{ruleForm.idNumeber}}</span>
-                        </li>
-                        <li class="letWid">
-                            籍
-                            <i></i>
-                            贯：
-                            <span>{{ruleForm.nativePlace}}</span>
-                        </li>
-                        <li>
-                            常驻地址：
-                            <span>{{ruleForm.address}}</span>
-                        </li>
-                        <li>
                             所属机构：
-                            <span>{{ruleForm.institution}}</span>
+                            <span>{{ruleForm.organization}}</span>
                         </li>
                     </ul>
                 </el-col>
@@ -97,20 +56,7 @@ export default {
     data() {
         return {
             loading: true,
-            ruleForm: {
-                name: "你猜猜", //用户名
-                nickName: "梦里询他千百度", //昵称
-                sex: "女", //性别
-                age: 22,
-                nation: "汉族", //民族
-                birthday: "2007年05月15日", //出生年月             
-                phone: "15010611993", //电话
-                email: "15010611993@163.com", //邮箱
-                idNumeber: 112233445566778899,//身份证号
-                nativePlace: "北京市北京市北京市",//籍贯
-                address: "北京市昌平区华家园东一区",//常住地址
-                institution: "北京大学",//所属机构
-            }
+            ruleForm: {},
         };
     },
     mounted() {
@@ -129,14 +75,19 @@ export default {
                 }
             }).then(res => {
                 if (res.status === 200) {
-                    // if (res.data.code == 0) {
-                    //     this.loading = false;
-                    //     console.log(res.data)
-                    // } else {
-                    //     // alert(res.data.msg)
-                    // }
+                    if (res.data.code == 0) {
+                        this.loading = false;
+                        // console.log(res.data)
+                        this.ruleForm = res.data.data
+                    } else {
+                        this.$alert(res.data.msg, {
+                            dangerouslyUseHTMLString: true
+                        });
+                    }
                 } else {
-                    alert('加载失败，请检查网络是否连接诶正常！')
+                    this.$alert('加载失败，请检查网络是否连接诶正常！', {
+                        dangerouslyUseHTMLString: true
+                    });
                 }
             }).catch((error) => {
                 console.log(error)
