@@ -42,6 +42,7 @@
           <el-select class="w150" v-model="ruleForm.gender" placeholder="请选择活动区域">
             <el-option label="女" value="0"></el-option>
             <el-option label="男" value="1"></el-option>
+            <el-option label="保密" value="2"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="手机号" prop="mobile">
@@ -149,12 +150,13 @@ export default {
     checkTab: function(index) {
       this.tab = index;
     },
-    mounted: function() {
-      this.details();
-    },
     //上一步
     back: function() {
       this.tab--;
+    },
+    //下一步
+    next: function() {
+      this.tab++;
     },
     submitSM: function(formName) {
       const tid = sessionStorage.getItem("tid");
@@ -172,8 +174,7 @@ export default {
                   realName: that.userName, //真实名
                   nickName: that.nickName, //昵称
                   password: "000000", //用户密码
-                  gender:
-                    that.gender == "" ? "2" : that.gender == "女" ? "0" : "1", //性别
+                  gender: that.gender, //性别
                   email: that.email, //邮箱
                   mobile: that.mobile, //手机号
                   nation: that.nation, //民族
@@ -223,41 +224,6 @@ export default {
         }
       });
     },
-    //点击修改前数据
-    details: function() {
-      const uid = this.$route.params.uid;
-      //渲染
-      this.axios
-        .get("/user/getUserDetail", {
-          params: {
-            params: {
-              uid: uid
-            }
-          }
-        })
-        .then(response => {
-          let data = response.data.data;
-          const that = this.ruleForm;
-          let birthday = data.birthday;
-          // data.birthday.slice(0, [4]);
-          console.log(typeof data.birthday);
-          that.uid = data.uid; //用户ID
-          that.userName = data.realName; //用户名
-          that.nickName = data.nickName; //昵称
-          that.password = data.password; //用户密码
-          that.gender = data.gender ? "女" : "男"; //性别
-          that.email = data.email; //邮箱
-          that.mobile = data.mobile; //手机号
-          that.major = data.major; //专业，默认是22
-          that.title = data.title; //职称，默认是1
-          that.address = data.address; //地址
-          that.birthday = data.birthday; //生日
-        })
-        .catch(function(error) {
-          console.log(error);
-        });
-    },
-
     //获取当前信息
     obtain: function() {
       // this.ruleForm.tid = sessionStorage.getItem("tid");
@@ -280,12 +246,11 @@ export default {
           const that = this.ruleForm;
           let birthday = data.birthday;
           // data.birthday.slice(0, [4]);
-          console.log(typeof data.birthday);
           that.uid = data.uid; //用户ID
           that.userName = data.realName; //用户名
           that.nickName = data.nickName; //昵称
           that.password = data.password; //用户密码
-          that.gender = data.gender == 2 ? "保密" : data.gender ? "男" : "女"; //性别
+          that.gender = data.gender.toString(); //性别
           that.email = data.email; //邮箱
           that.mobile = data.mobile; //手机号
           that.address = data.address; //地址
@@ -311,8 +276,7 @@ export default {
         "" +
         (month < 10 ? "0" + month : month) +
         (date < 10 ? "0" + date : date);
-      return times;
-      console.log(times);
+      return Number(times);
     },
     birthdayReturn: function(birthday) {}
   }

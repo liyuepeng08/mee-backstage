@@ -35,6 +35,7 @@
           <el-select class="w150" v-model="ruleForm.gender" placeholder="请选择活动区域">
             <el-option label="女" value="0"></el-option>
             <el-option label="男" value="1"></el-option>
+            <el-option label="保密" value="2"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="手机号" prop="mobile">
@@ -109,7 +110,7 @@ export default {
         userName: "", //用户名
         nickName: "", //昵称
         password: "", //用户密码
-        gender: "", //性别
+        gender: "2", //性别
         email: "", //邮箱
         mobile: "", //手机号
         school: "", //学校
@@ -165,7 +166,7 @@ export default {
                   realName: that.userName, //真实名
                   nickName: that.nickName, //昵称
                   password: "000000", //用户密码
-                  gender: that.gender == "" ? "2" : that.gender, //性别
+                  gender: that.gender, //性别
                   email: that.email, //邮箱
                   mobile: that.mobile, //手机号
                   nation: that.nation, //民族

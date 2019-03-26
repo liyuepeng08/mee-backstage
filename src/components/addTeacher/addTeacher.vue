@@ -57,16 +57,14 @@
           <el-select class="w150" v-model="ruleForm.gender" placeholder="请选择性别">
             <el-option label="女" value="0"></el-option>
             <el-option label="男" value="1"></el-option>
+            <el-option label="保密" value="2"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item prop="email" label="邮箱">
           <el-input class="w480" v-model="ruleForm.email" placeholder="输入邮箱"></el-input>
         </el-form-item>
         <el-form-item label="所属机构" prop="school">
-          <el-select disabled class="w480" v-model="ruleForm.school" placeholder="请选择">
-            <el-option label="北京市第一小学" value="shanghai"></el-option>
-            <el-option label="北京市第二小学" value="beijing"></el-option>
-          </el-select>
+          <el-select disabled style="width:100%" v-model="ruleForm.school" placeholder="请选择活动区域"></el-select>
         </el-form-item>
         <el-form-item>
           <el-button
@@ -80,52 +78,36 @@
       <dl class="model more" v-show="tab === 2">
         <dt>更多信息</dt>
         <el-form-item label="民族" prop="nation">
-          <el-input disabled class="w150" v-model="ruleForm.nation" placeholder="输入内容"></el-input>
-        </el-form-item>
-        <el-form-item disabled label="年龄" prop="age">
-          <el-input class="w150" v-model="ruleForm.age" placeholder="输入内容"></el-input>
+          <el-input class="w150" v-model="ruleForm.nation" placeholder="输入内容"></el-input>
         </el-form-item>
         <el-form-item label="出生日期" prop="birthday">
           <el-date-picker class="w150" type="date" placeholder="选择日期" v-model="ruleForm.birthday"></el-date-picker>
         </el-form-item>
-        <el-form-item label="政治面貌" prop="outlook">
-          <el-select disabled class="w150" v-model="ruleForm.outlook" placeholder="请选择">
-            <el-option label="群众" value="0"></el-option>
-            <el-option label="党员" value="1"></el-option>
+        <el-form-item label="政治面貌" prop="politics">
+          <el-select class="w150" v-model="ruleForm.politics" placeholder="请选择">
+            <el-option
+              :label="item.value"
+              :value="item.key"
+              v-for="(item,index) in politics"
+              :key="index"
+            ></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="婚姻状况" prop="marriage">
-          <el-select disabled class="w150" v-model="ruleForm.marriage" placeholder="请选择">
+        <el-form-item label="婚姻状况" prop="marital">
+          <el-select class="w150" v-model="ruleForm.marital" placeholder="请选择">
             <el-option label="未婚" value="0"></el-option>
             <el-option label="已婚" value="1"></el-option>
+            <el-option label="保密" value="2"></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="籍贯" prop="native">
-          <el-input
-            disabled
-            class="w480"
-            maxlength="50"
-            v-model="ruleForm.native"
-            placeholder="输入内容"
-          ></el-input>
+        <el-form-item label="籍贯" prop="nativeAddress">
+          <el-input class="w480" maxlength="50" v-model="ruleForm.nativeAddress" placeholder="输入内容"></el-input>
         </el-form-item>
-        <el-form-item label="身份证号" prop="idNumber">
-          <el-input
-            disabled
-            class="w480"
-            maxlength="18"
-            v-model="ruleForm.idNumber"
-            placeholder="输入手机号码"
-          ></el-input>
+        <el-form-item label="身份证号" prop="identity">
+          <el-input class="w480" maxlength="18" v-model="ruleForm.identity" placeholder="输入手机号码"></el-input>
         </el-form-item>
         <el-form-item label="常住地址" prop="address">
-          <el-input
-            disabled
-            maxlength="50"
-            class="w480"
-            v-model="ruleForm.address"
-            placeholder="输入内容"
-          ></el-input>
+          <el-input maxlength="50" class="w480" v-model="ruleForm.address" placeholder="输入内容"></el-input>
         </el-form-item>
         <!-- <el-form-item label="备注" prop="remarks">
           <el-input class="remarks" type="textarea" v-model="ruleForm.remarks" placeholder="输入内容"></el-input>
@@ -230,28 +212,36 @@ export default {
         userName: "", //用户名
         nickName: "", //昵称
         password: "", //用户密码
-        gender: "", //性别
+        gender: "2", //性别
         email: "", //邮箱
         mobile: "", //手机号
-        major: "", //专业，默认是22
-        title: "", //职称，默认是1
-
-        imageUrl: "", //头像
-        account: "", //账户
-        sex: "男", //性别
         school: "", //学校
         phone: "", //电话
         birthday: "", //出生年月
-        outlook: "", //政治面貌
-        subject: "", //教授科目
-        class: "", //班级
         nation: "", //民族
-        age: "", //年龄
-        native: "", //籍贯
-        idNumber: "", //身份证号
-        teachingAge: "", //教龄
-        teachingBrief: "" //教学简介
+        nativeAddress: "", //籍贯
+        address: "", //所在地址
+        parentsMobile: "", //父母电话
+        remark: "", //备注
+        marital: "2", //婚姻状况
+        identity: "", //身份证号
+        politics: "13" //政治面貌
       },
+      politics: [
+        { key: "1", value: "中共党员" },
+        { key: "2", value: "中共预备党员" },
+        { key: "3", value: "共青团员" },
+        { key: "4", value: "民革党员" },
+        { key: "5", value: "民盟盟员" },
+        { key: "6", value: "民建会员" },
+        { key: "7", value: "民进会员" },
+        { key: "8", value: "农工党党员" },
+        { key: "9", value: "致公党党员" },
+        { key: "10", value: "九三学社社员" },
+        { key: "11", value: "台盟盟员" },
+        { key: "12", value: "无党派人士" },
+        { key: "13", value: "群众" }
+      ],
       rules: {
         userName: [
           { required: true, message: "请输入真实姓名", trigger: "blur" },
@@ -273,7 +263,9 @@ export default {
       radio2: 3
     };
   },
-
+  mounted: function() {
+    this.obtain(); //获取当前信息
+  },
   methods: {
     checkTab: function(index) {
       this.tab = index;
@@ -297,17 +289,20 @@ export default {
               params: {
                 params: {
                   userName: that.userName, //用户名
-                  realName: that.userName, //用户名
+                  realName: that.userName, //真实名
                   nickName: that.nickName, //昵称
                   password: "000000", //用户密码
                   gender: that.gender, //性别
                   email: that.email, //邮箱
                   mobile: that.mobile, //手机号
-                  major: "22", //专业，默认是22
-                  title: "1", //职称，默认是1
-                  birthday: "", //生日
+                  nation: that.nation, //民族
+                  birthday: this.birthdayTime(), //生日
+                  nativeAddress: that.nativeAddress, //籍贯
+                  address: that.address, //所在地址
                   tenantId: tid, //机构
-                  role: "1" //角色（老师：1；0：学生）
+                  role: "1", //角色（老师：1；学生:2）
+                  identity: that.identity, //身份证号
+                  politics: that.politics //政治面貌
                 }
               }
             })
@@ -350,6 +345,24 @@ export default {
           return false;
         }
       });
+    },
+    birthdayTime: function() {
+      var birthday = new Date(this.ruleForm.birthday);
+      const year = birthday.getFullYear();
+      const month = birthday.getMonth() + 1;
+      const date = birthday.getDate();
+      var times =
+        year +
+        "" +
+        (month < 10 ? "0" + month : month) +
+        (date < 10 ? "0" + date : date);
+      return times;
+      console.log(times);
+    },
+    //获取当前信息
+    obtain: function() {
+      // this.ruleForm.tid = sessionStorage.getItem("tid");
+      this.ruleForm.school = sessionStorage.getItem("tTame");
     }
   }
 };
