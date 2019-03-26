@@ -19,7 +19,7 @@
                     <p class="title">基本资料</p>
                 </el-col>
             </el-row>
-            <el-row class="infomation">
+            <el-row class="infomation" v-loading="loading">
                 <el-col :span="20">
                     <ul class="leftInfo">
                         <li class="letWid">
@@ -96,6 +96,7 @@ export default {
     name: "AddManager",
     data() {
         return {
+            loading: true,
             ruleForm: {
                 name: "你猜猜", //用户名
                 nickName: "梦里询他千百度", //昵称
@@ -128,11 +129,12 @@ export default {
                 }
             }).then(res => {
                 if (res.status === 200) {
-                    if (res.data.code == 0) {
-                        console.log(res.data)
-                    } else {
-                        alert(res.data.msg)
-                    }
+                    // if (res.data.code == 0) {
+                    //     this.loading = false;
+                    //     console.log(res.data)
+                    // } else {
+                    //     // alert(res.data.msg)
+                    // }
                 } else {
                     alert('加载失败，请检查网络是否连接诶正常！')
                 }
