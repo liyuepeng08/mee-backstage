@@ -19,7 +19,7 @@
                     <p class="title">基本资料</p>
                 </el-col>
             </el-row>
-            <el-row class="infomation">
+            <el-row class="infomation" v-loading="loading">
                 <el-col :span="12">
                     <ul class="leftInfo">
                         <li class="letWid">
@@ -89,7 +89,8 @@
                             </div>
                         </li>
                         <li class="letWid">
-                            备 <i></i>注：
+                            备
+                            <i></i>注：
                             <span>{{ruleForm.remark}}</span>
                         </li>
                     </ul>
@@ -104,7 +105,8 @@ export default {
     name: "AddManager",
     data() {
         return {
-            ruleForm: {}
+            ruleForm: {},
+            loading: true,
         }
     },
     mounted() {
@@ -124,12 +126,18 @@ export default {
             }).then(res => {
                 if (res.status === 200) {
                     if (res.data.code == 0) {
-                        console.log(res.data)
+                        this.loading = false;
+                        this.ruleForm = res.data.data
                     } else {
-                        alert(res.data.msg)
+                        this.loading = false;
+                        this.$alert(res.data.msg, {
+                            dangerouslyUseHTMLString: true
+                        });
                     }
                 } else {
-                    alert('加载失败，请检查网络是否连接诶正常！')
+                    this.$alert('加载失败，请检查网络是否连接诶正常！', {
+                        dangerouslyUseHTMLString: true
+                    });
                 }
             }).catch((error) => {
                 console.log(error)

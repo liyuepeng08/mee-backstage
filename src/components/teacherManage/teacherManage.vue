@@ -56,11 +56,8 @@ export default {
             tid: ''
         };
     },
-    beforeMount() {
-        this.tid = sessionStorage.getItem('tid');
-        console.log(this.id)
-    },
     mounted() {
+        this.tid = sessionStorage.getItem('tid');
         this.getTeacherList();
 
     },
@@ -88,7 +85,10 @@ export default {
                             }
                         }
                     } else {
-                        this.loading = true
+                        this.loading = false
+                        this.$alert(res.data.msg, {
+                            dangerouslyUseHTMLString: true
+                        });
                     }
                 }).catch((error) => {
                     console.log(error)
@@ -123,7 +123,9 @@ export default {
                                     message: '删除成功!'
                                 });
                             } else {
-                                alert(res.data.msg);
+                                this.$alert(res.data.msg, {
+                                    dangerouslyUseHTMLString: true
+                                });
                             }
                         }
                     }).catch((error) => {
