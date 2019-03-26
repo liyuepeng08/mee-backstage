@@ -307,7 +307,7 @@ export default {
       radio2: 3
     };
   },
-
+  mounted: {},
   methods: {
     checkTab: function(index) {
       this.tab = index;
@@ -370,7 +370,7 @@ export default {
                 });
               }
             })
-            .catch(function(error) {
+            .catch(error => {
               this.$message("提交失败！");
               console.log(error);
             });
