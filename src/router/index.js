@@ -73,7 +73,7 @@ export default new Router({
         component: ModifyManager
 
       }, {
-        path: 'detailManager', //管理员详情
+        path: 'detailManager/:uid', //管理员详情
         name: 'detailManager',
         component: DetailManager
       }, {
