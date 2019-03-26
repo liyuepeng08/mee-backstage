@@ -301,11 +301,11 @@ export default {
       rules: {
         userName: [
           { required: true, message: "请输入活动名称", trigger: "blur" },
-          { min: 2, max: 5, message: "长度在 2 到 5 个字符", trigger: "blur" }
+          { min: 1, max: 20, message: "长度在 1 到 20 个字符", trigger: "blur" }
         ],
         nickName: [
           { required: true, message: "请输入活动名称", trigger: "blur" },
-          { min: 1, max: 5, message: "长度在 2 到 5 个字符", trigger: "blur" }
+          { min: 1, max: 20, message: "长度在 1 到 20 个字符", trigger: "blur" }
         ],
         mobile: [
           { required: true, message: "请输入手机号", trigger: "blur" },

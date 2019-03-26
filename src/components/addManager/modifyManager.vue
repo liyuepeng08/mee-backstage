@@ -1,6 +1,6 @@
 <template>
   <div class="addStudent">
-    <h3 class="pageTitle">修改教师</h3>
+    <h3 class="pageTitle">修改管理员</h3>
     <el-row class="bread">
       <span :class="{'selected':tab===1}" @click="checkTab(1)">
         <i/>基本信息
@@ -24,7 +24,7 @@
         <el-form-item label="联系电话" prop="mobile" class="validate">
           <el-input class="w150" v-model="ruleForm.mobile" placeholder="输入手机号"></el-input>
         </el-form-item>
-        <el-form-item prop="email" label="邮箱">
+        <el-form-item prop="email" label="邮箱" class="validate">
           <el-input class="w480" v-model="ruleForm.email" placeholder="输入邮箱"></el-input>
         </el-form-item>
         <el-form-item label="所属机构" prop="school">
@@ -34,7 +34,7 @@
         </el-form-item>
         <el-form-item>
           <el-button
-            @click="submit"
+            @click="submit('ruleForm')"
             type="primary"
             round
             style="width:120px;height:40px;font-size: 14px;"
@@ -66,7 +66,7 @@ export default {
       rules: {
         userName: [
           { required: true, message: "请输入活动名称", trigger: "blur" },
-          { min: 2, max: 5, message: "长度在 2 到 5 个字符", trigger: "blur" }
+          { min: 1, max: 20, message: "长度在 1 到 20 个字符", trigger: "blur" }
         ],
         mobile: [
           { required: true, message: "请输入手机号", trigger: "blur" },
@@ -74,6 +74,14 @@ export default {
             pattern: /^1[34578]\d{9}$/,
             message: "手机号格式错误",
             trigger: "blur"
+          }
+        ],
+        email: [
+          { required: true, message: "请输入邮箱地址", trigger: "blur" },
+          {
+            type: "email",
+            message: "请输入正确的邮箱地址",
+            trigger: ["blur", "change"]
           }
         ]
       },
@@ -84,7 +92,7 @@ export default {
     this.details();
   },
   methods: {
-    submit: function() {
+    submit: function(formName) {
       const that = this.ruleForm;
       this.$refs[formName].validate(valid => {
         if (valid) {
@@ -108,7 +116,7 @@ export default {
                   //倒计时跳转
                   this.$router.push({
                     //跳转到列表页
-                    path: "/admin/courseManage"
+                    path: "/admin/adminUser"
                   });
                   //模拟点击关闭按钮
                   document
@@ -122,7 +130,7 @@ export default {
                     clearTimeout(timer); //清除定时器
                     this.$router.push({
                       //跳转到列表页
-                      path: "/admin/teacherManage"
+                      path: "/admin/adminUser"
                     });
                   }
                 });

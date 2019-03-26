@@ -66,7 +66,7 @@ export default {
       rules: {
         userName: [
           { required: true, message: "请输入活动名称", trigger: "blur" },
-          { min: 2, max: 5, message: "长度在 2 到 5 个字符", trigger: "blur" }
+          { min: 1, max: 20, message: "长度在 1 到 20 个字符", trigger: "blur" }
         ],
         mobile: [
           { required: true, message: "请输入手机号", trigger: "blur" },
@@ -123,7 +123,7 @@ export default {
                   //倒计时跳转
                   this.$router.push({
                     //跳转到列表页
-                    path: "/admin/courseManage"
+                    path: "/admin/adminUser"
                   });
                   //模拟点击关闭按钮
                   document
@@ -137,7 +137,7 @@ export default {
                     clearTimeout(timer); //清除定时器
                     this.$router.push({
                       //跳转到列表页
-                      path: "/admin/teacherManage"
+                      path: "/admin/adminUser"
                     });
                   }
                 });
