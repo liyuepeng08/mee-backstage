@@ -29,7 +29,7 @@
             <el-row class="infomation">
                 <el-col :span="4">
                     <div class="photo">
-                        <img src="./teacherCard.jpg" alt>
+                        <img :src="ruleForm.avatar" alt>
                     </div>
                 </el-col>
                 <el-col :span="8">
@@ -50,13 +50,9 @@
                             性
                             <i></i>
                             别：
-                            <span>{{ruleForm.sex}}</span>
-                        </li>
-                        <li class="letWid">
-                            年
-                            <i></i>
-                            龄：
-                            <span>{{ruleForm.age}}</span>
+                            <span v-if="ruleForm.gender==0">女</span>
+                            <span v-if="ruleForm.gender==1">男</span>
+                            <span v-if="ruleForm.gender==2">保密</span>
                         </li>
                         <li class="letWid">
                             民
@@ -70,15 +66,17 @@
                         </li>
                         <li>
                             政治面貌：
-                            <span>{{ruleForm.political}}</span>
+                            <span>{{ruleForm.politics}}</span>
                         </li>
                         <li>
                             婚姻状况：
-                            <span>{{ruleForm.marriage}}</span>
+                            <span v-if="ruleForm.marital==0">否</span>
+                            <span v-if="ruleForm.marital==1">是</span>
+                            <span v-if="ruleForm.marital==2">保密</span>
                         </li>
                         <li>
                             联系电话：
-                            <span>{{ruleForm.phone}}</span>
+                            <span>{{ruleForm.mobile}}</span>
                         </li>
                         <li class="letWid">
                             邮
@@ -88,13 +86,13 @@
                         </li>
                         <li>
                             身份证号：
-                            <span>{{ruleForm.idNumeber}}</span>
+                            <span>{{ruleForm.identity}}</span>
                         </li>
                         <li class="letWid">
                             籍
                             <i></i>
                             贯：
-                            <span>{{ruleForm.nativePlace}}</span>
+                            <span>{{ruleForm.native_address}}</span>
                         </li>
                         <li>
                             常驻地址：
@@ -102,7 +100,7 @@
                         </li>
                     </ul>
                 </el-col>
-                <el-col :span="8">
+                <!-- <el-col :span="8">
                     <ul>
                         <li class="letWid">
                             教
@@ -139,9 +137,9 @@
                             <span>{{ruleForm.teachingBrief}}</span>
                         </li>
                     </ul>
-                </el-col>
+                </el-col> -->
             </el-row>
-            <div class="aptitudeBox">
+            <!-- <div class="aptitudeBox">
                 <p class="aptitudeTitle pos1">
                     教师资质
                     <i></i>
@@ -157,7 +155,7 @@
                         <img src="./teacherCard.jpg" alt>
                     </li>
                 </ul>
-            </div>
+            </div> -->
         </div>
     </div>
 </template>
@@ -188,7 +186,7 @@ export default {
             }).then(res => {
                 if (res.status === 200) {
                     if (res.data.code == 0) {
-                        // console.log(res.data)
+                        console.log(res.data)
                         this.ruleForm = res.data.data;
                     } else {
                         alert(res.data.msg)
