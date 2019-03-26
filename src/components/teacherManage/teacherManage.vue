@@ -58,6 +58,7 @@ export default {
     },
     beforeMount() {
         this.tid = sessionStorage.getItem('tid');
+        console.log(this.id)
     },
     mounted() {
         this.getTeacherList();

@@ -17,9 +17,9 @@
             <new-search @getSearchData="getSearchInfo"></new-search>
         </div>
         <el-table class="adminInfo" :data="tableData">
-            <el-table-column prop="realName" label="姓名"></el-table-column>
+            <el-table-column prop="realname" label="姓名"></el-table-column>
             <el-table-column prop="mobile" label="电话"></el-table-column>
-            <el-table-column prop="schoolName" label="所属机构"></el-table-column>
+            <el-table-column prop="organization" label="所属机构"></el-table-column>
             <el-table-column prop="time" label="创建时间"></el-table-column>
 
             <el-table-column label="操作">
@@ -80,6 +80,7 @@ export default {
                             this.total = res.data.data.totalCount;
                             this.pagerCount = res.data.data.totalPage;
                             this.tableData = res.data.data.list;
+                            console.log(this.tableData)
                             if (res.data.data.list == '') {
                                 this.showPage = false
                             }
