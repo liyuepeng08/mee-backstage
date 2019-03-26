@@ -15,7 +15,7 @@
       style="width:390px"
       size="mini"
     >
-      <dl class="model essential" v-if="tab === 1">
+      <dl class="model essential">
         <dt>基本信息</dt>
         <!-- <el-form-item label="账号" prop="account">
           <el-input v-model="ruleForm.account" placeholder="账号"></el-input>
@@ -70,17 +70,6 @@ export default {
     };
   },
   methods: {
-    checkTab: function(index) {
-      this.tab = index;
-    },
-    //下一步
-    next: function() {
-      this.tab++;
-    },
-    //上一步
-    back: function() {
-      this.tab--;
-    },
     submit: function() {
       //新增
       this.axios
@@ -108,7 +97,7 @@ export default {
               confirmButtonClass: "round"
               // center: true
             }).then(() => {
-              this.$router.push({ path: "/admin" });
+              this.$router.push({ path: "/admin/addManager" });
             });
           }
         })

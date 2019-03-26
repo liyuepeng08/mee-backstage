@@ -106,7 +106,7 @@ export default {
           this.userName = data.userName; //用户名
           this.password = data.password; //用户密码
           this.email = data.email; //邮箱
-          this.mobile = data.mobile; //手机号
+          this.mobile = data.mobile; //手机号 
         })
         .catch(function(error) {
           console.log(error);
