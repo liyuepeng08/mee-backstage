@@ -1,5 +1,12 @@
 <template>
     <div class="detailAdmin">
+        <p class="topNav">
+            <el-breadcrumb separator-class="el-icon-arrow-right">
+                <el-breadcrumb-item>用户管理</el-breadcrumb-item>
+                <el-breadcrumb-item>管理员管理</el-breadcrumb-item>
+                <el-breadcrumb-item class="active">管理员详情</el-breadcrumb-item>
+            </el-breadcrumb>
+        </p>
         <el-row>
             <el-col :span="24">
                 <h3 class="pageTitle">管理员详情</h3>
@@ -102,11 +109,20 @@ export default {
 .detailAdmin {
     margin: 10px 10px 0 10px;
     min-height: 600px;
+    .topNav {
+        font-size: 12px;
+        color: #a9a9a9;
+        .active {
+            /deep/.el-breadcrumb__inner {
+                color: #5693ff;
+            }
+        }
+    }
     .pageTitle {
         font-size: 18px;
         font-weight: normal;
         color: #000000;
-        padding: 19px 21px 31px;
+        padding: 19px 21px 31px 0;
     }
     .teacherInfo {
         width: 100%;
