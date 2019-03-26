@@ -298,6 +298,24 @@ export default {
         teachingAge: "", //教龄
         teachingBrief: "" //教学简介
       },
+      rules: {
+        userName: [
+          { required: true, message: "请输入活动名称", trigger: "blur" },
+          { min: 2, max: 5, message: "长度在 2 到 5 个字符", trigger: "blur" }
+        ],
+        nickName: [
+          { required: true, message: "请输入活动名称", trigger: "blur" },
+          { min: 1, max: 5, message: "长度在 2 到 5 个字符", trigger: "blur" }
+        ],
+        mobile: [
+          { required: true, message: "请输入手机号", trigger: "blur" },
+          {
+            pattern: /^1[34578]\d{9}$/,
+            message: "手机号格式错误",
+            trigger: "blur"
+          }
+        ]
+      },
       radio2: 3
     };
   },
@@ -345,6 +363,10 @@ export default {
                     //跳转到列表页
                     path: "/admin/courseManage"
                   });
+                  //模拟点击关闭按钮
+                  document
+                    .getElementsByClassName("el-message-box__close")[0]
+                    .click();
                 }, 3000);
 
                 this.$alert("3秒后返回上一级", "提交成功，请等待审核！！", {
@@ -353,13 +375,13 @@ export default {
                     clearTimeout(timer); //清除定时器
                     this.$router.push({
                       //跳转到列表页
-                      path: "/admin/studentManage"
+                      path: "/admin/teacherManage"
                     });
                   }
                 });
               }
             })
-            .catch(function(error) {
+            .catch(error => {
               this.$message("提交失败！");
               console.log(error);
             });
@@ -577,10 +599,5 @@ export default {
   /deep/ .el-message-box__btns {
     text-align: center;
   }
-}
-</style>
-<style lang="less">
-.el-message-box__content {
-  padding-left: 110px;
 }
 </style>

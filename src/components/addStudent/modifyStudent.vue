@@ -200,7 +200,7 @@ export default {
     back: function() {
       this.tab--;
     },
-    submitSM(formName) {
+    submitSM: function(formName) {
       const tid = sessionStorage.getItem("tid");
       const that = this.ruleForm;
       var birthday = new Date(that.birthday);
@@ -240,6 +240,10 @@ export default {
                     //跳转到列表页
                     path: "/admin/courseManage"
                   });
+                  //模拟点击关闭按钮
+                  document
+                    .getElementsByClassName("el-message-box__close")[0]
+                    .click();
                 }, 3000);
 
                 this.$alert("3秒后返回上一级", "提交成功，请等待审核！！", {
@@ -254,7 +258,7 @@ export default {
                 });
               }
             })
-            .catch(function(error) {
+            .catch(error => {
               console.log(error);
             });
         } else {
@@ -411,8 +415,4 @@ export default {
   }
 }
 </style>
-<style lang="less">
-.el-message-box__content {
-  padding-left: 110px;
-}
-</style>
+

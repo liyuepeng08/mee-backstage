@@ -102,7 +102,7 @@ export default {
           }
         })
         .catch(function(error) {
-          console.log(2222);
+         
           console.log(error);
         });
     }
