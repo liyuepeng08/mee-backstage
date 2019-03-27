@@ -7,8 +7,16 @@
         </p>
         <h2>学生管理</h2>
         <div class="butt">
-            <el-button class="addBtn" type="primary" icon="el-icon-plus" @click="addStudent">新增</el-button>
-            <el-button class="addBtn" type="primary" icon="el-icon-share" @click="importBtn">导入</el-button>
+            <el-button class="addBtn" type="primary" size="small" round icon="el-icon-plus" @click="addStudent">新增</el-button>
+            <el-upload
+                class="upload-demo"
+                action="http://localhost:3000/uploadExcel"
+                :on-success="handleAvatarSuccess"
+                :before-upload="beforeAvatarUpload">
+                
+                <el-button size="small" icon="el-icon-share" round type="primary">点击上传</el-button>
+            </el-upload>
+            <!-- <el-button class="addBtn" type="primary" icon="el-icon-share" @click="importBtn">导入</el-button> -->
             <a href="#">
                 <i class="el-icon-download"></i>下载模板
             </a>
@@ -46,6 +54,7 @@
 <script>
 import Pages from "../pages/pages";
 import NewSearch from "../newSearch/newSearch";
+import axios from 'axios'
 export default {
     data() {
         return {
@@ -55,7 +64,9 @@ export default {
             pageSize: 10,
             loading: true,
             showpage: true,
-            paramsData: {}
+            paramsData: {},
+            isUpload: false,            //loading动画状态
+            fileUrl: ''             //上传文件的路径
         };
     },
     mounted() {
@@ -152,6 +163,50 @@ export default {
         },
         invite() {
             this.$router.push({ path: "reqManager" });
+        },
+        handleAvatarSuccess(res, file) {      //图片上传成功后的回调
+            this.fileUrl = URL.createObjectURL(file.raw);
+            console.log("这个是文件上传成功后返回的地址：" + this.fileUrl)
+        },
+        async beforeAvatarUpload(file) {        //上传图片前的回调
+            const isJPG = file.type === 'image/jpeg';
+            const isLt2M = file.size / 1024 / 1024 < 10;
+
+            // if (!isJPG) {
+            //     this.$message.error('上传头像图片只能是 JPG 格式!');
+            //     return false
+            // }
+            if (!isLt2M) {
+                this.$message.error('上传头像图片大小不能超过 2MB!');
+                return false
+            }
+            // return isJPG && isLt2M;
+            this.isUpload = true        //loading动画显示
+
+            // let fd = new FormData()
+            // fd.append('file', file)
+            // fd.append('params', JSON.stringify({uid: '123'}))
+
+            // try {
+            //     let {status, data:{data: dataMsg}} = await this.axios({
+            //         url: '/oss/upload',
+            //         method: 'post',
+            //         data: fd,
+            //         noQs: true,
+            //         // headers: {
+            //         //     'Content-type': 'multipart/form-data'
+            //         // }
+            //     })
+
+            //     if (status === 200 && dataMsg) {
+            //         this.setThumbnail(dataMsg.url)     //上传成功后返回服务器上的图片路径地址
+                    
+            //         this.isUpload = false           //loading动画隐藏
+            //     }
+            // }
+            // catch(err) {
+            //     console.log(err)
+            // }
         }
     },
     components: {
@@ -182,13 +237,13 @@ export default {
     .butt {
         margin-top: 31px;
         .addBtn {
-            width: 90px;
-            height: 30px;
-            background: #5693ff;
-            border-radius: 15px;
-            border: solid 1px #5693ff;
-            padding: 0;
-            box-shadow: 0px 4px 6px 0px rgba(86, 147, 255, 0.4);
+            // width: 90px;
+            // height: 30px;
+            // background: #5693ff;
+            // border-radius: 15px;
+            // border: solid 1px #5693ff;
+            // padding: 0;
+            // box-shadow: 0px 4px 6px 0px rgba(86, 147, 255, 0.4);
         }
         .teachBtn {
             background: #f8fafc;
@@ -217,5 +272,8 @@ export default {
             }
         }
     }
+}
+.butt /deep/ .upload-demo {
+    display: inline-block;
 }
 </style>
