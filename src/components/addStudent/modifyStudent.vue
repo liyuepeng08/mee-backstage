@@ -1,5 +1,12 @@
 <template>
   <div class="addStudent">
+    <p class="topNav">
+      <el-breadcrumb separator-class="el-icon-arrow-right">
+        <el-breadcrumb-item>用户管理</el-breadcrumb-item>
+        <el-breadcrumb-item>学生管理</el-breadcrumb-item>
+        <el-breadcrumb-item class="active">学生编辑</el-breadcrumb-item>
+      </el-breadcrumb>
+    </p>
     <h3 class="pageTitle">修改学生</h3>
     <el-row class="bread">
       <span :class="{'selected':tab===1}" @click="checkTab(1)">
@@ -33,40 +40,19 @@
         </el-form-item>
         <el-form-item label="性别" prop="gender">
           <el-select class="w150" v-model="ruleForm.gender" placeholder="请选择活动区域">
-            <el-option label="男" value="0"></el-option>
-            <el-option label="女" value="1"></el-option>
+            <el-option label="女" value="0"></el-option>
+            <el-option label="男" value="1"></el-option>
+            <el-option label="保密" value="2"></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="联系电话" prop="mobile">
+        <el-form-item label="手机号" prop="mobile">
           <el-input v-model="ruleForm.mobile"></el-input>
         </el-form-item>
         <el-form-item prop="email" label="邮箱">
           <el-input v-model="ruleForm.email"></el-input>
         </el-form-item>
         <el-form-item label="所属机构" prop="school">
-          <el-select disabled style="width:100%" v-model="ruleForm.school" placeholder="请选择活动区域">
-            <el-option label="北京市第一小学" value="shanghai"></el-option>
-            <el-option label="北京市第二小学" value="beijing"></el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="所在班级" prop="class">
-          <el-row>
-            <el-col :span="14">
-              <el-select disabled style="width:100%" v-model="ruleForm.class" placeholder="选择班级">
-                <el-option label="一班" value="shanghai"></el-option>
-                <el-option label="二班" value="beijing"></el-option>
-              </el-select>
-            </el-col>
-            <el-col :span="9">
-              <el-row style="margin-bottom:10px;">
-                <el-row style="margin-bottom:10px;">
-                  <el-button style="color:#a9a9a9;border:none">
-                    <i class="el-icon-circle-plus-outline" style="margin-right: 4px;"></i>添加班级选项
-                  </el-button>
-                </el-row>
-              </el-row>
-            </el-col>
-          </el-row>
+          <el-select disabled style="width:100%" v-model="ruleForm.school" placeholder="请选择活动区域"></el-select>
         </el-form-item>
         <el-form-item>
           <el-button
@@ -80,52 +66,29 @@
       <dl class="model more" v-if="tab === 2">
         <dt>更多信息</dt>
         <el-form-item label="民族" prop="nation">
-          <el-input disabled class="w150" v-model="ruleForm.nation" placeholder="输入内容"></el-input>
-        </el-form-item>
-        <el-form-item label="年龄" prop="age">
-          <el-input class="w150" v-model="ruleForm.age" placeholder="输入内容"></el-input>
+          <el-input class="w150" v-model="ruleForm.nation" placeholder="输入内容"></el-input>
         </el-form-item>
         <el-form-item label="出生日期" prop="birthday">
           <el-date-picker class="w150" type="date" placeholder="选择日期" v-model="ruleForm.birthday"></el-date-picker>
         </el-form-item>
-        <el-form-item label="籍贯" prop="native">
-          <el-input disabled class="w480" maxlength="50" v-model="ruleForm.age" placeholder="输入内容"></el-input>
+        <el-form-item label="籍贯" prop="nativeAddress">
+          <el-input class="w480" v-model="ruleForm.nativeAddress" placeholder="输入内容" maxlength="50"></el-input>
         </el-form-item>
         <el-form-item label="联系地址" prop="address">
-          <el-input
-            disabled
-            class="w480"
-            maxlength="50"
-            v-model="ruleForm.address"
-            placeholder="输入内容"
-          ></el-input>
+          <el-input class="w480" v-model="ruleForm.address" placeholder="输入内容" maxlength="50"></el-input>
         </el-form-item>
-        <el-form-item label="父母电话" prop="parentPhone">
+        <el-form-item label="父母电话" prop="parentsMobile">
           <el-row>
             <el-col :span="14">
-              <el-input disabled v-model="ruleForm.parentPhone" placeholder="输入手机号码"></el-input>
-            </el-col>
-            <el-col :span="9">
-              <el-row style="margin-bottom:10px;">
-                <el-button style="color:#a9a9a9;border:none">
-                  <i class="el-icon-circle-plus-outline" style="margin-right: 4px;"></i>添加班级选项
-                </el-button>
-              </el-row>
+              <el-input v-model="ruleForm.parentsMobile" placeholder="输入手机号码" maxlength="11"></el-input>
             </el-col>
           </el-row>
         </el-form-item>
-        <el-form-item label="备注" prop="remarks">
-          <el-input
-            disabled
-            class="remarks"
-            type="textarea"
-            v-model="ruleForm.remarks"
-            placeholder="输入内容"
-          ></el-input>
+        <el-form-item label="备注" prop="remark">
+          <el-input class="remarks" type="textarea" v-model="ruleForm.remark" placeholder="输入内容"></el-input>
         </el-form-item>
         <el-form-item>
           <el-row style="margin-bottom:10px;">
-            <!-- <el-button round>圆角按钮</el-button> -->
             <el-button @click="back" round style="width:120px;height:40px;font-size: 14px;">上一步</el-button>
             <el-button
               @click="submitSM('ruleForm')"
@@ -152,34 +115,28 @@ export default {
       ruleForm: {
         uid: "", //用户ID
         userName: "", //用户名
+        nickName: "", //昵称
         password: "", //用户密码
-        gender: "男", //性别
+        gender: "", //性别
         email: "", //邮箱
         mobile: "", //手机号
-        major: 22, //专业，默认是22
-        title: 1, //职称，默认是1
-        nickName: "", //昵称
-        address: "", //地址
-
-        account: "", //账户
         school: "", //学校
         phone: "", //电话
         birthday: "", //出生年月
-        grade: "", //年级
-        class: "", //班级
         nation: "", //民族
-        age: "", //年龄
-        native: "", //籍贯
-        remarks: "" //备注
+        nativeAddress: "", //籍贯
+        address: "", //所在地址
+        parentsMobile: "", //父母电话
+        remark: "" //备注
       },
       rules: {
         userName: [
-          { required: true, message: "请输入活动名称", trigger: "blur" },
-          { min: 2, max: 5, message: "长度在 2 到 5 个字符", trigger: "blur" }
+          { required: true, message: "请输入真实姓名", trigger: "blur" },
+          { min: 1, max: 20, message: "长度在 1 到 20 个字符", trigger: "blur" }
         ],
         nickName: [
-          { required: true, message: "请输入活动名称", trigger: "blur" },
-          { min: 1, max: 5, message: "长度在 2 到 5 个字符", trigger: "blur" }
+          { required: true, message: "请输入昵称", trigger: "blur" },
+          { min: 1, max: 20, message: "长度在 1 到 20 个字符", trigger: "blur" }
         ]
       },
       radio2: 3
@@ -187,31 +144,24 @@ export default {
   },
   mounted: function() {
     this.details();
+    this.obtain(); //获取当前信息
   },
   methods: {
     checkTab: function(index) {
       this.tab = index;
     },
-    //下一步
-    next: function() {
-      this.tab++;
-    },
     //上一步
     back: function() {
       this.tab--;
     },
-    submitSM(formName) {
+    //下一步
+    next: function() {
+      this.tab++;
+    },
+    submitSM: function(formName) {
       const tid = sessionStorage.getItem("tid");
       const that = this.ruleForm;
-      var birthday = new Date(that.birthday);
-      const year = birthday.getFullYear();
-      const month = birthday.getMonth() + 1;
-      const date = birthday.getDate();
-      var times =
-        year +
-        "" +
-        (month < 10 ? "0" + month : month) +
-        (date < 10 ? "0" + date : date);
+
       this.$refs[formName].validate(valid => {
         if (valid) {
           //修改
@@ -219,15 +169,22 @@ export default {
             .get("/user/update", {
               params: {
                 params: {
-                  uid: that.uid,
+                  uid: that.uid, //京东云ID
                   userName: that.userName, //用户名
+                  realName: that.userName, //真实名
                   nickName: that.nickName, //昵称
-                  gender: that.gender == "男" ? 0 : 1, //性别
+                  password: "000000", //用户密码
+                  gender: that.gender, //性别
                   email: that.email, //邮箱
-                  birthday: times, //生日
                   mobile: that.mobile, //手机号
-                  address: that.address, //地址
-                  avatar: "http://jdcloud.image.com/4664.pgn" //头像
+                  nation: that.nation, //民族
+                  birthday: this.birthdayTime(), //生日
+                  nativeAddress: that.nativeAddress, //籍贯
+                  address: that.address, //所在地址
+                  parentsMobile: that.parentsMobile, //父母电话
+                  remark: that.remark, //备注
+                  tenantId: tid, //机构
+                  role: "2" //角色（老师：1；学生:2）
                 }
               }
             })
@@ -240,6 +197,10 @@ export default {
                     //跳转到列表页
                     path: "/admin/courseManage"
                   });
+                  //模拟点击关闭按钮
+                  document
+                    .getElementsByClassName("el-message-box__close")[0]
+                    .click();
                 }, 3000);
 
                 this.$alert("3秒后返回上一级", "提交成功，请等待审核！！", {
@@ -254,7 +215,7 @@ export default {
                 });
               }
             })
-            .catch(function(error) {
+            .catch(error => {
               console.log(error);
             });
         } else {
@@ -262,6 +223,11 @@ export default {
           return false;
         }
       });
+    },
+    //获取当前信息
+    obtain: function() {
+      // this.ruleForm.tid = sessionStorage.getItem("tid");
+      this.ruleForm.school = sessionStorage.getItem("tTame");
     },
     //点击修改前数据
     details: function() {
@@ -280,23 +246,39 @@ export default {
           const that = this.ruleForm;
           let birthday = data.birthday;
           // data.birthday.slice(0, [4]);
-          console.log(typeof data.birthday);
           that.uid = data.uid; //用户ID
           that.userName = data.realName; //用户名
           that.nickName = data.nickName; //昵称
           that.password = data.password; //用户密码
-          that.gender = data.gender ? "女" : "男"; //性别
+          that.gender = data.gender.toString(); //性别
           that.email = data.email; //邮箱
           that.mobile = data.mobile; //手机号
-          that.major = data.major; //专业，默认是22
-          that.title = data.title; //职称，默认是1
           that.address = data.address; //地址
           that.birthday = data.birthday; //生日
+          that.nation = data.nation; //民族
+          that.nativeAddress = data.nativeAddress; //籍贯
+          that.address = data.address; //所在地址
+          that.parentsMobile = data.parentsMobile; //父母电话
+          that.remark = data.remark; //备注
         })
         .catch(function(error) {
           console.log(error);
         });
-    }
+    },
+    //生日由DTC转成8位数字
+    birthdayTime: function() {
+      var birthday = new Date(this.ruleForm.birthday);
+      const year = birthday.getFullYear();
+      const month = birthday.getMonth() + 1;
+      const date = birthday.getDate();
+      var times =
+        year +
+        "" +
+        (month < 10 ? "0" + month : month) +
+        (date < 10 ? "0" + date : date);
+      return Number(times);
+    },
+    birthdayReturn: function(birthday) {}
   }
 };
 </script>
@@ -307,10 +289,20 @@ export default {
   background: #fff;
   margin: 10px 10px 0 10px;
   min-height: 600px;
+  .topNav {
+    background-color: #f3f3f5;
+    font-size: 12px;
+    color: #a9a9a9;
+    .active {
+      /deep/.el-breadcrumb__inner {
+        color: #5693ff;
+      }
+    }
+  }
   .pageTitle {
     font-size: 18px;
     color: #080808;
-    padding: 0px 21px 25px 0px;
+    padding: 19px 21px 31px 0;
     background-color: #f3f3f5;
   }
   // 面包屑
@@ -411,8 +403,4 @@ export default {
   }
 }
 </style>
-<style lang="less">
-.el-message-box__content {
-  padding-left: 110px;
-}
-</style>
+

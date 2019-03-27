@@ -26,10 +26,10 @@
                     <p class="title">基本资料</p>
                 </el-col>
             </el-row>
-            <el-row class="infomation">
+            <el-row class="infomation" v-loading="loading">
                 <el-col :span="4">
                     <div class="photo">
-                        <img src="./teacherCard.jpg" alt>
+                        <img :src="ruleForm.avatar" alt>
                     </div>
                 </el-col>
                 <el-col :span="8">
@@ -50,13 +50,9 @@
                             性
                             <i></i>
                             别：
-                            <span>{{ruleForm.sex}}</span>
-                        </li>
-                        <li class="letWid">
-                            年
-                            <i></i>
-                            龄：
-                            <span>{{ruleForm.age}}</span>
+                            <span v-if="ruleForm.gender==0">女</span>
+                            <span v-if="ruleForm.gender==1">男</span>
+                            <span v-if="ruleForm.gender==2">保密</span>
                         </li>
                         <li class="letWid">
                             民
@@ -70,15 +66,21 @@
                         </li>
                         <li>
                             政治面貌：
-                            <span>{{ruleForm.political}}</span>
+                            <span
+                                v-for="v in politics"
+                                :key="v.key"
+                                v-show="v.key==ruleForm.politics"
+                            >{{v.value}}</span>
                         </li>
                         <li>
                             婚姻状况：
-                            <span>{{ruleForm.marriage}}</span>
+                            <span v-if="ruleForm.marital==0">否</span>
+                            <span v-if="ruleForm.marital==1">是</span>
+                            <span v-if="ruleForm.marital==2">保密</span>
                         </li>
                         <li>
                             联系电话：
-                            <span>{{ruleForm.phone}}</span>
+                            <span>{{ruleForm.mobile}}</span>
                         </li>
                         <li class="letWid">
                             邮
@@ -88,13 +90,13 @@
                         </li>
                         <li>
                             身份证号：
-                            <span>{{ruleForm.idNumeber}}</span>
+                            <span>{{ruleForm.identity}}</span>
                         </li>
                         <li class="letWid">
                             籍
                             <i></i>
                             贯：
-                            <span>{{ruleForm.nativePlace}}</span>
+                            <span>{{ruleForm.nativeAddress}}</span>
                         </li>
                         <li>
                             常驻地址：
@@ -102,7 +104,7 @@
                         </li>
                     </ul>
                 </el-col>
-                <el-col :span="8">
+                <!-- <el-col :span="8">
                     <ul>
                         <li class="letWid">
                             教
@@ -139,9 +141,9 @@
                             <span>{{ruleForm.teachingBrief}}</span>
                         </li>
                     </ul>
-                </el-col>
+                </el-col>-->
             </el-row>
-            <div class="aptitudeBox">
+            <!-- <div class="aptitudeBox">
                 <p class="aptitudeTitle pos1">
                     教师资质
                     <i></i>
@@ -157,7 +159,7 @@
                         <img src="./teacherCard.jpg" alt>
                     </li>
                 </ul>
-            </div>
+            </div>-->
         </div>
     </div>
 </template>
@@ -167,7 +169,23 @@ export default {
     data() {
         return {
             uid: '',
-            ruleForm: {}
+            ruleForm: {},
+            loading: true,
+            politics: [
+                { key: "1", value: "中共党员" },
+                { key: "2", value: "中共预备党员" },
+                { key: "3", value: "共青团员" },
+                { key: "4", value: "民革党员" },
+                { key: "5", value: "民盟盟员" },
+                { key: "6", value: "民建会员" },
+                { key: "7", value: "民进会员" },
+                { key: "8", value: "农工党党员" },
+                { key: "9", value: "致公党党员" },
+                { key: "10", value: "九三学社社员" },
+                { key: "11", value: "台盟盟员" },
+                { key: "12", value: "无党派人士" },
+                { key: "13", value: "群众" }
+            ],
         }
     },
 
@@ -188,10 +206,12 @@ export default {
             }).then(res => {
                 if (res.status === 200) {
                     if (res.data.code == 0) {
-                        // console.log(res.data)
+                        this.loading = false;
                         this.ruleForm = res.data.data;
                     } else {
-                        alert(res.data.msg)
+                        this.$alert(res.data.msg, {
+                            dangerouslyUseHTMLString: true
+                        });
                     }
                 } else {
                     alert('加载失败，请检查网络是否连接正常！')
@@ -222,7 +242,7 @@ export default {
         font-size: 18px;
         font-weight: normal;
         color: #000000;
-        padding: 19px 21px 31px;
+        padding: 19px 21px 31px 0;
     }
     .teacherInfo {
         width: 100%;

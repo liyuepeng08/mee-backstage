@@ -1,6 +1,6 @@
 <template>
   <div class="addStudent">
-    <h3 class="pageTitle">修改学生</h3>
+    <h3 class="pageTitle">修改管理员</h3>
     <el-row class="bread">
       <span :class="{'selected':tab===1}" @click="checkTab(1)">
         <i/>基本信息
@@ -14,38 +14,31 @@
       class="demo-ruleForm"
       style="width:390px"
       size="mini"
+      :rules="rules"
     >
-      <dl class="model essential" v-if="tab === 1">
+      <dl class="model essential" v-show="tab === 1">
         <dt>基本信息</dt>
-        <!-- <el-form-item label="账号" prop="account">
-          <el-input v-model="ruleForm.account" placeholder="账号"></el-input>
-        </el-form-item>-->
-        <el-form-item label="姓名" prop="userName">
-          <el-input disabled class="w150" v-model="ruleForm.userName" placeholder="请输入姓名"></el-input>
+        <el-form-item label="姓名" prop="userName" class="validate">
+          <el-input disabled class="w150" v-model="ruleForm.userName" placeholder="请输入真实姓名"></el-input>
         </el-form-item>
-        <el-form-item label="联系电话" prop="mobile">
-          <el-input v-model="ruleForm.mobile"></el-input>
+        <el-form-item label="手机号" prop="mobile" class="validate">
+          <el-input class="w150" v-model="ruleForm.mobile" placeholder="输入手机号"></el-input>
         </el-form-item>
-        <el-form-item prop="email" label="邮箱">
-          <el-input v-model="ruleForm.email"></el-input>
+        <el-form-item prop="email" label="邮箱" class="validate">
+          <el-input class="w480" v-model="ruleForm.email" placeholder="输入邮箱"></el-input>
         </el-form-item>
         <el-form-item label="所属机构" prop="school">
-          <el-select disabled style="width:100%" v-model="ruleForm.school" placeholder="请选择活动区域">
-            <el-option label="北京市第一小学" value="shanghai"></el-option>
-            <el-option label="北京市第二小学" value="beijing"></el-option>
+          <el-select disabled class="w480" v-model="ruleForm.school" placeholder="请选择">
+            <el-option label="北京市第一小学" value="shanghai" selected></el-option>
           </el-select>
         </el-form-item>
         <el-form-item>
-          <el-row style="margin-bottom:10px;">
-            <!-- <el-button round>圆角按钮</el-button> -->
-            <el-button @click="back" round style="width:120px;height:40px;font-size: 14px;">上一步</el-button>
-            <el-button
-              @click="submit"
-              type="primary"
-              round
-              style="width:120px;height:40px;font-size: 14px;"
-            >提交</el-button>
-          </el-row>
+          <el-button
+            @click="submit('ruleForm')"
+            type="primary"
+            round
+            style="width:120px;height:40px;font-size: 14px;"
+          >提交</el-button>
         </el-form-item>
       </dl>
     </el-form>
@@ -65,48 +58,119 @@ export default {
         uid: "", //用户ID
         userName: "", //用户名
         password: "", //用户密码
+        gender: "男", //性别
         email: "", //邮箱
-        mobile: "" //手机号
+        mobile: "", //手机号
+        school: "北京大学"
+      },
+      rules: {
+        userName: [
+          { required: true, message: "请输入真实姓名", trigger: "blur" },
+          { min: 1, max: 20, message: "长度在 1 到 20 个字符", trigger: "blur" }
+        ],
+        mobile: [
+          { required: true, message: "请输入手机号", trigger: "blur" },
+          {
+            pattern: /^1[34578]\d{9}$/,
+            message: "手机号格式错误",
+            trigger: "blur"
+          }
+        ],
+        email: [
+          { required: true, message: "请输入邮箱地址", trigger: "blur" },
+          {
+            type: "email",
+            message: "请输入正确的邮箱地址",
+            trigger: ["blur", "change"]
+          }
+        ]
       },
       radio2: 3
     };
   },
   mounted: function() {
-    // this.details();
+    this.details();
   },
   methods: {
-    submit: function() {
-      //修改
-      //提交弹出框
-      this.$alert("提交成功，请等待审核！", "", {
-        confirmButtonText: "返回",
-        type: "success",
-        showClose: "",
-        confirmButtonClass: "round"
-        // center: true
-      }).then(() => {
-        this.$router.push({ path: "/admin" });
+    submit: function(formName) {
+      const that = this.ruleForm;
+      this.$refs[formName].validate(valid => {
+        if (valid) {
+          this.axios
+            .get("/user/update", {
+              params: {
+                params: {
+                  uid: that.uid, //京东云ID
+                  userName: that.userName, //用户名
+                  nickName: that.nickName, //昵称
+                  gender: that.gender == "男" ? 0 : 1, //性别
+                  email: that.email, //邮箱
+                  mobile: that.mobile //手机号
+                }
+              }
+            })
+            .then(response => {
+              let data = response.data;
+              if (data.code == 0) {
+                let timer = setTimeout(() => {
+                  //倒计时跳转
+                  this.$router.push({
+                    //跳转到列表页
+                    path: "/admin/adminUser"
+                  });
+                  //模拟点击关闭按钮
+                  document
+                    .getElementsByClassName("el-message-box__close")[0]
+                    .click();
+                }, 3000);
+
+                this.$alert("3秒后返回上一级", "提交成功，请等待审核！！", {
+                  confirmButtonText: "直接跳转",
+                  callback: action => {
+                    clearTimeout(timer); //清除定时器
+                    this.$router.push({
+                      //跳转到列表页
+                      path: "/admin/adminUser"
+                    });
+                  }
+                });
+              }
+            })
+            .catch(error => {
+              this.$message("提交失败！");
+              console.log(error);
+            });
+        } else {
+          console.log("error submit!!");
+          this.$message("请填写所有带*号的必填项！");
+          return false;
+        }
       });
+      //修改
     },
     //点击修改前数据
     details: function() {
+      const uid = this.$route.params.uid;
       console.log(1);
       //渲染
       this.axios
         .get("/user/getUserDetail", {
           params: {
             params: {
-              uid: "465213654126"
+              uid: uid
             }
           }
         })
-        .then(function(response) {
+        .then(response => {
           let data = response.data.data;
-          this.uid = data.uid; //用户ID
-          this.userName = data.userName; //用户名
-          this.password = data.password; //用户密码
-          this.email = data.email; //邮箱
-          this.mobile = data.mobile; //手机号 
+          const that = this.ruleForm;
+          that.uid = data.uid; //用户ID
+          that.userName = data.realName; //用户名
+          that.nickName = data.nickName; //昵称
+          that.password = data.password; //用户密码
+          that.gender = data.gender ? "女" : "男"; //性别
+          that.email = data.email; //邮箱
+          that.mobile = data.mobile; //手机号
         })
         .catch(function(error) {
           console.log(error);
@@ -167,26 +231,88 @@ export default {
     dt {
       padding-bottom: 30px;
     }
+    .back {
+      width: 120px;
+      height: 40px;
+      font-size: 14px;
+      color: #409eff;
+      border: 1px solid #409eff;
+    }
     .w150 {
       width: 150px;
     }
     .w480 {
       width: 480px;
     }
+    .w260 {
+      width: 260px;
+    }
+    // 头像
+    /deep/ .avatar-uploader {
+      height: 120px;
+    }
+    /deep/ .avatar-uploader .el-upload {
+      border: 1px dashed #d9d9d9;
+      border-radius: 6px;
+      cursor: pointer;
+      position: relative;
+
+      overflow: hidden;
+    }
+    /deep/ .avatar-uploader .el-upload:hover {
+      border-color: #409eff;
+    }
+    /deep/ .avatar-uploader-icon {
+      font-size: 28px;
+      color: #8c939d;
+      width: 120px;
+      height: 120px;
+      line-height: 120px;
+      text-align: center;
+    }
+    /deep/ .avatar {
+      width: 120px;
+      height: 120px;
+      display: block;
+    }
+    .certificate {
+      .title {
+        text-align: center;
+        font-size: 12px;
+        color: #666666;
+      }
+      /deep/ .avatar-uploader-icon {
+        width: 150px;
+        height: 120px;
+        line-height: 120px;
+      }
+      /deep/ .avatar {
+        width: 150px;
+        height: 120px;
+      }
+    }
+  }
+  // 设置label标题到右侧距离
+  /deep/ .el-form-item__label {
+    padding-right: 30px;
   }
   //more
   .more {
     padding: 34px 0px 34px 40px;
   }
-
-  /deep/ .el-form-item {
-    margin-bottom: 30px;
-    // width: 100%;
-    .el-input__inner {
-      height: 30px;
-      line-height: 30px;
-    }
+  // 验证
+  .validate {
+    position: relative;
   }
+  // 验证子项
+  /deep/
+    .el-form-item.is-required:not(.is-no-asterisk)
+    > .el-form-item__label:before {
+    position: absolute;
+    left: -12px;
+    top: 2px;
+  }
+
   /deep/ .el-form-item__label {
     font-size: 12px;
     text-align: justify;
@@ -213,10 +339,5 @@ export default {
   /deep/ .el-message-box__btns {
     text-align: center;
   }
-}
-</style>
-<style lang="less">
-.el-message-box__content {
-  padding-left: 110px;
 }
 </style>

@@ -1,5 +1,12 @@
 <template>
     <div class="detailAdmin">
+        <p class="topNav">
+            <el-breadcrumb separator-class="el-icon-arrow-right">
+                <el-breadcrumb-item>用户管理</el-breadcrumb-item>
+                <el-breadcrumb-item>管理员管理</el-breadcrumb-item>
+                <el-breadcrumb-item class="active">管理员详情</el-breadcrumb-item>
+            </el-breadcrumb>
+        </p>
         <el-row>
             <el-col :span="24">
                 <h3 class="pageTitle">管理员详情</h3>
@@ -19,46 +26,19 @@
                     <p class="title">基本资料</p>
                 </el-col>
             </el-row>
-            <el-row class="infomation">
+            <el-row class="infomation" v-loading="loading">
                 <el-col :span="20">
                     <ul class="leftInfo">
                         <li class="letWid">
                             姓
                             <i></i>
                             名：
-                            <span>{{ruleForm.name}}</span>
+                            <span>{{ruleForm.realName}}</span>
                         </li>
-                        <li class="letWid">
-                            昵
-                            <i></i>
-                            称：
-                            <span>{{ruleForm.nickName}}</span>
-                        </li>
-                        <li class="letWid">
-                            性
-                            <i></i>
-                            别：
-                            <span>{{ruleForm.sex}}</span>
-                        </li>
-                        <li class="letWid">
-                            年
-                            <i></i>
-                            龄：
-                            <span>{{ruleForm.age}}</span>
-                        </li>
-                        <li class="letWid">
-                            民
-                            <i></i>
-                            族：
-                            <span>{{ruleForm.nation}}</span>
-                        </li>
-                        <li>
-                            出生年月：
-                            <span>{{ruleForm.birthday}}</span>
-                        </li>
+
                         <li>
                             联系电话：
-                            <span>{{ruleForm.phone}}</span>
+                            <span>{{ruleForm.mobile}}</span>
                         </li>
                         <li class="letWid">
                             邮
@@ -67,22 +47,8 @@
                             <span>{{ruleForm.email}}</span>
                         </li>
                         <li>
-                            身份证号：
-                            <span>{{ruleForm.idNumeber}}</span>
-                        </li>
-                        <li class="letWid">
-                            籍
-                            <i></i>
-                            贯：
-                            <span>{{ruleForm.nativePlace}}</span>
-                        </li>
-                        <li>
-                            常驻地址：
-                            <span>{{ruleForm.address}}</span>
-                        </li>
-                        <li>
                             所属机构：
-                            <span>{{ruleForm.institution}}</span>
+                            <span>{{ruleForm.organization}}</span>
                         </li>
                     </ul>
                 </el-col>
@@ -96,20 +62,8 @@ export default {
     name: "AddManager",
     data() {
         return {
-            ruleForm: {
-                name: "你猜猜", //用户名
-                nickName: "梦里询他千百度", //昵称
-                sex: "女", //性别
-                age: 22,
-                nation: "汉族", //民族
-                birthday: "2007年05月15日", //出生年月             
-                phone: "15010611993", //电话
-                email: "15010611993@163.com", //邮箱
-                idNumeber: 112233445566778899,//身份证号
-                nativePlace: "北京市北京市北京市",//籍贯
-                address: "北京市昌平区华家园东一区",//常住地址
-                institution: "北京大学",//所属机构
-            }
+            loading: true,
+            ruleForm: {},
         };
     },
     mounted() {
@@ -129,12 +83,18 @@ export default {
             }).then(res => {
                 if (res.status === 200) {
                     if (res.data.code == 0) {
-                        console.log(res.data)
+                        this.loading = false;
+                        // console.log(res.data)
+                        this.ruleForm = res.data.data
                     } else {
-                        alert(res.data.msg)
+                        this.$alert(res.data.msg, {
+                            dangerouslyUseHTMLString: true
+                        });
                     }
                 } else {
-                    alert('加载失败，请检查网络是否连接诶正常！')
+                    this.$alert('加载失败，请检查网络是否连接诶正常！', {
+                        dangerouslyUseHTMLString: true
+                    });
                 }
             }).catch((error) => {
                 console.log(error)
@@ -149,11 +109,20 @@ export default {
 .detailAdmin {
     margin: 10px 10px 0 10px;
     min-height: 600px;
+    .topNav {
+        font-size: 12px;
+        color: #a9a9a9;
+        .active {
+            /deep/.el-breadcrumb__inner {
+                color: #5693ff;
+            }
+        }
+    }
     .pageTitle {
         font-size: 18px;
         font-weight: normal;
         color: #000000;
-        padding: 19px 21px 31px;
+        padding: 19px 21px 31px 0;
     }
     .teacherInfo {
         width: 100%;

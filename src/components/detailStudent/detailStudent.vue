@@ -1,5 +1,12 @@
 <template>
     <div class="detailStudent">
+        <p class="topNav">
+            <el-breadcrumb separator-class="el-icon-arrow-right">
+                <el-breadcrumb-item>用户管理</el-breadcrumb-item>
+                <el-breadcrumb-item>学生管理</el-breadcrumb-item>
+                <el-breadcrumb-item class="active">学生详情</el-breadcrumb-item>
+            </el-breadcrumb>
+        </p>
         <el-row>
             <el-col :span="24">
                 <h3 class="pageTitle">学生详情</h3>
@@ -19,38 +26,40 @@
                     <p class="title">基本资料</p>
                 </el-col>
             </el-row>
-            <el-row class="infomation">
+            <el-row class="infomation" v-loading="loading">
                 <el-col :span="12">
                     <ul class="leftInfo">
                         <li class="letWid">
                             姓
                             <i></i>
                             名：
-                            <span>{{ruleForm.name}}</span>
+                            <span>{{ruleForm.realName}}</span>
                         </li>
                         <li class="letWid">
                             昵
                             <i></i>
                             称：
-                            <span>{{ruleForm.niceName}}</span>
+                            <span>{{ruleForm.nickName}}</span>
                         </li>
                         <li class="letWid">
                             性
                             <i></i>
                             别：
-                            <span>{{ruleForm.sex}}</span>
+                            <span v-if="ruleForm.gender==0">女</span>
+                            <span v-if="ruleForm.gender==1">男</span>
+                            <span v-if="ruleForm.gender==2">保密</span>
                         </li>
-                        <li class="letWid">
+                        <!-- <li class="letWid">
                             年
                             <i></i>
                             龄：
                             <span>{{ruleForm.age}}</span>
-                        </li>
+                        </li>-->
                         <li class="letWid">
                             民
                             <i></i>
                             族：
-                            <span>{{ruleForm.nation}}</span>
+                            <span>{{ruleForm.identity}}</span>
                         </li>
                         <li>
                             出生年月：
@@ -58,7 +67,7 @@
                         </li>
                         <li>
                             联系电话：
-                            <span>{{ruleForm.phone}}</span>
+                            <span>{{ruleForm.mobile}}</span>
                         </li>
                         <li class="letWid">
                             邮
@@ -67,42 +76,29 @@
                             <span>{{ruleForm.email}}</span>
                         </li>
                         <li>
-                            身份证号：
-                            <span>{{ruleForm.idNumeber}}</span>
+                            所属机构：
+                            <span>{{ruleForm.roganization}}</span>
                         </li>
                         <li class="letWid">
                             籍
                             <i></i>
                             贯：
-                            <span>{{ruleForm.nativePlace}}</span>
+                            <span>{{ruleForm.nativeAddress}}</span>
                         </li>
                         <li>
                             常驻地址：
                             <span>{{ruleForm.address}}</span>
                         </li>
-                    </ul>
-                </el-col>
-                <el-col :span="12">
-                    <ul>
-                        <li class="clearfix">
-                            <p class="fl">所属机构：</p>
-                            <div class="fl institution">
-                                <p v-for="v in ruleForm.institution" :key="v">{{v}}</p>
-                            </div>
-                        </li>
-                        <li class="clearfix">
-                            <p class="fl">所在班级：</p>
-                            <span class="fl classes">{{ruleForm.classes}}</span>
-                        </li>
                         <li class="clearfix">
                             <p class="fl">父母电话：</p>
                             <div class="fl parentTel">
-                                <p v-for="v in ruleForm.parentTel" :key="v">{{v}}</p>
+                                <p v-for="v in ruleForm.parentMobile" :key="v">{{v}}</p>
                             </div>
                         </li>
-                        <li class="teachingBrief">
-                            教学简介：
-                            <span>{{ruleForm.teachingBrief}}</span>
+                        <li class="letWid">
+                            备
+                            <i></i>注：
+                            <span>{{ruleForm.remark}}</span>
                         </li>
                     </ul>
                 </el-col>
@@ -116,23 +112,8 @@ export default {
     name: "AddManager",
     data() {
         return {
-            ruleForm: {
-                name: "窦娥", //用户名
-                niceName: "梦里询他千百度", //昵称
-                sex: "女", //性别
-                age: 12,
-                nation: "汉族", //民族
-                birthday: "2007年05月15日", //出生年月             
-                phone: "15010611993", //电话
-                email: "15010611993@163.com", //邮箱
-                idNumeber: 112233445566778899,//身份证号
-                nativePlace: "北京市北京市北京市",//籍贯
-                address: "北京市昌平区华家园东一区",//常住地址
-                institution: ["少儿英语", "艺术英语"],//所属机构
-                classes: "一年7班", //所在班级
-                parentTel: ["13113113131", "15715711571"],//父母电话
-                teachingBrief: "南京大麦网络大学蛤蜊英文专业毕业，从事教师行业13年，桃李满天下，下面随便写，不知道写啥，没空瞎编，看着写吧。我是案例，是个很长很长的案例",//教学简介
-            }
+            ruleForm: {},
+            loading: true,
         }
     },
     mounted() {
@@ -152,12 +133,18 @@ export default {
             }).then(res => {
                 if (res.status === 200) {
                     if (res.data.code == 0) {
-                        console.log(res.data)
+                        this.loading = false;
+                        this.ruleForm = res.data.data
                     } else {
-                        alert(res.data.msg)
+                        this.loading = false;
+                        this.$alert(res.data.msg, {
+                            dangerouslyUseHTMLString: true
+                        });
                     }
                 } else {
-                    alert('加载失败，请检查网络是否连接诶正常！')
+                    this.$alert('加载失败，请检查网络是否连接诶正常！', {
+                        dangerouslyUseHTMLString: true
+                    });
                 }
             }).catch((error) => {
                 console.log(error)
@@ -172,11 +159,20 @@ export default {
 .detailStudent {
     margin: 10px 10px 0 10px;
     min-height: 600px;
+    .topNav {
+        font-size: 12px;
+        color: #a9a9a9;
+        .active {
+            /deep/.el-breadcrumb__inner {
+                color: #5693ff;
+            }
+        }
+    }
     .pageTitle {
         font-size: 18px;
         font-weight: normal;
         color: #000000;
-        padding: 19px 21px 31px;
+        padding: 19px 21px 31px 0;
     }
 
     .teacherInfo {
