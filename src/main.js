@@ -16,7 +16,7 @@ Vue.use(ElementUI)
 
 //把两个不同请求地址的axios实例对象添加到vue原型上
 Vue.prototype.axiosC = catalogAxios       //请求catalog服务用
-Vue.prototype.axiosU = userCenterAxios    //请求userCenter服务用
+Vue.prototype.axios = userCenterAxios    //请求userCenter服务用
 
 /* eslint-disable no-new */
 new Vue({
