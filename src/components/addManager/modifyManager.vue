@@ -22,7 +22,7 @@
           <el-input disabled class="w150" v-model="ruleForm.userName" placeholder="请输入真实姓名"></el-input>
         </el-form-item>
         <el-form-item label="手机号" prop="mobile" class="validate">
-          <el-input class="w150" v-model="ruleForm.mobile" placeholder="输入手机号"></el-input>
+          <el-input class="w150" maxlength="11" v-model="ruleForm.mobile" placeholder="输入手机号"></el-input>
         </el-form-item>
         <el-form-item prop="email" label="邮箱" class="validate">
           <el-input class="w480" v-model="ruleForm.email" placeholder="输入邮箱"></el-input>

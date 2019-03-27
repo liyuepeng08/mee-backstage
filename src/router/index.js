@@ -36,6 +36,7 @@ import NewCourseUpload from '@/components/courseManage/newCourseUpload' //新建
 import UploadVideo from '@/components/courseManage/uploadVideo' //视频上传
 import UploadWord from '@/components/courseManage/UploadWord' //课件上传
 
+import ClassManage from '@/components/classManage/classManage' //课程管理列表页
 Vue.use(Router)
 
 export default new Router({
@@ -166,8 +167,13 @@ export default new Router({
         path: "teacherManage",
         name: "teacherManage",
         component: TeacherManage
+      }, {
+        path: "classManage", //班级管理
+        name: "classManage",
+        component: ClassManage
       }
     ]
+
   }, {
     path: '/',
     name: 'Login',
