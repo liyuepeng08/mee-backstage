@@ -252,7 +252,7 @@ export default {
             msg: "Welcome to Your Vue.js App",
             tab: 1,
             ruleForm: {
-                avatar:"",//头像
+                avatar: "",//头像
                 userName: "", //用户名
                 nickName: "", //昵称
                 password: "", //用户密码
@@ -270,7 +270,7 @@ export default {
                 marital: "2", //婚姻状况
                 identity: "", //身份证号
                 politics: "13", //政治面貌
-                imageUrl:'http://minecraft-oss.s3.cn-north-1.jcloudcs.com/2019/03/27/8ff0201878cae10330fea9fc2ca62862.jpg',//默认图面 测试用
+                imageUrl: 'http://minecraft-oss.s3.cn-north-1.jcloudcs.com/2019/03/27/8ff0201878cae10330fea9fc2ca62862.jpg',//默认图面 测试用
 
             },
             politics: [
@@ -368,7 +368,7 @@ export default {
                         .get("/tenant/user/createUser", {
                             params: {
                                 params: {
-                                    avatar:that.imageUrl,//头像
+                                    avatar: that.imageUrl,//头像
                                     userName: that.userName, //用户名
                                     realName: that.userName, //真实名
                                     nickName: that.nickName, //昵称
@@ -388,9 +388,7 @@ export default {
                             }
                         })
                         .then(response => {
-                            console.log(111);
                             let data = response.data;
-                            console.log("-------data" + data);
                             if (data.code == 0) {
                                 let timer = setTimeout(() => {
                                     //倒计时跳转
@@ -428,17 +426,20 @@ export default {
             });
         },
         birthdayTime: function () {
-            var birthday = new Date(this.ruleForm.birthday);
-            const year = birthday.getFullYear();
-            const month = birthday.getMonth() + 1;
-            const date = birthday.getDate();
-            var times =
-                year +
-                "" +
-                (month < 10 ? "0" + month : month) +
-                (date < 10 ? "0" + date : date);
-            return times;
-            console.log(times);
+            if (this.ruleForm.birthday) {
+                var birthday = new Date(this.ruleForm.birthday);
+                const year = birthday.getFullYear();
+                const month = birthday.getMonth() + 1;
+                const date = birthday.getDate();
+                var times =
+                    year +
+                    "" +
+                    (month < 10 ? "0" + month : month) +
+                    (date < 10 ? "0" + date : date);
+                return times;
+                console.log(times);
+            }
+            return this.ruleForm.birthday;
         },
         //获取当前信息
         obtain: function () {

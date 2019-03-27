@@ -50,9 +50,7 @@
                             性
                             <i></i>
                             别：
-                            <span v-if="ruleForm.gender==0">女</span>
-                            <span v-if="ruleForm.gender==1">男</span>
-                            <span v-if="ruleForm.gender==2">保密</span>
+                            <span>{{ruleForm.gender==2?'保密':ruleForm.gender?'男':'女'}}</span>
                         </li>
                         <li class="letWid">
                             民
