@@ -252,6 +252,7 @@ export default {
             msg: "Welcome to Your Vue.js App",
             tab: 1,
             ruleForm: {
+                avatar:"",//头像
                 userName: "", //用户名
                 nickName: "", //昵称
                 password: "", //用户密码
@@ -268,7 +269,9 @@ export default {
                 remark: "", //备注
                 marital: "2", //婚姻状况
                 identity: "", //身份证号
-                politics: "13" //政治面貌
+                politics: "13", //政治面貌
+                imageUrl:'http://minecraft-oss.s3.cn-north-1.jcloudcs.com/2019/03/27/8ff0201878cae10330fea9fc2ca62862.jpg',//默认图面 测试用
+
             },
             politics: [
                 { key: "1", value: "中共党员" },
@@ -365,6 +368,7 @@ export default {
                         .get("/tenant/user/createUser", {
                             params: {
                                 params: {
+                                    avatar:that.imageUrl,//头像
                                     userName: that.userName, //用户名
                                     realName: that.userName, //真实名
                                     nickName: that.nickName, //昵称

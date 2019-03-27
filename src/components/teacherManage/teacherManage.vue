@@ -19,15 +19,13 @@
         <el-table class="tablelInfo" v-loading="loading" :data="tableData">
             <el-table-column prop="realName" label="名称"></el-table-column>
             <el-table-column prop="mobile" label="电话"></el-table-column>
-            <el-table-column prop="classes" label="所在班级"></el-table-column>
-            <el-table-column prop="subject" label="教授科目"></el-table-column>
-            <el-table-column prop="mechanism" label="所属机构"></el-table-column>
             <el-table-column prop="registerTime" label="创建时间"></el-table-column>
             <el-table-column label="操作">
                 <template slot-scope="scope">
                     <el-button type="text" size="small" @click="detailMsg(scope)">详情</el-button>
                     <el-button type="text" size="small" @click="modifyMsg(scope)">编辑</el-button>
                     <el-button type="text" size="small" @click="deleteMsg(scope,tableData)">删除</el-button>
+                    <el-button type="text" size="small" @click="resetPassword(scope)">重置密码</el-button>
                 </template>
             </el-table-column>
         </el-table>
@@ -148,6 +146,9 @@ export default {
             this.$router.push({
                 path: `modifyTeacher/${scope.row.uid}`
             });
+        },
+        resetPassword(scope){
+            console.log(scope.row);
         },
         addTeacher() {
             this.$router.push({
