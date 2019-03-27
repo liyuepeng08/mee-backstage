@@ -343,7 +343,7 @@ export default {
             fd.append('params', JSON.stringify({ uid: this.tid }))
 
             try {
-                let { status, data: { data: result } } = await this.axios({//解构赋值
+                let { status, data: { data: result } } = await this.axiosC({//解构赋值
                     url: '/oss/upload',
                     method: 'post',
                     data: fd,
