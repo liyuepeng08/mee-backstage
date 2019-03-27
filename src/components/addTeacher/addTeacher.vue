@@ -270,7 +270,7 @@ export default {
                 marital: "2", //婚姻状况
                 identity: "", //身份证号
                 politics: "13", //政治面貌
-                imageUrl: 'http://minecraft-oss.s3.cn-north-1.jcloudcs.com/2019/03/27/8ff0201878cae10330fea9fc2ca62862.jpg',//默认图面 测试用
+                imageUrl: '',//默认图面 测试用
 
             },
             politics: [
