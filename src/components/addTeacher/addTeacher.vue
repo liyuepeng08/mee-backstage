@@ -3,8 +3,8 @@
     <p class="topNav">
       <el-breadcrumb separator-class="el-icon-arrow-right">
         <el-breadcrumb-item>用户管理</el-breadcrumb-item>
-        <el-breadcrumb-item>学生管理</el-breadcrumb-item>
-        <el-breadcrumb-item class="active">学生编辑</el-breadcrumb-item>
+        <el-breadcrumb-item>教师管理</el-breadcrumb-item>
+        <el-breadcrumb-item class="active">教师编辑</el-breadcrumb-item>
       </el-breadcrumb>
     </p>
     <h3 class="pageTitle">新增教师</h3>
