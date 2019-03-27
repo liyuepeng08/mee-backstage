@@ -36,11 +36,21 @@
             :total="total"
             :pagerCount="pagerCount"
         ></pages>
+        <transition name="el-fade-in-linear">
+            <reset-password
+                class="transition-box"
+                :resetName="resetName"
+                @changeStatus="getStatus"
+                v-if="isResetPwd"
+            ></reset-password>
+        </transition>
     </div>
 </template>
 <script>
 import Pages from "../pages/pages";
 import NewSearch from "../newSearch/newSearch";
+import ResetPassword from '../resetPassword/resetPassword'
+import { Install } from '@/config/checkRule.js'
 export default {
     data() {
         return {
@@ -51,7 +61,9 @@ export default {
             loading: true,
             showPage: true,
             paramsData: {},
-            tid: ''
+            tid: '',
+            isResetPwd: false,
+            resetName: ''
         };
     },
     mounted() {
@@ -147,8 +159,22 @@ export default {
                 path: `modifyTeacher/${scope.row.uid}`
             });
         },
-        resetPassword(scope){
-            console.log(scope.row);
+        resetPassword(scope) {
+            this.resetName = scope.row.realName
+            this.isResetPwd = true
+        },
+        getStatus(txt, pwd) {
+            if (txt) {
+                if (Install.pwd(pwd.newPwd1) && Install.pwd(pwd.newPwd2)) {
+                    console.log(pwd.newPwd1, pwd.newPwd2);
+                } else {
+                    this.$alert('密码格式不正确！', {
+                        dangerouslyUseHTMLString: true
+                    });
+                }
+            } else {
+                this.isResetPwd = false
+            }
         },
         addTeacher() {
             this.$router.push({
@@ -164,7 +190,8 @@ export default {
     },
     components: {
         Pages,
-        NewSearch
+        NewSearch,
+        ResetPassword
     }
 };
 </script>
