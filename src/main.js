@@ -6,7 +6,7 @@ import router from './router'
 import ElementUI from 'element-ui'
 import './assets/css/reset.css'
 import 'element-ui/lib/theme-chalk/index.css'
-import {axios} from '@/config/axiosDefault'
+import {catalogAxios, userCenterAxios} from '@/config/axiosDefault'
 import store from '@/store/index'
 
 
@@ -14,7 +14,9 @@ Vue.config.productionTip = false
 
 Vue.use(ElementUI)
 
-Vue.prototype.axios = axios
+//把两个不同请求地址的axios实例对象添加到vue原型上
+Vue.prototype.axiosC = catalogAxios
+Vue.prototype.axiosU = userCenterAxios
 
 /* eslint-disable no-new */
 new Vue({

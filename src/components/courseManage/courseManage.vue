@@ -118,7 +118,7 @@ export default {
     methods: {
         async loadCourseList() {     //参数  当前页数， 每页显示条数
             try {
-                let {status, data: {data: dataMsg}} = await this.axios({
+                let {status, data: {data: dataMsg}} = await this.axiosC({
                     method: 'get',
                     url: '/material/course/listByPage',
                     params: {
@@ -149,7 +149,7 @@ export default {
             try {
 
                 //获取所有课程类别
-                let {status, data: {data: dataMsg}} = await this.axios({
+                let {status, data: {data: dataMsg}} = await this.axiosC({
                     url: '/material/categroy/list',
                     method: 'get',
                     params: {
@@ -224,7 +224,7 @@ export default {
         },
         async deleteCourse(courseId, index) {                //删除课程接口
             try {
-                let {status, data: {data: dataMsg, code}} = await this.axios({
+                let {status, data: {data: dataMsg, code}} = await this.axiosC({
                     url: '/material/course/update',
                     method: 'get',
                     params: {
