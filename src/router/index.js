@@ -38,7 +38,7 @@ import UploadWord from '@/components/courseManage/UploadWord' //课件上传
 
 import ClassManage from '@/components/classManage/classManage' //课程管理列表页
 import AddClass from '@/components/classManage/addClass' //添加课程
-import StudentList from '@/components/studentList/studentList' //学生列表
+import SelectStudentList from '@/components/selectStudentList/selectStudentList' //学生列表
 
 Vue.use(Router)
 
@@ -179,9 +179,9 @@ export default new Router({
           name: "addClass",
           component: AddClass
         }, {
-          path: 'studentList',
-          name: 'studentList',
-          component: StudentList
+          path: 'selectStudentList',
+          name: 'selectStudentList',
+          component: SelectStudentList
         }]
       }
     ]
