@@ -36,11 +36,21 @@
             :total="total"
             :pagerCount="pagerCount"
         ></pages>
+        <transition name="el-fade-in-linear">
+            <reset-password
+                class="transition-box"
+                :resetName="resetName"
+                @changeStatus="getStatus"
+                v-if="isResetPwd"
+            ></reset-password>
+        </transition>
     </div>
 </template>
 <script>
 import Pages from "../pages/pages";
 import NewSearch from "../newSearch/newSearch";
+import ResetPassword from '../resetPassword/resetPassword'
+// import Install from '@/config/checkRule'
 export default {
     data() {
         return {
@@ -51,7 +61,9 @@ export default {
             loading: true,
             showPage: true,
             paramsData: {},
-            tid: ''
+            tid: '',
+            isResetPwd: false,
+            resetName: ''
         };
     },
     mounted() {
@@ -147,8 +159,36 @@ export default {
                 path: `modifyTeacher/${scope.row.uid}`
             });
         },
-        resetPassword(scope){
-            console.log(scope.row);
+        resetPassword(scope) {
+            this.resetName = scope.row.realName
+            this.isResetPwd = true
+        },
+        getStatus(txt, pwd) {
+            if (txt) {
+                // if (Install.isPwd(pwd.newPwd1) && Install.iPwd(pwd.newPwd2)) {
+                //     console.log(pwd.newPwd1, pwd.newPwd2);
+                // } else {
+                //     this.$alert('密码格式不正确！', {
+                //         dangerouslyUseHTMLString: true
+                //     });
+                // }
+                if (pwd.newPwd1 == '' && pwd.newPwd2 == '') {
+                    this.$alert('密码不能为空！', {
+                        dangerouslyUseHTMLString: true
+                    });
+                } else if (pwd.newPwd1 == '' && pwd.newPwd2 != '' || pwd.newPwd2 == '' && pwd.newPwd1 != '' || pwd.newPwd1 != pwd.newPwd2) {
+                    this.$alert('密码输入不一致！', {
+                        dangerouslyUseHTMLString: true
+                    });
+                } else if (pwd.newPwd1 == pwd.newPwd2) {
+                    this.$alert('密码修改成功！', {
+                        dangerouslyUseHTMLString: true
+                    });
+                    this.isResetPwd = false
+                }
+            } else {
+                this.isResetPwd = false
+            }
         },
         addTeacher() {
             this.$router.push({
@@ -164,7 +204,8 @@ export default {
     },
     components: {
         Pages,
-        NewSearch
+        NewSearch,
+        ResetPassword
     }
 };
 </script>
