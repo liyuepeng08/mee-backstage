@@ -51,6 +51,10 @@
                     :pagerCount="pagerCount"
                 ></pages>
             </div>
+            <ol class="selectedBtn" v-if="selectBtn">
+                <li @click="returnBack">返回</li>
+                <li @click="finished">完成</li>
+            </ol>
         </div>
     </div>
 </template>
@@ -68,6 +72,7 @@ export default {
             tableData: [],
             paramsData: {},
             multipleSelection: [],
+            selectBtn: false,//最下方按钮
         }
     },
     mounted() {
@@ -102,7 +107,6 @@ export default {
                     if (res.status === 200) {
                         this.loading = false;
                         if (res.data.code == 0) {
-                            console.log(res.data);
                             this.total = res.data.data.totalCount;
                             this.pagerCount = res.data.data.totalPage;
                             if (res.data.data.list == '') {
@@ -187,6 +191,10 @@ export default {
             this.paramsData = params;
             this.getStudentList()
         },
+        // 返回
+        returnBack() { },
+        // 完成
+        finished() { }
     },
     components: {
         Pages,
@@ -261,6 +269,29 @@ export default {
             left: 20px;
             span {
                 color: #5693ff;
+            }
+        }
+        .selectedBtn {
+            width: 260px;
+            margin: 20px auto;
+            li {
+                display: inline-block;
+                width: 120px;
+                height: 40px;
+                font-size: 14px;
+                line-height: 40px;
+                background-color: #ffffff;
+                border-radius: 20px;
+                border: solid 1px #5693ff;
+                text-align: center;
+                margin-right: 10px;
+                cursor: pointer;
+            }
+            li:last-child {
+                margin-right: 0;
+                color: #fff;
+                background-color: #5693ff;
+                box-shadow: 0px 4px 6px 0px rgba(86, 147, 255, 0.4);
             }
         }
     }
