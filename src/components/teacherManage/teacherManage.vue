@@ -50,7 +50,7 @@
 import Pages from "../pages/pages";
 import NewSearch from "../newSearch/newSearch";
 import ResetPassword from '../resetPassword/resetPassword'
-import { Install } from '@/config/checkRule.js'
+// import Install from '@/config/checkRule'
 export default {
     data() {
         return {
@@ -165,12 +165,26 @@ export default {
         },
         getStatus(txt, pwd) {
             if (txt) {
-                if (Install.pwd(pwd.newPwd1) && Install.pwd(pwd.newPwd2)) {
-                    console.log(pwd.newPwd1, pwd.newPwd2);
-                } else {
-                    this.$alert('密码格式不正确！', {
+                // if (Install.isPwd(pwd.newPwd1) && Install.iPwd(pwd.newPwd2)) {
+                //     console.log(pwd.newPwd1, pwd.newPwd2);
+                // } else {
+                //     this.$alert('密码格式不正确！', {
+                //         dangerouslyUseHTMLString: true
+                //     });
+                // }
+                if (pwd.newPwd1 == '' && pwd.newPwd2 == '') {
+                    this.$alert('密码不能为空！', {
                         dangerouslyUseHTMLString: true
                     });
+                } else if (pwd.newPwd1 == '' && pwd.newPwd2 != '' || pwd.newPwd2 == '' && pwd.newPwd1 != '' || pwd.newPwd1 != pwd.newPwd2) {
+                    this.$alert('密码输入不一致！', {
+                        dangerouslyUseHTMLString: true
+                    });
+                } else if (pwd.newPwd1 == pwd.newPwd2) {
+                    this.$alert('密码修改成功！', {
+                        dangerouslyUseHTMLString: true
+                    });
+                    this.isResetPwd = false
                 }
             } else {
                 this.isResetPwd = false
