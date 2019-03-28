@@ -153,7 +153,7 @@ export default {
       async createAttach() {          //开始创建附件
         try {
             let totalAttach = this.videoAttachList.concat(this.wordAttachList)
-            let {status, data: {data: dataMsg}} = await this.axios({
+            let {status, data: {data: dataMsg}} = await this.axiosC({
             url: '/material/course/attach/create',
                 method: 'post',
                 data: {
@@ -192,7 +192,7 @@ export default {
         }
       },
       async getAttachList(courseId) {             //根据courseId来获取附件列表信息
-            let {status, data: {data: attachList}} = await this.axios({
+            let {status, data: {data: attachList}} = await this.axiosC({
                 url: '/material/course/attach/' + courseId,
                 method: 'get',
                 params: {
@@ -220,7 +220,7 @@ export default {
       },
       async deleteAttach(uri, type) {          //删除附件
         try {
-            let {status, data: {code}} = await this.axios({
+            let {status, data: {code}} = await this.axiosC({
                 url: '/oss/delete',
                 method: 'get',
                 params: {

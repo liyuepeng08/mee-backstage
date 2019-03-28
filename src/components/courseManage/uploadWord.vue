@@ -82,7 +82,7 @@ export default {
             fd.append('params', JSON.stringify({uid: '123'}))
 
             try {
-                let {status, data:{data: fileMsg}} = await this.axios({
+                let {status, data:{data: fileMsg}} = await this.axiosC({
                     url: '/oss/upload',
                     method: 'post',
                     data: fd,

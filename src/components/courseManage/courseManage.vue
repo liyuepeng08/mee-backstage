@@ -63,7 +63,7 @@
                 <el-table-column
                     label="操作">
                     <template slot-scope="scope">
-                        <el-button type="text" size="small">详情</el-button>
+                        <!-- <el-button type="text" size="small">详情</el-button> -->
                         <el-button type="text" size="small" @click="edit(scope.row.id)">编辑</el-button>
                         <el-button type="text" size="small" @click="deleteButt(scope.row.id, scope.$index)">删除</el-button>
                     </template>
@@ -282,9 +282,10 @@ export default {
     }
 }
 </script>
-<style lang="less">
-.el-table th.is-leaf {
-    font-size: 700;
+<style lang="less" scoped>
+.el-table /deep/ th.is-leaf {
+    font-weight: 700;
+    background-color: #fff;
 }
 .el-table th>.cell {
     font-weight: 700;
@@ -350,5 +351,6 @@ export default {
     }
 
 }
+
 </style>
 

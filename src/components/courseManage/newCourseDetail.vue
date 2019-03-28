@@ -182,7 +182,7 @@ export default {
         try {
 
             //获取所有课程类别
-            let {status, data: {data: dataMsg}} = await this.axios({
+            let {status, data: {data: dataMsg}} = await this.axiosC({
                 url: '/material/categroy/list',
                 method: 'get',
                 params: {
@@ -240,7 +240,7 @@ export default {
         },
         async updateCourse() {          //更新课程
 
-            let {status, data: {data: dataMsg}} = await this.axios({
+            let {status, data: {data: dataMsg}} = await this.axiosC({
                 method: 'get',
                 url: '/material/course/update',
                 params: {
@@ -272,7 +272,7 @@ export default {
             }
         },
         async createCourse() {          //新建课程
-            let {status, data: {data: courseId}} = await this.axios({
+            let {status, data: {data: courseId}} = await this.axiosC({
                 method: 'get',
                 url: '/material/course/create',
                 params: {
@@ -307,7 +307,7 @@ export default {
         async getCourseDetail(courseId) {     //更新课程时，获取 课程详情数据
             try {
                 this.isLoad = true          //加载数据loading动画显示
-                let {status, data: {data: dataMsg}} = await this.axios({
+                let {status, data: {data: dataMsg}} = await this.axiosC({
                     method: 'get',
                     url: '/material/course/' + courseId
                 })
@@ -357,7 +357,7 @@ export default {
             fd.append('params', JSON.stringify({uid: '123'}))
 
             try {
-                let {status, data:{data: dataMsg}} = await this.axios({
+                let {status, data:{data: dataMsg}} = await this.axiosC({
                     url: '/oss/upload',
                     method: 'post',
                     data: fd,
@@ -379,7 +379,7 @@ export default {
         },
         async loadCatagoryList(id) {        //根据上一级分类的id，加载下一级。  参数是选中的value值，是一个数组，对应选中功能的一二级的value值
         
-            let {status, data: {data: dataMsg}} = await this.axios({
+            let {status, data: {data: dataMsg}} = await this.axiosC({
                 url: '/material/categroy/list/' + id[id.length - 1],
                 method: 'get',
                 params: {
