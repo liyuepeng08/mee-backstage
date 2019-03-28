@@ -3,22 +3,18 @@
         <p class="topNav">
             <span>班级管理</span>
             <i class="el-icon-arrow-right"></i>
-            <span class="active">学生列表</span>
+            <span>学生列表</span>
+            <i class="el-icon-arrow-right"></i>
+            <span class="active">选择学生</span>
         </p>
-        <h2>学生列表</h2>
+        <h2>选择学生</h2>
 
-        <div class="tableList">
-            <div class="butt">
-                <el-button class="addBtn" @click="addStudent" size="small" type="primary" round>添加学生</el-button>
-                <el-button
-                    class="removeAll"
-                    @click="deleteAll"
-                    size="small"
-                    type="primary"
-                    round
-                >批量删除</el-button>
-                <new-search @getSearchData="getSearchInfo"></new-search>
-            </div>
+        <div class="tableList pos1">
+            <p class="stuCount">
+                已选人数：
+                <span>{{multipleSelection.length}}</span>
+            </p>
+            <new-search class="getSearch" @getSearchData="getSearchInfo"></new-search>
             <el-table
                 v-loading="loading"
                 class="tableInfo"
@@ -34,24 +30,18 @@
                 <el-table-column label="操作">
                     <template slot-scope="scope">
                         <el-button type="text" size="small" @click="detailMsg(scope)">详情</el-button>
-                        <el-button type="text" size="small" @click="deleteMsg(scope,tableData)">删除</el-button>
                     </template>
                 </el-table-column>
             </el-table>
-            <div class="pos1">
-                <p class="stuCount">
-                    学生人数：
-                    <span>{{total}}</span>
-                </p>
-                <pages
-                    v-if="showpage"
-                    @changeNum="getStudentList"
-                    :pageSize="pageSize"
-                    :total="total"
-                    :pagerCount="pagerCount"
-                ></pages>
-            </div>
-            <ol class="selectedBtn" v-if="selectBtn">
+
+            <pages
+                v-if="showpage"
+                @changeNum="getStudentList"
+                :pageSize="pageSize"
+                :total="total"
+                :pagerCount="pagerCount"
+            ></pages>
+            <ol class="selectedBtn">
                 <li @click="returnBack">返回</li>
                 <li @click="finished">完成</li>
             </ol>
@@ -72,7 +62,6 @@ export default {
             tableData: [],
             paramsData: {},
             multipleSelection: [],
-            selectBtn: false,//最下方按钮
         }
     },
     mounted() {
@@ -137,64 +126,19 @@ export default {
             });
 
         },
-        // 单条删除
-        deleteMsg(scope, rows) {
-            this.$confirm(
-                "确定要删除" + scope.row.realName + "用户吗？",
-                "删除管理员",
-                {
-                    confirmButtonText: "确定",
-                    cancelButtonText: "取消",
-                    type: "warning"
-                }
-            ).then(() => {
-                let tid = sessionStorage.getItem('tid'),
-                    params = { tid: tid, uid: scope.row.uid };
-                this.axios.get("/tenant/user/delete", {
-                    params: { params }
-                }).then(res => {
-                    this.loading = true
-                    if (res.status == 200) {
-                        this.loading = false
-                        if (res.data.code == 0) {
-                            rows.splice(scope.$index, 1);
-                            this.$message({
-                                type: 'success',
-                                message: '删除成功!'
-                            });
-                        } else {
-                            this.$alert(res.data.msg);
-                        }
-                    }
-                })
-
-            }).catch((error) => {
-                console.log(error)
-            })
-        },
-        //添加学生
-        addStudent() {
-            this.$router.push({
-                path: "/admin/addStudent"
-            })
-        },
-        // 批量删除
-        deleteAll() {
-            if (this.multipleSelection == '') {
-                this.$alert('请选择您要删除的信息！')
-            } else {
-                this.$alert('开发中...<(*￣▽￣*)/')
-            }
-        },
         // 获得搜索信息
         getSearchInfo(params) {
             this.paramsData = params;
             this.getStudentList()
         },
         // 返回
-        returnBack() { },
+        returnBack() {
+
+        },
         // 完成
-        finished() { }
+        finished() {
+
+        }
     },
     components: {
         Pages,
@@ -223,28 +167,24 @@ export default {
         color: #080808;
         margin: 30px 0;
     }
+    .stuCount {
+        margin-top: 20px;
+        color: #666;
+        font-size: 12px;
+        span {
+            color: #5693ff;
+        }
+    }
+    .getSearch {
+        margin: 10px 0 20px 0;
+    }
     .tableList {
         width: 1126px;
         min-height: 570px;
         background: #ffffff;
         border-radius: 4px;
         border: 1px solid #f1f1f1;
-        .butt {
-            margin: 20px 0;
-            padding-left: 20px;
-            .addBtn,
-            .removeAll {
-                color: #fff;
-                font-size: 12px;
-                margin-top: 10px;
-                box-shadow: 0px 4px 6px 0px rgba(86, 147, 255, 0.4);
-            }
-            .removeAll {
-                background: #f8fafc;
-                color: #5693ff;
-                box-shadow: none;
-            }
-        }
+
         .tableInfo {
             width: 1086px;
             margin: 0 auto;
@@ -260,6 +200,12 @@ export default {
             /deep/ .el-table__row td:first-child {
                 text-align: center;
             }
+            /deep/ .has-gutter th:nth-child(5),
+            /deep/ .el-table__row td:last-child {
+                text-align: right;
+                padding-right: 30px;
+            }
+           
         }
         .stuCount {
             font-size: 12px;
