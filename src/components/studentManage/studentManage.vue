@@ -20,6 +20,7 @@
                 action="http://localhost:3000/uploadExcel"
                 :on-success="handleAvatarSuccess"
                 :before-upload="beforeAvatarUpload"
+                :show-file-list="false"
             >
                 <el-button size="small" icon="el-icon-share" round type="primary">点击上传</el-button>
             </el-upload>
@@ -216,18 +217,23 @@ export default {
         },
         handleAvatarSuccess(res, file) {      //图片上传成功后的回调
             this.fileUrl = URL.createObjectURL(file.raw);
-            console.log("这个是文件上传成功后返回的地址：" + this.fileUrl)
+          
+          
+            if (res.code === 0) {   //上传成功
+                this.getStudentList()       //重新获取学生信息列表
+            }
         },
         async beforeAvatarUpload(file) {        //上传图片前的回调
-            const isJPG = file.type === 'image/jpeg';
-            const isLt2M = file.size / 1024 / 1024 < 10;
+            //excel格式校验
+            const isJPG = file.type === 'application/vnd.ms-excel' || file.type === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+            const isLt2M = file.size / 1024 / 1024 < 10;        
 
-            // if (!isJPG) {
-            //     this.$message.error('上传头像图片只能是 JPG 格式!');
-            //     return false
-            // }
+            if (!isJPG) {
+                this.$message.error('上传文件格式不正确！');
+                return false
+            }
             if (!isLt2M) {
-                this.$message.error('上传头像图片大小不能超过 2MB!');
+                this.$message.error('上传头像图片大小不能超过 10MB!');
                 return false
             }
             // return isJPG && isLt2M;

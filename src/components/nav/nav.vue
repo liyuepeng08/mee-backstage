@@ -81,8 +81,10 @@ export default {
 };
 </script>
 <style lang="less">
-.el-submenu .el-menu-item {
+.el-submenu /deep/ .el-menu-item {
   min-width: 0px;
+  padding: 0;
+  min-width: 0;
 }
 .el-menu-item.is-active {
   background-color: #f4f8ff;
