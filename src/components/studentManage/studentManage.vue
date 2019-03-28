@@ -125,7 +125,7 @@ export default {
         // 获得搜索信息
         getSearchInfo(params) {
             this.paramsData = params;
-            this.getTeacherList()
+            this.getStudentList()
         },
         deleteMsg(scope, rows) {
             this.$confirm(
