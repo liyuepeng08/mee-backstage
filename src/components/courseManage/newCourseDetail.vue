@@ -33,13 +33,13 @@
                 </el-col>
             </el-row>
             <el-row>
-                <el-col :span="3"><i class="red">*</i>副标题：</el-col>
+                <el-col :span="3">副标题：</el-col>
                 <el-col :span="10">
                     <el-input v-model="subtitle"  placeholder="请输入副标题"></el-input>
                 </el-col>
             </el-row>
             <el-row>
-                <el-col :span="3"><i class="red">*</i>课程简介：</el-col>
+                <el-col :span="3">课程简介：</el-col>
                 <el-col :span="10">
                     <el-input v-model="description" type="textarea" placeholder="请输入课程简介" :rows="3"></el-input>
                 </el-col>
@@ -56,13 +56,13 @@
                 </el-col>
             </el-row>
             <el-row>
-                <el-col :span="3"><i class="red">*</i>年龄标签：</el-col>
+                <el-col :span="3">年龄标签：</el-col>
                 <el-col :span="13">
                     <el-tag v-for="(text, idx) in tagsText" :class='{tags: true,tagsSelected: selectedTagsText.indexOf(text) >= 0}' :key="idx" @click="clickTags(text)">{{text}}</el-tag>
                 </el-col>
             </el-row>
             <el-row>
-                <el-col :span="3"><i class="red">*</i>付费模式：</el-col>
+                <el-col :span="3">付费模式：</el-col>
                 <el-col :span="10">
                     <el-radio v-model="radio" label="1">免费模式</el-radio>
                     <el-radio v-model="radio" label="2">收费模式</el-radio>
@@ -272,6 +272,10 @@ export default {
             }
         },
         async createCourse() {          //新建课程
+            if(!this.$store.state.thumbnail) {this.$message({message: '警告：必须上传封面图片', type: 'warning'}); return false}
+            if(!this.title) {this.$message({message: '警告：必须输入标题名称', type: 'warning'}); return false}
+            if(!this.categoryId.length) {this.$message({message: '警告：必须选择课程类别', type: 'warning'}); return false}
+
             let {status, data: {data: courseId}} = await this.axiosC({
                 method: 'get',
                 url: '/material/course/create',
@@ -292,7 +296,7 @@ export default {
 
             if (status === 200 && courseId) {
 
-                this.$message("课程新建成功！")
+                this.$message({message: "课程新建成功！", type: 'success'})
 
                 this.setCourseId(courseId)      //更新vuex中的课程courseId
 
@@ -377,34 +381,34 @@ export default {
                 console.log(err)
             }
         },
-        async loadCatagoryList(id) {        //根据上一级分类的id，加载下一级。  参数是选中的value值，是一个数组，对应选中功能的一二级的value值
+        // async loadCatagoryList(id) {        //根据上一级分类的id，加载下一级。  参数是选中的value值，是一个数组，对应选中功能的一二级的value值
         
-            let {status, data: {data: dataMsg}} = await this.axiosC({
-                url: '/material/categroy/list/' + id[id.length - 1],
-                method: 'get',
-                params: {
-                    params: {
-                        status: 1
-                    }
-                }
-            })
+        //     let {status, data: {data: dataMsg}} = await this.axiosC({
+        //         url: '/material/categroy/list/' + id[id.length - 1],
+        //         method: 'get',
+        //         params: {
+        //             params: {
+        //                 status: 1
+        //             }
+        //         }
+        //     })
 
-            if (status === 200 && dataMsg) {
-                this.subjectList.every((item) => {
-                    if (item.value == id) {
-                        item.children = dataMsg.map((subItem) => {     //结果
-                            return {
-                                label: subItem.name,
-                                value: subItem.id,
-                                pid: subItem.pid,
-                                children: []
-                            }
-                        })
-                        return false        //跳出循环
-                    }
-                })
-            }
-        },
+        //     if (status === 200 && dataMsg) {
+        //         this.subjectList.every((item) => {
+        //             if (item.value == id) {
+        //                 item.children = dataMsg.map((subItem) => {     //结果
+        //                     return {
+        //                         label: subItem.name,
+        //                         value: subItem.id,
+        //                         pid: subItem.pid,
+        //                         children: []
+        //                     }
+        //                 })
+        //                 return false        //跳出循环
+        //             }
+        //         })
+        //     }
+        // },
         ...mapMutations([
             'setTitle',
             'setSubtitle',

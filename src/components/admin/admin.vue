@@ -37,7 +37,7 @@ export default {
 }
 .right-cont {
     background-color: #F3F3F5;
-    min-height: 100%;
+    min-height: 600px;
     padding-left: 20px;
     padding-right: 20px;
     padding-bottom: 50px;
