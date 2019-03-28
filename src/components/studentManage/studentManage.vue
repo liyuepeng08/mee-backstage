@@ -7,13 +7,20 @@
         </p>
         <h2>学生管理</h2>
         <div class="butt">
-            <el-button class="addBtn" type="primary" size="small" round icon="el-icon-plus" @click="addStudent">新增</el-button>
+            <el-button
+                class="addBtn"
+                type="primary"
+                size="small"
+                round
+                icon="el-icon-plus"
+                @click="addStudent"
+            >新增</el-button>
             <el-upload
                 class="upload-demo"
                 action="http://localhost:3000/uploadExcel"
                 :on-success="handleAvatarSuccess"
-                :before-upload="beforeAvatarUpload">
-                
+                :before-upload="beforeAvatarUpload"
+            >
                 <el-button size="small" icon="el-icon-share" round type="primary">点击上传</el-button>
             </el-upload>
             <!-- <el-button class="addBtn" type="primary" icon="el-icon-share" @click="importBtn">导入</el-button> -->
@@ -31,14 +38,15 @@
         <el-table class="studentInfo" v-loading="loading" :data="tableData">
             <el-table-column prop="realName" label="名称"></el-table-column>
             <el-table-column prop="mobile" label="电话"></el-table-column>
-            <el-table-column prop="class" label="所在班级"></el-table-column>
-            <el-table-column prop="mechanism" label="所属机构"></el-table-column>
+            <!-- <el-table-column prop="class" label="所在班级"></el-table-column>
+            <el-table-column prop="mechanism" label="所属机构"></el-table-column>-->
             <el-table-column prop="registerTime" label="创建时间"></el-table-column>
             <el-table-column label="操作">
                 <template slot-scope="scope">
                     <el-button type="text" size="small" @click="detailMsg(scope)">详情</el-button>
                     <el-button type="text" size="small" @click="modifyMsg(scope)">编辑</el-button>
                     <el-button type="text" size="small" @click="deleteMsg(scope,tableData)">删除</el-button>
+                    <el-button type="text" size="small" @click="resetPassword(scope)">重置密码</el-button>
                 </template>
             </el-table-column>
         </el-table>
@@ -49,12 +57,20 @@
             :total="total"
             :pagerCount="pagerCount"
         ></pages>
+        <transition name="el-fade-in-linear">
+            <reset-password
+                class="transition-box"
+                :resetName="resetName"
+                @changeStatus="getStatus"
+                v-if="isResetPwd"
+            ></reset-password>
+        </transition>
     </div>
 </template>
 <script>
 import Pages from "../pages/pages";
 import NewSearch from "../newSearch/newSearch";
-import axios from 'axios'
+import ResetPassword from '../resetPassword/resetPassword'
 export default {
     data() {
         return {
@@ -65,8 +81,10 @@ export default {
             loading: true,
             showpage: true,
             paramsData: {},
-            isUpload: false,            //loading动画状态
-            fileUrl: ''             //上传文件的路径
+            isUpload: false,//loading动画状态
+            fileUrl: '' ,//上传文件的路径
+            isResetPwd:false,
+            resetName: ''
         };
     },
     mounted() {
@@ -155,6 +173,38 @@ export default {
                 path: `modifyStudent/${scope.row.uid}`
             });
         },
+        // 重置密码
+        resetPassword(scope) {
+            this.resetName = scope.row.realName
+            this.isResetPwd = true
+        },
+        getStatus(txt, pwd) {
+            if (txt) {
+                // if (Install.isPwd(pwd.newPwd1) && Install.iPwd(pwd.newPwd2)) {
+                //     console.log(pwd.newPwd1, pwd.newPwd2);
+                // } else {
+                //     this.$alert('密码格式不正确！', {
+                //         dangerouslyUseHTMLString: true
+                //     });
+                // }
+                if (pwd.newPwd1 == '' && pwd.newPwd2 == '') {
+                    this.$alert('密码不能为空！', {
+                        dangerouslyUseHTMLString: true
+                    });
+                } else if (pwd.newPwd1 == '' && pwd.newPwd2 != '' || pwd.newPwd2 == '' && pwd.newPwd1 != '' || pwd.newPwd1 != pwd.newPwd2) {
+                    this.$alert('密码输入不一致！', {
+                        dangerouslyUseHTMLString: true
+                    });
+                } else if (pwd.newPwd1 == pwd.newPwd2) {
+                    this.$alert('密码修改成功！', {
+                        dangerouslyUseHTMLString: true
+                    });
+                    this.isResetPwd = false
+                }
+            } else {
+                this.isResetPwd = false
+            }
+        },
         addStudent() {
             this.$router.push({ path: "addStudent" });
         },
@@ -200,7 +250,7 @@ export default {
 
             //     if (status === 200 && dataMsg) {
             //         this.setThumbnail(dataMsg.url)     //上传成功后返回服务器上的图片路径地址
-                    
+
             //         this.isUpload = false           //loading动画隐藏
             //     }
             // }
@@ -211,7 +261,8 @@ export default {
     },
     components: {
         Pages,
-        NewSearch
+        NewSearch,
+        ResetPassword
     }
 };
 </script>
