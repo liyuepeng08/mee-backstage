@@ -65,7 +65,7 @@
       <ol class="model more" v-show="tab === 2">
         <dt>更多信息</dt>
         <el-form-item label="民族" prop="nation">
-          <el-input class="w150" v-model="ruleForm.nation" placeholder="输入内容"></el-input>
+          <el-input maxlength="10" class="w150" v-model="ruleForm.nation" placeholder="输入内容"></el-input>
         </el-form-item>
         <el-form-item label="出生日期" prop="birthday">
           <el-date-picker class="w150" type="date" placeholder="选择日期" v-model="ruleForm.birthday"></el-date-picker>

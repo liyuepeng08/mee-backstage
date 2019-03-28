@@ -39,7 +39,7 @@
           </template> 
         </el-table-column>-->
         <el-table-column prop="categoryName" label="教程名称" width="340"></el-table-column>
-        <el-table-column prop="createTime" label="创建时间"></el-table-column>
+        <el-table-column prop="categoryName" label="创建时间"></el-table-column>
         <el-table-column prop="chapter" label="在班学生(人)" width="340">
           <div class="people">
             <span>80</span>
@@ -190,7 +190,7 @@ export default {
     newCourse() {
       //点击"新建"按钮，跳转到 新建课程详情页面
       this.$router.push({
-        path: "/admin/courseManage/newCourseDetail"
+        path: "/admin/classManage/addClass"
       });
     },
     //编辑

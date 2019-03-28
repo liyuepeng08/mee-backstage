@@ -1,43 +1,89 @@
 <template>
-  <div class="addStudent">
-    <h3 class="pageTitle">新增管理员</h3>
-    <el-row class="bread">
-      <span :class="{'selected':tab===1}" @click="checkTab(1)">
-        <i/>基本信息
-      </span>
-    </el-row>
+  <div class="addClass">
+    <h3 class="pageTitle">创建班级</h3>
     <!-- <form class="el-form demo-ruleForm"> -->
     <el-form
       :model="ruleForm"
       ref="ruleForm"
       label-width="90px"
       class="demo-ruleForm"
-      style="width:390px"
+      style="width:870px"
       size="mini"
-      :rules="rules"
     >
       <dl class="model essential">
         <dt>基本信息</dt>
-        <el-form-item label="姓名" prop="userName" class="validate">
-          <el-input class="w150" v-model="ruleForm.userName" placeholder="请输入姓名"></el-input>
+        <el-form-item label="班级名称">
+          <el-input class="w493" v-model="ruleForm.userName" placeholder="请输入"></el-input>
         </el-form-item>
-        <el-form-item label="手机号" prop="mobile" class="validate">
-          <el-input v-model="ruleForm.mobile" maxlength="11"></el-input>
+        <el-form-item label="班级简介" prop="remark">
+          <el-input class="remarks" type="textarea" v-model="ruleForm.remark" placeholder="请输入"></el-input>
         </el-form-item>
-        <el-form-item prop="email" label="邮箱" class="validate">
-          <el-input v-model="ruleForm.email"></el-input>
+        <el-form-item label="选择课程">
+          <ul class="lessonFather">
+            <li class="lesson">
+              <div class="lessonImg">
+                <img src alt>
+              </div>
+              <h4>少儿艺体二外英语</h4>
+              <div>
+                <span class="lessonTitle">英语</span>
+                <span>12章节</span>
+              </div>
+              <div>开课时间</div>
+              <div class="lessonBtn">
+                <span class="detail">详情</span>|
+                <span>删除</span>
+              </div>
+            </li>
+            <li class="lesson"></li>
+            <li class="lesson"></li>
+            <li class="addLesson">
+              <i class="el-icon-plus"></i>
+              <span>添加新课程</span>
+            </li>
+          </ul>
         </el-form-item>
-        <el-form-item label="所属机构" prop="school">
-          <el-select disabled style="width:100%" v-model="ruleForm.tTame" placeholder="请选择活动区域"></el-select>
+        <el-form-item label="授课教师" prop="school">
+          <el-table
+            :data="tableData"
+            v-loading="loading"
+            style="width: 100%; border: 1px solid #f1f1f1;"
+          >
+            <el-table-column label="教程名称" width="260">
+              <template slot-scope="scope">
+                <div class="msg-cont">
+                  <div class="list-img">
+                    <img :src="scope.row.img" alt>
+                  </div>
+                  <div class="cont">
+                    <div class="title">
+                      <a href="#">{{scope.row.title}}</a>
+                    </div>
+                  </div>
+                </div>
+              </template>
+            </el-table-column>
+            <el-table-column prop="phone" label="电话"></el-table-column>
+            <el-table-column label="操作" width="140">
+              <template slot-scope="scope">
+                <el-button type="text" size="small">查看</el-button>
+                <el-button
+                  type="text"
+                  size="small"
+                  @click="deleteButt(scope.row.id, scope.$index)"
+                >删除</el-button>
+              </template>
+            </el-table-column>
+          </el-table>
+          <div class="addTeaBtn">
+            <i class="el-icon-plus"></i>
+            添加教师
+          </div>
         </el-form-item>
         <el-form-item>
           <el-row style="margin-bottom:10px;">
-            <el-button
-              @click="submit('ruleForm')"
-              type="primary"
-              round
-              style="width:120px;height:40px;font-size: 14px;"
-            >提交</el-button>
+            <el-button round style="width:120px;height:40px;font-size: 14px;">放弃创建</el-button>
+            <el-button type="primary" round style="width:120px;height:40px;font-size: 14px;">完成</el-button>
           </el-row>
         </el-form-item>
       </dl>
@@ -49,111 +95,36 @@
 
 <script>
 export default {
-  name: "addStudent",
+  name: "addClass",
   data() {
     return {
-      msg: "Welcome to Your Vue.js App",
-      tab: 1,
+      tableData: [
+        {
+          img: "https://minecraft.education.jdcloud.com/img/course-pic.png",
+          title: "无法无天",
+          phone: "15010618888",
+          tid: "12121214"
+        },
+        {
+          img: "https://minecraft.education.jdcloud.com/img/course-pic.png",
+          title: "百变小樱",
+          phone: "15010616666",
+          tid: "12121213"
+        }
+      ],
+      loading: false, //保存是否请求表格数据的状态
       ruleForm: {
         tid: "", //租户ID
         tTame: "", //租户名称
-        uid: "", //用户ID
-        userName: "", //用户名
-        password: "", //用户密码
-        email: "", //邮箱
-        mobile: "" //手机号
-      },
-      rules: {
-        userName: [
-          { required: true, message: "请输入真实姓名", trigger: "blur" },
-          { min: 1, max: 20, message: "长度在 1 到 20 个字符", trigger: "blur" }
-        ],
-        mobile: [
-          { required: true, message: "请输入手机号", trigger: "blur" },
-          {
-            pattern: /^1[34578]\d{9}$/,
-            message: "手机号格式错误",
-            trigger: "blur"
-          }
-        ],
-        email: [
-          { required: true, message: "请输入邮箱地址", trigger: "blur" },
-          {
-            type: "email",
-            message: "请输入正确的邮箱地址",
-            trigger: ["blur", "change"]
-          }
-        ]
-      },
-      radio2: 3
+        uid: "" //用户ID
+      }
     };
   },
   mounted: function() {
     this.obtain(); //获取当前信息
   },
   methods: {
-    submit: function(formName) {
-      const tid = sessionStorage.getItem("tid");
-      let that = this.ruleForm;
-      this.$refs[formName].validate(valid => {
-        if (valid) {
-          //新增
-          this.axios
-            .get("/tenant/user/createUser", {
-              params: {
-                params: {
-                  userName: that.userName, //用户名
-                  realName: that.userName, //用户名
-                  nickName: that.nickName, //昵称
-                  password: "000000", //用户密码
-                  gender: 2, //性别保密
-                  email: that.email, //邮箱
-                  mobile: that.mobile, //手机号
-                  tenantId: tid, //机构
-                  role: 3 //角色（学生：0；老师：1；管理员：3）
-                }
-              }
-            })
-            .then(response => {
-              console.log(111);
-              let data = response.data;
-              console.log("-------data" + data);
-              if (data.code == 0) {
-                let timer = setTimeout(() => {
-                  //倒计时跳转
-                  this.$router.push({
-                    //跳转到列表页
-                    path: "/admin/adminUser"
-                  });
-                  //模拟点击关闭按钮
-                  document
-                    .getElementsByClassName("el-message-box__close")[0]
-                    .click();
-                }, 3000);
-
-                this.$alert("3秒后返回上一级", "提交成功，请等待审核！！", {
-                  confirmButtonText: "直接跳转",
-                  callback: action => {
-                    clearTimeout(timer); //清除定时器
-                    this.$router.push({
-                      //跳转到列表页
-                      path: "/admin/adminUser"
-                    });
-                  }
-                });
-              }
-            })
-            .catch(error => {
-              this.$message("提交失败！");
-              console.log(error);
-            });
-        } else {
-          console.log("error submit!!");
-          this.$message("请填写所有带*号的必填项！");
-          return false;
-        }
-      });
-    },
+    submit: function(formName) {},
     //获取当前信息
     obtain: function() {
       this.ruleForm.tid = sessionStorage.getItem("tid");
@@ -165,48 +136,22 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="less" scoped>
-.addStudent {
+.addClass {
   background: #fff;
-  margin: 10px 10px 0 10px;
-  min-height: 600px;
+  // margin: 10px 10px 0 10px;
+  // min-height: 600px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  min-height: 100%;
+  width: 100%;
+  // background-color: #f3f3f5;
+  z-index: 100;
   .pageTitle {
     font-size: 18px;
     color: #080808;
     padding: 0px 21px 25px 0px;
     background-color: #f3f3f5;
-  }
-  // 面包屑
-  .bread {
-    background-color: #f3f3f5;
-    font-size: 12px;
-    font-weight: normal;
-    font-stretch: normal;
-    padding-bottom: 15px;
-    letter-spacing: 0px;
-    color: #a9a9a9;
-    i {
-      display: inline-block;
-      width: 10px;
-      height: 10px;
-      border-radius: 50%;
-      margin-right: 6px;
-      position: relative;
-      top: 1px;
-      background-color: #f3f3f5;
-      border: solid 1px #a9a9a9;
-    }
-    b {
-      padding: 0 4px;
-      position: relative;
-      top: -1px;
-    }
-    .selected {
-      color: #5693ff;
-      i {
-        background-color: #5693ff;
-        border: solid 1px #5693ff;
-      }
-    }
   }
   //下dl模板
   .model {
@@ -214,29 +159,148 @@ export default {
     dt {
       padding-bottom: 30px;
     }
-    .w150 {
-      width: 150px;
+    .w493 {
+      width: 493px;
     }
-    .w480 {
-      width: 480px;
+    //添加课程
+    .lessonFather {
+      overflow: hidden;
+
+      //课程
+      .lesson {
+        width: 120px;
+        height: 200px;
+        background-color: #ffffff;
+        border-radius: 4px;
+        border: solid 1px #f1f1f1;
+        padding: 19px;
+        font-size: 12px;
+        line-height: 20px;
+        color: #666666;
+        position: relative;
+        float: left;
+        margin-right: 20px;
+        margin-bottom: 20px;
+        .lessonImg {
+          height: 80px;
+
+          background-color: #e4e4e4;
+          border-radius: 4px;
+          opacity: 0.99;
+        }
+        h4 {
+          color: #080808;
+          line-height: 36px;
+          font-size: 14px;
+          padding-bottom: 10px;
+        }
+        .lessonTitle {
+          width: 50px;
+          display: inline-block;
+        }
+        .lessonBtn {
+          color: #5693ff;
+          text-align: center;
+          position: absolute;
+          bottom: 20px;
+          padding: 0 14px;
+          span {
+            padding: 0 10px;
+          }
+        }
+      }
+
+      //添加课程
+      .addLesson {
+        height: 240px;
+        width: 158px;
+        background-color: #f8fafc;
+        border-radius: 4px;
+        border: solid 1px #f1f1f1;
+        text-align: center;
+        margin-right: 20px;
+        margin-bottom: 20px;
+        float: left;
+        i {
+          color: #a9a9a9;
+          font-size: 20px;
+          padding: 100px 70px 30px;
+        }
+        span {
+          text-align: center;
+          font-size: 12px;
+          color: #666666;
+        }
+      }
+      :nth-child(4n) {
+        margin-right: 0px;
+      }
+    }
+    //添加老师
+    .msg-cont {
+      &:after {
+        content: "";
+        display: block;
+        clear: both;
+      }
+      .list-img {
+        width: 40px;
+        height: 40px;
+        background-color: #bfbfbf;
+        float: left;
+        border-radius: 50%;
+        overflow: hidden;
+        img {
+          width: 100%;
+          height: 100%;
+        }
+      }
+      .cont {
+        width: 185px;
+        float: right;
+        height: 40px;
+        line-height: 40px;
+        .title {
+          white-space: nowrap;
+          text-overflow: ellipsis;
+          overflow: hidden;
+          a {
+            font-size: 12px;
+            color: #666;
+            display: block;
+          }
+        }
+        p {
+          font-size: 12px;
+          color: #a9a9a9;
+          margin-top: 35px;
+          overflow: hidden;
+          white-space: nowrap;
+          text-overflow: ellipsis;
+        }
+      }
+    }
+    .addTeaBtn {
+      cursor: pointer;
+      text-align: center;
+      color: #5693ff;
+      height: 30px;
+      line-height: 30px;
+      font-size: 12px;
+      border: 1px solid rgb(241, 241, 241);
+      border-top: none;
+      i {
+        width: 16px;
+        height: 16px;
+        line-height: 16px;
+        font-size: 12px;
+        background-color: #5693ff;
+        border-radius: 4px;
+        color: #fff;
+      }
     }
   }
-  //more
-  .more {
-    padding: 34px 0px 34px 40px;
-  }
-  // 验证
-  .validate {
-    position: relative;
-  }
-  // 验证子项
-  /deep/
-    .el-form-item.is-required:not(.is-no-asterisk)
-    > .el-form-item__label:before {
-    position: absolute;
-    left: -12px;
-    top: 2px;
-  }
+
   /deep/ .el-form-item {
     margin-bottom: 30px;
     // width: 100%;
@@ -273,8 +337,4 @@ export default {
   }
 }
 </style>
-<style lang="less">
-.el-message-box__content {
-  padding-left: 110px;
-}
-</style>
+
