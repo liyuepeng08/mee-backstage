@@ -36,14 +36,16 @@
                 <p>{{scope.row.tag}}</p>
               </div>
             </div>
-          </template>
+          </template> 
         </el-table-column>-->
-        <el-table-column prop="categoryName" label="教程名称" width="360"></el-table-column>
+        <el-table-column prop="categoryName" label="教程名称" width="340"></el-table-column>
         <el-table-column prop="createTime" label="创建时间"></el-table-column>
-        <el-table-column prop="categoryName" label="科目" width="180"></el-table-column>
-
-        <el-table-column prop="chapter" label="章节数"></el-table-column>
-
+        <el-table-column prop="chapter" label="在班学生(人)" width="340">
+          <div class="people">
+            <span>80</span>
+            <i class="el-icon-edit-outline"></i>
+          </div>
+        </el-table-column>
         <el-table-column label="操作">
           <template slot-scope="scope">
             <el-button type="text" size="small">详情</el-button>
@@ -184,12 +186,14 @@ export default {
         console.log(err);
       }
     },
+    //新建
     newCourse() {
       //点击"新建"按钮，跳转到 新建课程详情页面
       this.$router.push({
         path: "/admin/courseManage/newCourseDetail"
       });
     },
+    //编辑
     edit(courseId) {
       //编辑课程按钮点击事件，参数为课程id
       this.$router.push({
@@ -199,6 +203,7 @@ export default {
         }
       });
     },
+    //删除
     deleteButt(courseId, index) {
       //删除课程按钮点击事件，参数为课程id
       //弹窗确认
@@ -216,8 +221,8 @@ export default {
           //取消
         });
     },
+    //删除课程接口
     async deleteCourse(courseId, index) {
-      //删除课程接口
       try {
         let {
           status,
@@ -243,27 +248,18 @@ export default {
         console.log(err);
       }
     },
+    //切换页码回调函数，参数是切换后的页码
     changePage(pageNum) {
-      //切换页码回调函数，参数是切换后的页码
       this.loadCourseList(pageNum, 10);
     },
+    //点击搜索，调用的回调函数
     searchCourseList(searchMsg) {
       //点击搜索，调用的回调函数
       console.log(searchMsg);
       //搜索内容添加到要传递的参数中
       this.params.createTime = searchMsg.date;
-      this.params.categoryId =
-        searchMsg.categoryId1[searchMsg.categoryId1.length - 1];
       this.params.title = searchMsg.searchText;
       this.params.pageIndex = 1;
-      // params: {       //加载课程列表传参
-      //     title: '',
-      //     createTime: '',
-      //     categoryId: '',
-      //     pageIndex: 1,
-      //     pageSize: 10,
-      //     status: 1
-      // }
       //重新加载表格数据
       this.loadCourseList();
     }
@@ -272,7 +268,7 @@ export default {
     $route(to, form) {
       //监听路由变化，返回时刷新数据
 
-      to.path === "/admin/courseManage" && this.loadCourseList();
+      to.path === "/admin/classManage" && this.loadCourseList();
     }
   },
   components: {
@@ -283,57 +279,29 @@ export default {
   }
 };
 </script>
+<style lang="less" scoped>
+.course-vue {
+  position: relative;
+  min-height: 100%;
+  //在班人数
+  .people {
+    span {
+      width: 56px;
+      display: inline-block;
+    }
+    i {
+      color: #5693ff;
+      cursor: pointer;
+      padding: 10px;
+    }
+  }
+}
+</style>
 <style lang="less">
 .el-table th.is-leaf {
   font-size: 700;
 }
-.el-table th > .cell {
-  font-weight: 700;
-  color: #333333;
-}
-.course-vue {
-  position: relative;
-  min-height: 100%;
-}
-.msg-cont {
-  &:after {
-    content: "";
-    display: block;
-    clear: both;
-  }
-  .list-img {
-    width: 120px;
-    height: 80px;
-    float: left;
-    img {
-      width: 120px;
-      height: 80px;
-    }
-  }
-  .cont {
-    width: 215px;
-    float: right;
-    .title {
-      white-space: nowrap;
-      text-overflow: ellipsis;
-      overflow: hidden;
-      a {
-        font-size: 14px;
-        color: #080808;
-        font-weight: 700;
-        display: block;
-      }
-    }
-    p {
-      font-size: 12px;
-      color: #a9a9a9;
-      margin-top: 35px;
-      overflow: hidden;
-      white-space: nowrap;
-      text-overflow: ellipsis;
-    }
-  }
-}
+
 .course-operation {
   margin-bottom: 20px;
   &:after {
