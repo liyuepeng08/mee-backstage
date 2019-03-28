@@ -134,6 +134,8 @@ export default {
                     });
                   }
                 });
+              } else {
+                this.$message(data.msg);
               }
             })
             .catch(error => {
@@ -162,15 +164,19 @@ export default {
           }
         })
         .then(response => {
-          let data = response.data.data;
-          const that = this.ruleForm;
-          that.uid = data.uid; //用户ID
-          that.userName = data.realName; //用户名
-          that.nickName = data.nickName; //昵称
-          that.password = data.password; //用户密码
-          that.gender = data.gender ? "女" : "男"; //性别
-          that.email = data.email; //邮箱
-          that.mobile = data.mobile; //手机号
+          if (data.code == 0) {
+            let data = response.data.data;
+            const that = this.ruleForm;
+            that.uid = data.uid; //用户ID
+            that.userName = data.realName; //用户名
+            that.nickName = data.nickName; //昵称
+            that.password = data.password; //用户密码
+            that.gender = data.gender ? "女" : "男"; //性别
+            that.email = data.email; //邮箱
+            that.mobile = data.mobile; //手机号
+          } else {
+            this.$message(data.msg);
+          }
         })
         .catch(function(error) {
           console.log(error);

@@ -141,6 +141,8 @@ export default {
                     });
                   }
                 });
+              } else {
+                this.$message(data.msg);
               }
             })
             .catch(error => {

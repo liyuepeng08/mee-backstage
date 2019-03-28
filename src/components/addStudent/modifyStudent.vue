@@ -213,6 +213,8 @@ export default {
                     });
                   }
                 });
+              } else {
+                this.$message(data.msg);
               }
             })
             .catch(error => {
@@ -242,24 +244,28 @@ export default {
           }
         })
         .then(response => {
-          let data = response.data.data;
-          const that = this.ruleForm;
-          let birthday = data.birthday;
-          // data.birthday.slice(0, [4]);
-          that.uid = data.uid; //用户ID
-          that.userName = data.realName; //用户名
-          that.nickName = data.nickName; //昵称
-          that.password = data.password; //用户密码
-          that.gender = data.gender.toString(); //性别
-          that.email = data.email; //邮箱
-          that.mobile = data.mobile; //手机号
-          that.address = data.address; //地址
-          that.birthday = this.dateTime(data.birthday); //生日
-          that.nation = data.nation; //民族
-          that.nativeAddress = data.nativeAddress; //籍贯
-          that.address = data.address; //所在地址
-          that.parentsMobile = data.parentsMobile; //父母电话
-          that.remark = data.remark; //备注
+          if (data.code == 0) {
+            let data = response.data.data;
+            const that = this.ruleForm;
+            let birthday = data.birthday;
+            // data.birthday.slice(0, [4]);
+            that.uid = data.uid; //用户ID
+            that.userName = data.realName; //用户名
+            that.nickName = data.nickName; //昵称
+            that.password = data.password; //用户密码
+            that.gender = data.gender.toString(); //性别
+            that.email = data.email; //邮箱
+            that.mobile = data.mobile; //手机号
+            that.address = data.address; //地址
+            that.birthday = this.dateTime(data.birthday); //生日
+            that.nation = data.nation; //民族
+            that.nativeAddress = data.nativeAddress; //籍贯
+            that.address = data.address; //所在地址
+            that.parentsMobile = data.parentsMobile; //父母电话
+            that.remark = data.remark; //备注
+          } else {
+            this.$message(data.msg);
+          }
         })
         .catch(function(error) {
           console.log(error);
