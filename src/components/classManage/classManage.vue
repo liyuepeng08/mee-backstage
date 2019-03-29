@@ -203,6 +203,7 @@ export default {
         }
       });
     },
+    //详情
     detail(courseId) {
       //编辑课程按钮点击事件，参数为课程id
       this.$router.push({
