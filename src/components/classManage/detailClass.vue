@@ -5,7 +5,7 @@
     <el-form
       :model="ruleForm"
       ref="ruleForm"
-      label-width="90px"
+      label-width="70px"
       class="demo-ruleForm"
       style="width:870px"
       size="mini"
@@ -13,11 +13,12 @@
       <dl class="model essential">
         <dt>基本信息</dt>
         <el-form-item label="班级名称">
-         春花华小二班
+          <div class="detailContent">春天花华小小学</div>
         </el-form-item>
-        <el-form-item label="班级简介" prop="remark">
-          <el-input class="remarks" type="textarea" v-model="ruleForm.remark" placeholder="请输入"></el-input>
-        </el-form-item>
+        <el-form-item
+          label="班级简介"
+          prop="remark"
+        >本课是以网球的基本知识、基本技术、技能为主要学习内容。通过合理的网球教学和锻炼过程,使学生热爱网球运动,不仅学会打网球,同时也会欣赏高水平的比赛。</el-form-item>
         <el-form-item label="选择课程">
           <ul class="lessonFather">
             <li class="lesson">
@@ -31,16 +32,24 @@
               </div>
               <div>开课时间</div>
               <div class="lessonBtn">
-                <span class="detail">详情</span>|
-                <span>删除</span>
+                <span class="detail">详情</span>
               </div>
             </li>
             <li class="lesson"></li>
             <li class="lesson"></li>
-            <li class="addLesson">
-              <i class="el-icon-plus"></i>
-              <span>添加新课程</span>
+          </ul>
+        </el-form-item>
+        <el-form-item label="授课教师">
+          <ul class="lessonFather">
+            <li class="lesson teacher">
+              <div class="lessonImg">
+                <img src alt>
+              </div>
+              <p>wufawu</p>
+              <p>15010618888</p>
             </li>
+            <li class="lesson teacher"></li>
+            <li class="lesson teacher"></li>
           </ul>
         </el-form-item>
         <el-form-item label="授课教师" prop="school">
@@ -63,15 +72,11 @@
                 </div>
               </template>
             </el-table-column>
-            <el-table-column prop="phone" label="电话"></el-table-column>
-            <el-table-column label="操作" width="140">
-              <template slot-scope="scope">
-                <el-button type="text" size="small">查看</el-button>
-                <el-button
-                  type="text"
-                  size="small"
-                  @click="deleteButt(scope.row.id, scope.$index)"
-                >删除</el-button>
+            <el-table-column prop="time" label="创建时间"></el-table-column>
+            <el-table-column prop="sex" label="性别" width="140"></el-table-column>
+            <el-table-column label="操作" width="60">
+              <template slot-scope>
+                <el-button type="text" size="small">详情</el-button>
               </template>
             </el-table-column>
           </el-table>
@@ -80,12 +85,7 @@
             添加教师
           </div>
         </el-form-item>
-        <el-form-item>
-          <el-row style="margin-bottom:10px;">
-            <el-button round style="width:120px;height:40px;font-size: 14px;">放弃创建</el-button>
-            <el-button type="primary" round style="width:120px;height:40px;font-size: 14px;">完成</el-button>
-          </el-row>
-        </el-form-item>
+        <pages v-if="totalCount" :pageSize="10" @changeNum="changePage" :total="totalCount"></pages>
       </dl>
     </el-form>
 
@@ -94,6 +94,7 @@
 </template>
 
 <script>
+import Pages from "@/components/pages/pages";
 export default {
   name: "addClass",
   data() {
@@ -102,16 +103,19 @@ export default {
         {
           img: "https://minecraft.education.jdcloud.com/img/course-pic.png",
           title: "无法无天",
-          phone: "15010618888",
+          time: "2019-12-12 12:30",
+          sex: "男",
           tid: "12121214"
         },
         {
           img: "https://minecraft.education.jdcloud.com/img/course-pic.png",
           title: "百变小樱",
-          phone: "15010616666",
+          time: "2019-12-12 12:31",
+          sex: "女",
           tid: "12121213"
         }
       ],
+      totalCount: 1, //列表数据的总条数
       loading: false, //保存是否请求表格数据的状态
       ruleForm: {
         tid: "", //租户ID
@@ -129,8 +133,13 @@ export default {
     obtain: function() {
       this.ruleForm.tid = sessionStorage.getItem("tid");
       this.ruleForm.tTame = sessionStorage.getItem("tTame");
+    },
+    //切换页码回调函数，参数是切换后的页码
+    changePage(pageNum) {
+      // this.loadCourseList(pageNum, 10);
     }
-  }
+  },
+  components: { Pages }
 };
 </script>
 
@@ -165,7 +174,6 @@ export default {
     //添加课程
     .lessonFather {
       overflow: hidden;
-
       //课程
       .lesson {
         width: 120px;
@@ -204,32 +212,23 @@ export default {
           position: absolute;
           bottom: 20px;
           padding: 0 14px;
+          width: 90px;
           span {
             padding: 0 10px;
           }
         }
       }
-
-      //添加课程
-      .addLesson {
-        height: 240px;
-        width: 158px;
-        background-color: #f8fafc;
-        border-radius: 4px;
-        border: solid 1px #f1f1f1;
-        text-align: center;
-        margin-right: 20px;
-        margin-bottom: 20px;
-        float: left;
-        i {
-          color: #a9a9a9;
-          font-size: 20px;
-          padding: 100px 70px 30px;
+      //教师
+      .teacher {
+        width: 160px;
+        height: 238px;
+        padding: 0px;
+        .lessonImg {
+          height: 160px;
         }
-        span {
+        p {
           text-align: center;
-          font-size: 12px;
-          color: #666666;
+          padding: 4px 0px;
         }
       }
       :nth-child(4n) {
@@ -280,6 +279,7 @@ export default {
         }
       }
     }
+    //添加老师按钮
     .addTeaBtn {
       cursor: pointer;
       text-align: center;
@@ -299,6 +299,11 @@ export default {
         color: #fff;
       }
     }
+    //详情样式
+    .detailContent {
+      font-size: 12px;
+      color: #080808;
+    }
   }
 
   /deep/ .el-form-item {
@@ -314,6 +319,7 @@ export default {
     text-align: justify;
     height: 30px;
     overflow: hidden;
+    padding-right: 20px;
   }
   /deep/ .el-form-item__label:after {
     display: inline-block;

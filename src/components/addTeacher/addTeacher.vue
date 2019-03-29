@@ -25,7 +25,7 @@
     <el-form
       :model="ruleForm"
       ref="ruleForm"
-      label-width="90px"
+      label-width="70px"
       class="demo-ruleForm"
       style="width:390px"
       size="mini"
