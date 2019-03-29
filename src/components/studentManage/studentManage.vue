@@ -17,7 +17,7 @@
             >新增</el-button>
             <el-upload
                 class="upload-demo"
-                action="http://localhost:3001/uploadExcel"
+                action="http://localhost:3000/uploadExcel"
                 :on-success="handleAvatarSuccess"
                 :before-upload="beforeAvatarUpload"
                 :show-file-list="false"
@@ -305,7 +305,7 @@ export default {
         }
     }
 }
-.butt /deep/ .upload-demo {
+.butt .upload-demo {
     display: inline-block;
 }
 </style>

@@ -36,7 +36,7 @@ export default {
     min-height: 100%;
 }
 .right-cont {
-    background-color: #F3F3F5;
+    background-color: #F8FAFC;
     min-height: 600px;
     padding-left: 20px;
     padding-right: 20px;

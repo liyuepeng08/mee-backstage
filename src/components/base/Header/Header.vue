@@ -63,7 +63,7 @@ export default {
 .header {
   width: 100%;
   height: 60px;
-  background-color: #f3f3f5;
+  background-color: #F8FAFC;
   .logo {
     width: 100%;
     height: 60px;
