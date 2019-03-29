@@ -160,7 +160,8 @@ export default {
     obtain: function() {
       this.ruleForm.tid = sessionStorage.getItem("tid");
       this.ruleForm.tTame = sessionStorage.getItem("tTame");
-    }
+    },
+    
   }
 };
 </script>
