@@ -276,7 +276,7 @@ export default {
     // 跳转学生列表
     nextHref() {
       this.$router.push({
-        path: "classManage/studentList"
+        path: "classManage/classStudentList"
       });
     }
   },

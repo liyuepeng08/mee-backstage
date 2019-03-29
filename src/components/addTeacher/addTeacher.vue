@@ -267,6 +267,7 @@ export default {
     };
   },
   mounted: function() {
+    this.tid=sessionStorage.getItem('tid')
     this.obtain(); //获取当前信息
   },
   methods: {
