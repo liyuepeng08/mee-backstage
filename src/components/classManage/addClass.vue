@@ -123,6 +123,8 @@ export default {
         }
       ],
       loading: false, //保存是否请求表格数据的状态
+      add: 1,
+      id: "",
       ruleForm: {
         tid: "", //租户ID
         creator: "", //创建人ID
@@ -136,7 +138,7 @@ export default {
 
     // this.emptyCourseVuex(); //首先vuex关于课程的内容数据全清空
     let courseId = this.$route.query.courseId;
-
+    this.id = courseId;
     if (courseId) {
       //有，就是更新课程，发送请求获取详情数据
 
@@ -152,11 +154,18 @@ export default {
     submit: function(formName) {
       const tid = sessionStorage.getItem("tid");
       let that = this.ruleForm;
+      let path;
+      if (this.id) {
+        path = "classroom/update";
+      } else {
+        path = "classroom/create";
+      }
       //新增
-      this.axios
-        .get("/classroom/create", {
+      http: this.axios
+        .get(path, {
           params: {
             params: {
+              id: this.id,
               name: that.name,
               description: that.description,
               tid: that.tid,

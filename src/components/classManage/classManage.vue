@@ -233,13 +233,13 @@ export default {
         let {
           status,
           data: { data: dataMsg, code }
-        } = await this.axiosC({
-          url: "/material/course/update",
+        } = await this.axios({
+          url: "/classroom/update",
           method: "get",
           params: {
             params: JSON.stringify({
               id: courseId,
-              status: -1
+              status: 3
             })
           }
         });
