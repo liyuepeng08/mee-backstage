@@ -200,8 +200,5 @@ export default {
   background: url(./settings.png) center no-repeat;
 }
 
-
-
-
 </style>
 
