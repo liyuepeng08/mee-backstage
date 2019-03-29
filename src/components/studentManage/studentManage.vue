@@ -17,7 +17,7 @@
             >新增</el-button>
             <el-upload
                 class="upload-demo"
-                action="http://localhost:3000/uploadExcel"
+                action="http://localhost:3001/uploadExcel"
                 :on-success="handleAvatarSuccess"
                 :before-upload="beforeAvatarUpload"
                 :show-file-list="false"
@@ -238,31 +238,6 @@ export default {
             }
             // return isJPG && isLt2M;
             this.isUpload = true        //loading动画显示
-
-            // let fd = new FormData()
-            // fd.append('file', file)
-            // fd.append('params', JSON.stringify({uid: '123'}))
-
-            // try {
-            //     let {status, data:{data: dataMsg}} = await this.axios({
-            //         url: '/oss/upload',
-            //         method: 'post',
-            //         data: fd,
-            //         noQs: true,
-            //         // headers: {
-            //         //     'Content-type': 'multipart/form-data'
-            //         // }
-            //     })
-
-            //     if (status === 200 && dataMsg) {
-            //         this.setThumbnail(dataMsg.url)     //上传成功后返回服务器上的图片路径地址
-
-            //         this.isUpload = false           //loading动画隐藏
-            //     }
-            // }
-            // catch(err) {
-            //     console.log(err)
-            // }
         }
     },
     components: {

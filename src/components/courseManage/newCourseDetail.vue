@@ -76,7 +76,7 @@
                         <ul>
                             <li>
                                 <div>折扣价</div>
-                                <el-input placeholder="单位：元"></el-input>
+                                <el-input v-model="discountPrice" placeholder="单位：元"></el-input>
                             </li>
                             <li>
                                 <div>原价</div>
@@ -115,7 +115,8 @@ export default {
             },
             subjectList: [],             //课程分类的数据源
             isUpload: false,             //上传图片loading动画状态显示控制
-            isLoad: false               //更新课程请求数据 页面loading动画控制
+            isLoad: false,               //更新课程请求数据 页面loading动画控制
+            discountPrice: 0           //折扣价
         }
     },
     computed: {

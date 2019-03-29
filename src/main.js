@@ -1,11 +1,11 @@
 // The Vue build version to load with the `import` command
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
+import './assets/css/reset.css'
+import 'element-ui/lib/theme-chalk/index.css'     //注意css文件引用在app.vue上面，否则修改的element-ui样式会覆盖组件中修改的样式
 import Vue from 'vue'
 import App from './App'
 import router from './router'
 import ElementUI from 'element-ui'
-import './assets/css/reset.css'
-import 'element-ui/lib/theme-chalk/index.css'
 import {catalogAxios, userCenterAxios} from '@/config/axiosDefault'
 import store from '@/store/index'
 
