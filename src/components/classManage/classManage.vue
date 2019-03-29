@@ -190,14 +190,14 @@ export default {
     newCourse() {
       //点击"新建"按钮，跳转到 新建课程详情页面
       this.$router.push({
-        path: "/admin/courseManage/newCourseDetail"
+        path: "/admin/classManage/addClass"
       });
     },
     //编辑
     edit(courseId) {
       //编辑课程按钮点击事件，参数为课程id
       this.$router.push({
-        path: "/admin/courseManage/newCourseDetail",
+        path: "/admin/classManage/addClass",
         query: {
           courseId
         }
