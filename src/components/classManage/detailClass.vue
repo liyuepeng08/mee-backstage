@@ -75,7 +75,7 @@
             <el-table-column prop="time" label="创建时间"></el-table-column>
             <el-table-column prop="sex" label="性别" width="140"></el-table-column>
             <el-table-column label="操作" width="60">
-              <template slot-scope="scope">
+              <template slot-scope>
                 <el-button type="text" size="small">详情</el-button>
               </template>
             </el-table-column>
