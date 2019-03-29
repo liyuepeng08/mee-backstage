@@ -13,10 +13,15 @@
       <dl class="model essential">
         <dt>基本信息</dt>
         <el-form-item label="班级名称">
-          <el-input class="w493" v-model="ruleForm.userName" placeholder="请输入"></el-input>
+          <el-input class="w493" v-model="ruleForm.name" placeholder="请输入"></el-input>
         </el-form-item>
-        <el-form-item label="班级简介" prop="remark">
-          <el-input class="remarks" type="textarea" v-model="ruleForm.remark" placeholder="请输入"></el-input>
+        <el-form-item label="班级简介" prop="description">
+          <el-input
+            class="remarks"
+            type="textarea"
+            v-model="ruleForm.description"
+            placeholder="请输入"
+          ></el-input>
         </el-form-item>
         <el-form-item label="选择课程">
           <ul class="lessonFather">
@@ -83,7 +88,12 @@
         <el-form-item>
           <el-row style="margin-bottom:10px;">
             <el-button round style="width:120px;height:40px;font-size: 14px;">放弃创建</el-button>
-            <el-button type="primary" round style="width:120px;height:40px;font-size: 14px;">完成</el-button>
+            <el-button
+              type="primary"
+              @click="submit"
+              round
+              style="width:120px;height:40px;font-size: 14px;"
+            >完成</el-button>
           </el-row>
         </el-form-item>
       </dl>
@@ -103,7 +113,7 @@ export default {
           img: "https://minecraft.education.jdcloud.com/img/course-pic.png",
           title: "无法无天",
           phone: "15010618888",
-          tid: "12121214"
+          tid: "12121213"
         },
         {
           img: "https://minecraft.education.jdcloud.com/img/course-pic.png",
@@ -115,20 +125,106 @@ export default {
       loading: false, //保存是否请求表格数据的状态
       ruleForm: {
         tid: "", //租户ID
-        tTame: "", //租户名称
-        uid: "" //用户ID
+        creator: "", //创建人ID
+        name: "", //班级名称
+        description: "" //描述
       }
     };
+  },
+  created() {
+    //查看地址栏是否有courseId，有的话就是 更新课程，否则就是 新建课程。
+
+    // this.emptyCourseVuex(); //首先vuex关于课程的内容数据全清空
+    let courseId = this.$route.query.courseId;
+
+    if (courseId) {
+      //有，就是更新课程，发送请求获取详情数据
+
+      // this.setCourseId(courseId); //保存到vuex中课程的courseId
+
+      this.getCourseDetail(courseId); //请求获取课程详情数据
+    }
   },
   mounted: function() {
     this.obtain(); //获取当前信息
   },
   methods: {
-    submit: function(formName) {},
+    submit: function(formName) {
+      const tid = sessionStorage.getItem("tid");
+      let that = this.ruleForm;
+      //新增
+      this.axios
+        .get("/classroom/create", {
+          params: {
+            params: {
+              name: that.name,
+              description: that.description,
+              tid: that.tid,
+              creator: that.uid
+            }
+          }
+        })
+        .then(response => {
+          let data = response.data;
+          if (data.code == 0) {
+            let timer = setTimeout(() => {
+              //倒计时跳转
+              this.$router.push({
+                //跳转到列表页
+                path: "/admin/classManage"
+              });
+              //模拟点击关闭按钮
+              document
+                .getElementsByClassName("el-message-box__close")[0]
+                .click();
+            }, 3000);
+
+            this.$alert("3秒后返回上一级", "提交成功，请等待审核！！", {
+              confirmButtonText: "直接跳转",
+              callback: action => {
+                clearTimeout(timer); //清除定时器
+                this.$router.push({
+                  //跳转到列表页
+                  path: "/admin/classManage"
+                });
+              }
+            });
+          } else {
+            this.$message(data.msg);
+          }
+        })
+        .catch(error => {
+          this.$message("提交失败！");
+          console.log(error);
+        });
+    },
+    //更新课程时，获取 课程详情数据
+    async getCourseDetail(roomId) {
+      console.log("更新");
+      try {
+        this.isLoad = true; //加载数据loading动画显示
+        let {
+          status,
+          data: { data: dataMsg }
+        } = await this.axios({
+          method: "get",
+          url: "/classroom/" + roomId
+        });
+        if (status === 200 && dataMsg) {
+          // this.setCourseDetail(dataMsg); //将获取到的课程详情，存入到vuex中
+          // this.selectedTagsText = dataMsg.tag1.split(",");
+          this.ruleForm = dataMsg;
+          this.isLoad = false; //加载数据loading动画隐藏
+        }
+      } catch (err) {
+        console.log(err);
+      }
+    },
     //获取当前信息
     obtain: function() {
       this.ruleForm.tid = sessionStorage.getItem("tid");
-      this.ruleForm.tTame = sessionStorage.getItem("tTame");
+      this.ruleForm.create = sessionStorage.getItem("tTame");
+      this.ruleForm.uid = sessionStorage.getItem("uid");
     }
   }
 };

@@ -38,13 +38,15 @@
             </div>
           </template> 
         </el-table-column>-->
-        <el-table-column prop="categoryName" label="教程名称" width="340"></el-table-column>
+        <el-table-column prop="name" label="教程名称" width="340"></el-table-column>
         <el-table-column prop="createTime" label="创建时间"></el-table-column>
-        <el-table-column prop="chapter" label="在班学生(人)" width="340">
-          <div class="people">
-            <span>80</span>
-            <i @click="nextHref" class="el-icon-edit-outline"></i>
-          </div>
+        <el-table-column label="在班学生(人)" width="340">
+          <template slot-scope="scope">
+            <div class="people">
+              <span>{{scope.row.studentNum?scope.row.studentNum:0}}</span>
+              <i @click="nextHref" class="el-icon-edit-outline"></i>
+            </div>
+          </template>
         </el-table-column>
         <el-table-column label="操作">
           <template slot-scope="scope">
@@ -80,15 +82,16 @@ export default {
           placeholder: "输入要查询的名称"
         }
       },
-
+      tid: sessionStorage.getItem("tid"), //租户ID
       params: {
         //加载课程列表传参
-        title: "",
-        createTime: "",
-        categoryId: "",
-        pageIndex: 1,
-        pageSize: 10,
-        status: 1
+        tid: sessionStorage.getItem("tid"),
+        pageIndex: 1
+        // title: "",
+        // createTime: "",
+        // categoryId: "",
+        // pageSize: 10,
+        // status: 1
       }
     };
   },
@@ -106,9 +109,9 @@ export default {
         let {
           status,
           data: { data: dataMsg }
-        } = await this.axiosC({
+        } = await this.axios({
           method: "get",
-          url: "/material/course/listByPage",
+          url: "classroom/listByPage",
           params: {
             params: this.params
           }
@@ -117,19 +120,12 @@ export default {
         if (status === 200 && dataMsg) {
           //请求成功
           this.loading = false;
-          dataMsg.list.forEach(item => {
-            //返回的数据处理
-            item.tag =
-              (item.tag1 || "") +
-              " " + //tag合并
-              (item.tag2 || "") +
-              " " +
-              (item.tag3 || "") +
-              " " +
-              (item.tag4 || "") +
-              " " +
-              (item.tag5 || "");
-          });
+          // dataMsg.list.forEach(item => {
+          //   //返回的数据处理
+
+          //   item.studentNum ? "" : (item.studentNum = 0);
+
+          // });
           this.tableData = dataMsg.list; //赋值表格数据
           this.totalCount = dataMsg.totalCount; //总条数赋值
         }
