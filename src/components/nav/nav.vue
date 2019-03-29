@@ -131,7 +131,7 @@ export default {
   color: #5693ff;
 }
 
-.el-menu /deep/ .el-menu-item.index ._icon {
+.el-menu /deep/ .el-menu-item ._icon {
   display: inline-block;
   width: 20px;
   height: 20px;
