@@ -34,18 +34,16 @@
         </el-form-item>
         <el-form-item label="授课教师">
           <ul class="lessonFather">
-            <li class="lesson teacher">
+            <li class="lesson teacher" v-for="(item,index) in teacherForm" :key="index">
               <div class="lessonImg">
                 <img src alt>
               </div>
-              <p>wufawu</p>
-              <p>15010618888</p>
+              <p>{{item.nickName}}</p>
+              <p>{{item.mobile}}</p>
             </li>
-            <li class="lesson teacher"></li>
-            <li class="lesson teacher"></li>
           </ul>
         </el-form-item>
-        <el-form-item label="授课教师" prop="school">
+        <el-form-item label="学生名单" prop="school">
           <el-table
             :data="tableData"
             v-loading="loading"
@@ -168,7 +166,6 @@ export default {
         });
         if (status === 200 && dataMsg) {
           this.classForm = dataMsg;
-          console.log(this.classForm);
           this.isLoad = false; //加载数据loading动画隐藏
         }
       } catch (err) {
@@ -195,7 +192,7 @@ export default {
           }
         });
         if (status === 200 && dataMsg) {
-          this.teacherForm = dataMsg;
+          this.teacherForm = dataMsg.list;
           console.log(this.teacherForm);
           this.isLoad = false; //加载数据loading动画隐藏
         }
