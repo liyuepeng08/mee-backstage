@@ -27,7 +27,7 @@
                 <span>12章节</span>
               </div>
               <div class="lessonBtn">
-                <span class="detail">详情</span>
+                <span class="detail" @click="toCourseDetail(item.id)">详情</span>
               </div>
             </li>
           </ul>
@@ -199,6 +199,15 @@ export default {
       } catch (err) {
         console.log(err);
       }
+    },
+    // 跳转课程详情
+    toCourseDetail(id) {
+      this.$router.push({
+        path: "/admin/courseManage/courseDetail",
+        query: {
+          courseId: id
+        }
+      });
     },
     //切换页码回调函数，参数是切换后的页码
     changePage(pageNum) {
