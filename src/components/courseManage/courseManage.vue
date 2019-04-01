@@ -63,7 +63,7 @@
                 <el-table-column
                     label="操作">
                     <template slot-scope="scope">
-                        <!-- <el-button type="text" size="small">详情</el-button> -->
+                        <el-button type="text" size="small" @click="detail(scope.row.id)">详情</el-button>
                         <el-button type="text" size="small" @click="edit(scope.row.id)">编辑</el-button>
                         <el-button type="text" size="small" @click="deleteButt(scope.row.id, scope.$index)">删除</el-button>
                     </template>
@@ -199,6 +199,14 @@ export default {
         newCourse() {       //点击"新建"按钮，跳转到 新建课程详情页面
             this.$router.push({         
                 path: '/admin/courseManage/newCourseDetail'
+            })
+        },
+        detail(courseId) {      //点击详情，查看详情页面
+            this.$router.push({
+                path: '/admin/courseManage/courseDetail',
+                query: {
+                    courseId
+                }
             })
         },
         edit(courseId) {            //编辑课程按钮点击事件，参数为课程id

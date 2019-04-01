@@ -31,6 +31,7 @@ import TeacherExamine from '@/components/teacherExamine/teacherExamine' //教师
 import ExamineTeacherDel from '@/components/examineTeacherDel/examineTeacherDel' //教师审核详情
 import ExamineStudentDel from '@/components/examineStudentDel/examineStudentDel' //学生审核详情
 import CourseManage from '@/components/courseManage/courseManage' //课程管理
+import CourseDetail from '@/components/courseManage/courseDetail'   //课程详情
 import NewCourseDetail from '@/components/courseManage/newCourseDetail' //新建课程详情
 import NewCourseUpload from '@/components/courseManage/newCourseUpload' //新建课程上传
 import UploadVideo from '@/components/courseManage/uploadVideo' //视频上传
@@ -152,7 +153,11 @@ export default new Router({
         path: 'courseManage', //课程管理
         name: 'courseManage',
         component: CourseManage,
-        children: [{ //新建课程详情
+        children: [{    //查看课程详情
+          path: 'courseDetail',
+          name: 'courseDetail',
+          component: CourseDetail
+        },{ //新建课程详情
           path: 'newCourseDetail',
           name: 'newCourseDetail',
           component: NewCourseDetail

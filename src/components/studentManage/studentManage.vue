@@ -17,7 +17,7 @@
             >新增</el-button>
             <el-upload
                 class="upload-demo"
-                action="http://localhost:3000/uploadExcel"
+                action="http://116.196.91.10:3000/uploadExcel"
                 :on-success="handleAvatarSuccess"
                 :before-upload="beforeAvatarUpload"
                 :show-file-list="false"
