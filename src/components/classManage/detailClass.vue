@@ -3,7 +3,6 @@
     <h3 class="pageTitle">班级详情</h3>
     <!-- <form class="el-form demo-ruleForm"> -->
     <el-form
-      :model="ruleForm"
       ref="ruleForm"
       label-width="70px"
       class="demo-ruleForm"
@@ -18,22 +17,19 @@
         <el-form-item label="班级简介" prop="remark">{{ruleForm.description}}</el-form-item>
         <el-form-item label="选择课程">
           <ul class="lessonFather">
-            <li class="lesson">
+            <li class="lesson" v-for="(item,index) in classForm" :key="index">
               <div class="lessonImg">
                 <img src alt>
               </div>
-              <h4>少儿艺体二外英语</h4>
+              <h4>{{item.taskTitle}}</h4>
               <div>
-                <span class="lessonTitle">英语</span>
+                <span class="lessonTitle">{{item.taskCode}}</span>
                 <span>12章节</span>
               </div>
-              <div>开课时间</div>
               <div class="lessonBtn">
                 <span class="detail">详情</span>
               </div>
             </li>
-            <li class="lesson"></li>
-            <li class="lesson"></li>
           </ul>
         </el-form-item>
         <el-form-item label="授课教师">
@@ -116,6 +112,8 @@ export default {
         name: "", //班级名称
         description: "" //描述
       },
+      classForm: [], //课程列表
+      teacherForm: [], //教师列表
       params: {}
     };
   },
@@ -126,6 +124,7 @@ export default {
     // this.id = courseId;
     this.getClassDetail(roomId); //请求获取课程详情数据
     this.getCourseDetail(roomId, tid); //请求获取课程详情数据
+    this.getTeacherDetail(roomId, tid); //请求获取教师详情数据
   },
   methods: {
     submit: function(formName) {},
@@ -168,8 +167,36 @@ export default {
           }
         });
         if (status === 200 && dataMsg) {
-          console.log("课程详情");
-          this.ruleForm = dataMsg;
+          this.classForm = dataMsg;
+          console.log(this.classForm);
+          this.isLoad = false; //加载数据loading动画隐藏
+        }
+      } catch (err) {
+        console.log(err);
+      }
+    },
+    //获取班级教师详情
+    async getTeacherDetail(roomId, tid) {
+      try {
+        this.isLoad = true; //加载数据loading动画显示
+        let {
+          status,
+          data: { data: dataMsg }
+        } = await this.axiosC({
+          method: "get",
+          url: "classroom/selectTeacherList",
+          params: {
+            params: {
+              roomId: roomId,
+              tid: tid,
+              pageIndex: 0,
+              pageSize: 10
+            }
+          }
+        });
+        if (status === 200 && dataMsg) {
+          this.teacherForm = dataMsg;
+          console.log(this.teacherForm);
           this.isLoad = false; //加载数据loading动画隐藏
         }
       } catch (err) {
@@ -240,7 +267,7 @@ export default {
         }
         h4 {
           color: #080808;
-          line-height: 36px;
+          line-height: 24px;
           font-size: 14px;
           padding-bottom: 10px;
         }
