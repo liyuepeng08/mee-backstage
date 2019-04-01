@@ -121,11 +121,11 @@ export default {
   },
   created() {
     //查看地址栏是否有courseId，有的话就是 更新课程，否则就是 新建课程。
-    let courseId = this.$route.query.courseId;
+    let roomId = this.$route.query.roomId;
     let tid = sessionStorage.getItem("tid");
     // this.id = courseId;
-    this.getClassDetail(courseId); //请求获取课程详情数据
-    this.getCourseDetail(courseId); //请求获取课程详情数据
+    this.getClassDetail(roomId); //请求获取课程详情数据
+    this.getCourseDetail(roomId, tid); //请求获取课程详情数据
   },
   methods: {
     submit: function(formName) {},
@@ -151,7 +151,7 @@ export default {
       }
     },
     //获取班级课程详情
-    async getCourseDetail(roomId) {
+    async getCourseDetail(roomId, tid) {
       try {
         this.isLoad = true; //加载数据loading动画显示
         let {
@@ -161,12 +161,14 @@ export default {
           method: "get",
           url: "classroom/showTasks",
           params: {
-            params: this.params
+            params: {
+              roomId: roomId,
+              tid: tid
+            }
           }
         });
         if (status === 200 && dataMsg) {
-          // this.setCourseDetail(dataMsg); //将获取到的课程详情，存入到vuex中
-          // this.selectedTagsText = dataMsg.tag1.split(",");
+          console.log("课程详情");
           this.ruleForm = dataMsg;
           this.isLoad = false; //加载数据loading动画隐藏
         }
