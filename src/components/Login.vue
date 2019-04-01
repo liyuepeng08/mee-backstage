@@ -12,7 +12,7 @@
                 <option value="2">2</option>
                 <option value="3">3</option>
             </select>
-            <input type="button" value="登 录" @click="signin" class="button">
+            <input type="button" value="登 录" @click="signin"   class="button">
             <div class="aboutLink">
                 <a href class="registerLink">注册账号</a>|
                 <a href>忘记密码？</a>

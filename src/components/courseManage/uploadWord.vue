@@ -152,7 +152,7 @@ export default {
     left: 0;
     height: 100%;
     width: 100%;
-    background-color: #F3F3F5;
+    background-color: #F8FAFC;
 }
 .uploadvideo-content {
     background-color: #fff;

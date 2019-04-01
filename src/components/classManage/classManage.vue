@@ -109,7 +109,7 @@ export default {
         let {
           status,
           data: { data: dataMsg }
-        } = await this.axios({
+        } = await this.axiosC({
           method: "get",
           url: "classroom/listByPage",
           params: {
@@ -119,6 +119,7 @@ export default {
 
         if (status === 200 && dataMsg) {
           //请求成功
+          console.log(dataMsg.list);
           this.loading = false;
           // dataMsg.list.forEach(item => {
           //   //返回的数据处理
@@ -128,6 +129,8 @@ export default {
           // });
           this.tableData = dataMsg.list; //赋值表格数据
           this.totalCount = dataMsg.totalCount; //总条数赋值
+        }else{
+           this.loading = false;
         }
       } catch (err) {
         console.log(err);

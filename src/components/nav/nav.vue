@@ -8,7 +8,7 @@
   >
     <el-menu-item style="padding-left: 20px;" index="/admin" class="index">
       <!-- <router-link to="/admin">代理商管理</router-link> -->
-      <i></i>
+      <i class="_icon"></i>
       <span>首页</span>
     </el-menu-item>
 
@@ -19,10 +19,10 @@
       </template>
       <el-menu-item-group>
         <!-- <template slot="title">分组一</template> -->
-        <el-menu-item index="/admin/adminUser">管理员管理</el-menu-item>
-        <el-menu-item index>机构管理</el-menu-item>
-        <el-menu-item index="/admin/teacherManage">教师管理</el-menu-item>
-        <el-menu-item index="/admin/studentManage">学生管理</el-menu-item>
+        <el-menu-item index="/admin/adminUser" style="padding-left: 60px;">管理员管理</el-menu-item>
+        <el-menu-item index  style="padding-left: 60px;">机构管理</el-menu-item>
+        <el-menu-item index="/admin/teacherManage"  style="padding-left: 60px;">教师管理</el-menu-item>
+        <el-menu-item index="/admin/studentManage"  style="padding-left: 60px;">学生管理</el-menu-item>
       </el-menu-item-group>
     </el-submenu>
 
@@ -33,14 +33,14 @@
       </template>
       <el-menu-item-group>
         <!-- <template slot="title">分组一</template> -->
-        <el-menu-item index="/admin/courseManage">课程管理</el-menu-item>
-        <el-menu-item index>试卷管理</el-menu-item>
+        <el-menu-item index="/admin/courseManage"  style="padding-left: 60px;">课程管理</el-menu-item>
+        <el-menu-item index  style="padding-left: 60px;">试卷管理</el-menu-item>
       </el-menu-item-group>
     </el-submenu>
 
     <el-menu-item style="padding-left: 20px;" index="/admin/classManage" class="classic">
       <!-- <router-link to="/admin">代理商管理</router-link> -->
-      <i></i>
+      <i class="_icon"></i>
       <span>班级管理</span>
     </el-menu-item>
 
@@ -50,16 +50,16 @@
         <span>审核管理</span>
       </template>
       <el-menu-item-group>
-        <el-menu-item index="/admin/teacherExamine">教师审核</el-menu-item>
-        <el-menu-item index="/admin/studentExamine">学生管理</el-menu-item>
-        <el-menu-item index>课程审核</el-menu-item>
-        <el-menu-item index>考卷审核</el-menu-item>
+        <el-menu-item index="/admin/teacherExamine" style="padding-left: 60px;">教师审核</el-menu-item>
+        <el-menu-item index="/admin/studentExamine" style="padding-left: 60px;">学生管理</el-menu-item>
+        <el-menu-item index style="padding-left: 60px;">课程审核</el-menu-item>
+        <el-menu-item index style="padding-left: 60px;">考卷审核</el-menu-item>
       </el-menu-item-group>
     </el-submenu>
 
     <el-menu-item style="padding-left: 20px;" index="/admin" class="setting">
       <!-- <router-link to="/admin">代理商管理</router-link> -->
-      <i></i>
+      <i class="_icon"></i>
       <span>设置</span>
     </el-menu-item>
   </el-menu>
@@ -131,18 +131,18 @@ export default {
   color: #5693ff;
 }
 
-.el-menu /deep/ .el-menu-item /deep/ i {
+.el-menu /deep/ .el-menu-item ._icon {
   display: inline-block;
   width: 20px;
   height: 20px;
-  margin-right: 20px;
+  margin-right: 15px;
 }
 
-.el-menu /deep/ .el-submenu /deep/ .el-submenu__title ._icon {
+.el-menu /deep/ .el-submenu .el-submenu__title ._icon {
   display: inline-block;
   width: 20px;
   height: 20px;
-  margin-right: 20px;
+  margin-right: 15px;
 }
 
 .el-menu /deep/ .el-menu-item.index i {
@@ -153,21 +153,19 @@ export default {
   background: url(./indexs.png) center no-repeat;
 }
 
-
-
-.el-menu /deep/ .el-submenu.user /deep/ .el-submenu__title ._icon {
+.el-menu /deep/ .el-submenu.user .el-submenu__title ._icon {
   background: url(./usern.png) center no-repeat;
 }
 
-.el-menu /deep/ .user.is-opened /deep/ .el-submenu__title ._icon {
+.el-menu /deep/ .user.is-opened .el-submenu__title ._icon {
   background: url(./users.png) center no-repeat;
 }
 
-.el-menu /deep/ .el-submenu.resources /deep/ .el-submenu__title ._icon {
+.el-menu /deep/ .el-submenu.resources .el-submenu__title ._icon {
   background: url(./resourcen.png) center no-repeat;
 }
 
-.el-menu /deep/ .resources.is-opened /deep/ .el-submenu__title ._icon {
+.el-menu /deep/ .resources.is-opened .el-submenu__title ._icon {
   background: url(./resources.png) center no-repeat;
 }
 
@@ -183,11 +181,11 @@ export default {
 
 
 
-.el-menu /deep/ .el-submenu.examine /deep/ .el-submenu__title ._icon {
+.el-menu /deep/ .el-submenu.examine .el-submenu__title ._icon {
   background: url(./examinen.png) center no-repeat;
 }
 
-.el-menu /deep/ .examine.is-opened /deep/ .el-submenu__title ._icon {
+.el-menu /deep/ .examine.is-opened .el-submenu__title ._icon {
   background: url(./examines.png) center no-repeat;
 }
 
