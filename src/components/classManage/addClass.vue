@@ -25,6 +25,21 @@
                 </el-form-item>
                 <el-form-item label="选择课程">
                     <ul class="lessonFather">
+                        <!-- <li >{{v}}</li> -->
+                        <li class="lesson" v-for="(v,i) in courseData" :key="i">
+                            <div class="lessonImg">
+                                <img :src="v.thumbnail" alt>
+                            </div>
+                            <h4>{{v.title}}</h4>
+                            <div class="clearfix">
+                                <span class="fl lessonTitle">{{v.tag2}}</span>
+                                <span class="fr">12章节</span>
+                            </div>
+                            <div class="lessonBtn">
+                                <span class="detail">详情</span>|
+                                <span>删除</span>
+                            </div>
+                        </li>
                         <li class="addLesson" @click="addTaskBtn">
                             <i class="el-icon-plus"></i>
                             <span>添加新课程</span>
@@ -56,12 +71,12 @@
                                 <el-button
                                     type="text"
                                     size="small"
-                                    @click="deleteButt(scope.row.id, scope.$index)"
+                                    @click="deleteButt(scope,tableData)"
                                 >删除</el-button>
                             </template>
                         </el-table-column>
                     </el-table>
-                    <div class="addTeaBtn" @click="addTeacherBtn(courseId)">
+                    <div class="addTeaBtn" @click="addTeacherBtn(id)">
                         <i class="el-icon-plus"></i>
                         添加教师
                     </div>
@@ -79,9 +94,13 @@
                 </el-form-item>
             </dl>
         </el-form>
-        <select-teacher-list :courseId="courseId" @isShowed="isShowed" v-if="isShow"></select-teacher-list>
+        <select-teacher-list
+            @isShowed="isShowed"
+            @teacherFinishData="teacherFinishData"
+            v-if="isShow"
+        ></select-teacher-list>
         <!-- </form> -->
-        <add-course @giveUp="giveUp" :courseId="courseId" v-if="isCourse"></add-course>
+        <add-course @giveUp="giveUp" @courseFinishData="courseFinishData" v-if="isCourse"></add-course>
     </div>
 </template>
 
@@ -100,38 +119,53 @@ export default {
                 name: "", //班级名称
                 description: "" //描述
             },
+            id: "",
             isShow: false,//是否显示弹出层
-            courseId: '',
-            isCourse: false
+            isCourse: false,
+            courseData: [],//已选择的课程数据
         };
     },
     created() {
         //查看地址栏是否有courseId，有的话就是 更新课程，否则就是 新建课程。
 
         // this.emptyCourseVuex(); //首先vuex关于课程的内容数据全清空
-        this.courseId = this.$route.query.courseId;
-
-        if (this.courseId) {
+        let courseId = this.$route.query.courseId;
+        this.id = courseId;
+        if (courseId) {
             //有，就是更新课程，发送请求获取详情数据
 
             // this.setCourseId(courseId); //保存到vuex中课程的courseId
 
-            this.getCourseDetail(this.courseId); //请求获取课程详情数据
+            this.getCourseDetail(courseId); //请求获取课程详情数据
         }
     },
     mounted: function () {
         this.obtain(); //获取当前信息
-        this.getClassRoomTeacher()
+
+        if (this.id) {
+            this.getClassRoomTeacher()//获得老师数据
+            this.getCourseList(this.id)//获得课程            
+        } else {
+            this.loading = false
+
+        }
     },
     methods: {
         submit: function (formName) {
             const tid = sessionStorage.getItem("tid");
             let that = this.ruleForm;
+            let path;
+            if (this.id) {
+                path = "classroom/update";
+            } else {
+                path = "classroom/create";
+            }
             //新增
-            this.axiosC
-                .get("/classroom/create", {
+            http: this.axiosC
+                .get(path, {
                     params: {
                         params: {
+                            id: this.id,
                             name: that.name,
                             description: that.description,
                             tid: that.tid,
@@ -142,6 +176,12 @@ export default {
                 .then(response => {
                     let data = response.data;
                     if (data.code == 0) {
+                        if (this.tableData != '') {
+                            this.teacherFinished(data.data);
+                        }
+                        if (this.courseData != '') {
+                            this.courseFinish(data.data);
+                        }
                         let timer = setTimeout(() => {
                             //倒计时跳转
                             this.$router.push({
@@ -170,7 +210,6 @@ export default {
                 })
                 .catch(error => {
                     this.$message("提交失败！");
-                    console.log(error);
                 });
         },
         //更新课程时，获取 课程详情数据
@@ -209,21 +248,20 @@ export default {
         isShowed(f) {
             this.isShow = f
         },
+        giveUp(f) {
+            this.isCourse = f
+        },
         // 选择课程
         addTaskBtn() {
             this.isCourse = true
         },
-        // 放弃选择
-        giveUp(f) {
-            this.isCourse = f
-        },
-        // 查询教师
+        // 获取教师
         getClassRoomTeacher(pageNum) {
             pageNum = pageNum || 1;
             let tid = sessionStorage.getItem('tid')
             let params = {
                 tid: tid,
-                roomId: this.courseId,
+                roomId: this.id,
                 pageIndex: pageNum,
                 pageSize: 10
             }
@@ -240,7 +278,76 @@ export default {
                     this.loading = fasle
                 }
             })
-        }
+        },
+        // 删除教师
+        deleteButt(scope, rows) {
+            console.log(scope.row, rows);
+        },
+        // 获取课程
+        getCourseList(id) {
+            let tid = sessionStorage.getItem('tid'),
+                params = {
+                    tid: tid,
+                    roomId: id
+                };
+            this.axiosC.get('/classroom/showTasks', { params: { params } }).then(res => {
+                console.log(res);
+            }).catch((err) => {
+                console.log(err);
+            })
+        },
+        // 获得选中老师数据
+        teacherFinishData(teacher) {
+            this.isShow = false
+            this.tableData = teacher
+        },
+        teacherFinished(classId) {
+            let teacherArr = [];
+            let tid = Number(sessionStorage.getItem('tid'))
+            this.tableData.forEach(item => {
+                teacherArr.tid = tid;
+                teacherArr.uid = item.uid;
+                teacherArr.roomId = classId;
+                teacherArr.status = item.status;
+                teacherArr.role = item.role;
+                teacherArr.mobile = item.mobile;
+                teacherArr.nickName = item.nickName;
+                teacherArr.gender = item.gender;
+
+            })
+            let params = { params: { "users": teacherArr } }
+            this.axiosC.post('/classroom/addClassUser', params).then(res => {            
+                if (res.status == 200) {
+                    console.log(res.data)
+                }
+            })
+        },
+        // 获得选中的课程数据
+        courseFinishData(course) {
+            this.isCourse = false;
+            this.courseData = course
+        },
+        courseFinish(classId) {
+            let params = {}, tid = sessionStorage.getItem('tid');
+            this.courseData.forEach(item => {
+                let courseIdsArr = [];
+                courseIdsArr.push(item.id.toString());
+                params = {
+                    tid: tid,
+                    roomId: classId,
+                    courseIds: courseIdsArr
+                }
+            })
+            this.axiosC.post('/classroom/addTask', params).then(res => {
+                if (res.status == 200) {
+                    if (res.data.code == 0) {
+                        this.$message('添加成功！')
+                    }
+                }
+            })
+
+        },
+
     },
     components: {
         SelectTeacherList,
@@ -298,19 +405,25 @@ export default {
                 margin-bottom: 20px;
                 .lessonImg {
                     height: 80px;
-
+                    margin-bottom: 5px;
                     background-color: #e4e4e4;
                     border-radius: 4px;
                     opacity: 0.99;
+                    img {
+                        width: 100%;
+                        height: 100%;
+                    }
                 }
                 h4 {
                     color: #080808;
-                    line-height: 36px;
                     font-size: 14px;
                     padding-bottom: 10px;
                 }
                 .lessonTitle {
-                    width: 50px;
+                    width: 70px;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    white-space: nowrap;
                     display: inline-block;
                 }
                 .lessonBtn {

@@ -38,7 +38,7 @@
             </div>
           </template> 
         </el-table-column>-->
-        <el-table-column prop="name" label="教程名称" width="340"></el-table-column>
+        <el-table-column prop="name" label="班级名称" width="340"></el-table-column>
         <el-table-column prop="createTime" label="创建时间"></el-table-column>
         <el-table-column label="在班学生(人)" width="340">
           <template slot-scope="scope">
@@ -87,11 +87,6 @@ export default {
         //加载课程列表传参
         tid: sessionStorage.getItem("tid"),
         pageIndex: 1
-        // title: "",
-        // createTime: "",
-        // categoryId: "",
-        // pageSize: 10,
-        // status: 1
       }
     };
   },
@@ -129,8 +124,8 @@ export default {
           // });
           this.tableData = dataMsg.list; //赋值表格数据
           this.totalCount = dataMsg.totalCount; //总条数赋值
-        }else{
-           this.loading = false;
+        } else {
+          this.loading = false;
         }
       } catch (err) {
         console.log(err);
@@ -182,6 +177,7 @@ export default {
           this.searchConfig.cascader1.data = dataMsg; //赋值给搜索框配置json
         }
       } catch (err) {
+        // this.$message("获取数据失败！");
         console.log(err);
       }
     },
@@ -203,17 +199,17 @@ export default {
       });
     },
     //详情
-    detail(courseId) {
+    detail(roomId) {
       //编辑课程按钮点击事件，参数为课程id
       this.$router.push({
         path: "/admin/classManage/detailClass",
         query: {
-          courseId
+          roomId
         }
       });
     },
     //删除
-    deleteButt(courseId, index) {
+    deleteButt(roomId, index) {
       //删除课程按钮点击事件，参数为课程id
       //弹窗确认
       this.$confirm("此操作将永久删除该课程, 是否继续?", "提示", {
@@ -224,25 +220,25 @@ export default {
         .then(() => {
           // 开始删除
           //删除数据方法
-          this.deleteCourse(courseId, index);
+          this.deleteCourse(roomId, index);
         })
         .catch(() => {
           //取消
         });
     },
     //删除课程接口
-    async deleteCourse(courseId, index) {
+    async deleteCourse(roomId, index) {
       try {
         let {
           status,
           data: { data: dataMsg, code }
         } = await this.axiosC({
-          url: "/material/course/update",
+          url: "/classroom/update",
           method: "get",
           params: {
             params: JSON.stringify({
-              id: courseId,
-              status: -1
+              id: roomId,
+              status: 3
             })
           }
         });
@@ -259,6 +255,7 @@ export default {
     },
     //切换页码回调函数，参数是切换后的页码
     changePage(pageNum) {
+      this.params.pageIndex = pageNum;
       this.loadCourseList(pageNum, 10);
     },
     //点击搜索，调用的回调函数
@@ -267,7 +264,7 @@ export default {
       console.log(searchMsg);
       //搜索内容添加到要传递的参数中
       this.params.createTime = searchMsg.date;
-      this.params.title = searchMsg.searchText;
+      this.params.name = searchMsg.searchText;
       this.params.pageIndex = 1;
       //重新加载表格数据
       this.loadCourseList();

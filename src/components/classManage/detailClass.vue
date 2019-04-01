@@ -13,12 +13,9 @@
       <dl class="model essential">
         <dt>基本信息</dt>
         <el-form-item label="班级名称">
-          <div class="detailContent">春天花华小小学</div>
+          <div class="detailContent">{{ruleForm.name}}</div>
         </el-form-item>
-        <el-form-item
-          label="班级简介"
-          prop="remark"
-        >本课是以网球的基本知识、基本技术、技能为主要学习内容。通过合理的网球教学和锻炼过程,使学生热爱网球运动,不仅学会打网球,同时也会欣赏高水平的比赛。</el-form-item>
+        <el-form-item label="班级简介" prop="remark">{{ruleForm.description}}</el-form-item>
         <el-form-item label="选择课程">
           <ul class="lessonFather">
             <li class="lesson">
@@ -80,10 +77,6 @@
               </template>
             </el-table-column>
           </el-table>
-          <div class="addTeaBtn">
-            <i class="el-icon-plus"></i>
-            添加教师
-          </div>
         </el-form-item>
         <pages v-if="totalCount" :pageSize="10" @changeNum="changePage" :total="totalCount"></pages>
       </dl>
@@ -119,20 +112,69 @@ export default {
       loading: false, //保存是否请求表格数据的状态
       ruleForm: {
         tid: "", //租户ID
-        tTame: "", //租户名称
-        uid: "" //用户ID
-      }
+        creator: "", //创建人ID
+        name: "", //班级名称
+        description: "" //描述
+      },
+      params: {}
     };
   },
-  mounted: function() {
-    this.obtain(); //获取当前信息
+  created() {
+    //查看地址栏是否有courseId，有的话就是 更新课程，否则就是 新建课程。
+    let roomId = this.$route.query.roomId;
+    let tid = sessionStorage.getItem("tid");
+    // this.id = courseId;
+    this.getClassDetail(roomId); //请求获取课程详情数据
+    this.getCourseDetail(roomId, tid); //请求获取课程详情数据
   },
   methods: {
     submit: function(formName) {},
-    //获取当前信息
-    obtain: function() {
-      this.ruleForm.tid = sessionStorage.getItem("tid");
-      this.ruleForm.tTame = sessionStorage.getItem("tTame");
+    //获取班级详情
+    async getClassDetail(roomId) {
+      try {
+        this.isLoad = true; //加载数据loading动画显示
+        let {
+          status,
+          data: { data: dataMsg }
+        } = await this.axiosC({
+          method: "get",
+          url: "/classroom/" + roomId
+        });
+        if (status === 200 && dataMsg) {
+          // this.setCourseDetail(dataMsg); //将获取到的课程详情，存入到vuex中
+          // this.selectedTagsText = dataMsg.tag1.split(",");
+          this.ruleForm = dataMsg;
+          this.isLoad = false; //加载数据loading动画隐藏
+        }
+      } catch (err) {
+        console.log(err);
+      }
+    },
+    //获取班级课程详情
+    async getCourseDetail(roomId, tid) {
+      try {
+        this.isLoad = true; //加载数据loading动画显示
+        let {
+          status,
+          data: { data: dataMsg }
+        } = await this.axiosC({
+          method: "get",
+          url: "classroom/showTasks",
+          params: {
+            params: {
+              roomId: roomId,
+              tid: tid
+            }
+          }
+        });
+        if (status === 200 && dataMsg) {
+          console.log("课程详情");
+          this.ruleForm = dataMsg;
+          this.isLoad = false; //加载数据loading动画隐藏
+        }
+      } catch (err) {
+        console.log(err);
+      }
     },
     //切换页码回调函数，参数是切换后的页码
     changePage(pageNum) {
@@ -160,7 +202,7 @@ export default {
     font-size: 18px;
     color: #080808;
     padding: 0px 21px 25px 0px;
-    background-color: #f3f3f5;
+    background-color: #f8fafc;
   }
   //下dl模板
   .model {
