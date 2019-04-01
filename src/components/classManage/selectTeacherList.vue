@@ -183,9 +183,7 @@ export default {
             if (this.selectedArr == '') {
                 this.$alert('请选择您要添加的学生！')
             } else {
-                let tid = Number(sessionStorage.getItem('tid'))
                 this.selectedArr.forEach(item => {
-                    item.tid = tid;
                     item.role = this.role;
                 })
                 this.$emit('teacherFinishData',this.selectedArr)
