@@ -68,8 +68,8 @@ export default {
         }
     },
     mounted() {
+        this.roomId = this.$route.query.roomId;
         this.getStudentList();
-        // this.removal();
     },
     methods: {
         toggleSelection(rows) {
@@ -165,7 +165,8 @@ export default {
                 this.$alert('请选择您要添加的学生！')
             } else {
                 // console.log(this.selectedArr);
-                let tid = Number(sessionStorage.getItem('tid'))
+                let tid = Number(sessionStorage.getItem('tid')), studentArray = [], studentObj = {};
+
                 this.selectedArr.forEach(item => {
                     if (item.gender == '保密') {
                         item.gender = 2
@@ -174,15 +175,20 @@ export default {
                     } else {
                         item.gender = 0
                     }
-                    item.tid = tid;
-                    item.role = this.role;
-                    item.roomId = this.courseId
+                    studentObj.tid = tid;
+                    studentObj.role = this.role;
+                    studentObj.roomId = this.roomId
+                    studentObj.uid = item.uid;
+                    studentObj.status = item.status;
+                    studentObj.mobile = item.mobile;
+                    studentObj.nickName = item.nickName;
+                    studentObj.gender = item.gender;
                 })
-                let params = { params: { "users": this.selectedArr } }
+                studentArray.push(studentObj)
+                let params = { params: { "users": studentArray } }
                 this.axiosC.post('/classroom/addClassUser', params).then(res => {
-                    console.log(res);
                     if (res.status == 200) {
-                        
+                        this.$message('添加成功！');
                     }
                 })
             }
