@@ -123,7 +123,7 @@ export default {
                     }
                 }
             } else {
-                console.log(2322);
+                // console.log(2322);
             }
         },
         // 获得学生列表
@@ -187,15 +187,9 @@ export default {
                 this.selectedArr.forEach(item => {
                     item.tid = tid;
                     item.role = this.role;
-                    item.roomId = this.roomId
                 })
-                let params = { params: { "users": this.selectedArr } }
-                this.axiosC.post('/classroom/addClassUser',params).then(res => {
-                    console.log(res);
-                    if (res.status == 200) {
-
-                    }
-                })
+                this.$emit('teacherFinishData',this.selectedArr)
+               
             }
         }
     },

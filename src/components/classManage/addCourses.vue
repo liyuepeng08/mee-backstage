@@ -31,13 +31,13 @@
                     <el-table-column prop="chapter" label="章节数"></el-table-column>
 
                     <el-table-column label="操作">
-                        <el-button type="text" size="small">详情</el-button>
+                        <el-button type="text" size="small">查看</el-button>
                     </el-table-column>
                 </el-table>
                 <div class="clearfix pos1">
                     <p class="fl selectedTask">
                         已选课程
-                        <span>3</span> 门
+                        <span>{{selectArray.length}}</span> 门
                     </p>
                     <pages
                         class="fr pageTop"
@@ -61,7 +61,6 @@
 // import Search from '@/components/search/search'
 import Pages from '@/components/pages/pages'
 export default {
-    props: ['courseId'],
     data() {
         return {
             tableData: [],
@@ -260,22 +259,11 @@ export default {
         },
         // 完成
         finished() {
-            let params = {}, tid = sessionStorage.getItem('tid');
-            this.selectArray.forEach(item => {
-                let courseIds = [];
-                courseIds.push(item.id.toString());
-                params = {
-                    tid: tid,
-                    roomId: this.courseId,
-                    courseIds: courseIds
-                }
-            })
-            // params = JSON.stringify(params);
-            this.axiosC.post('/classroom/addTask', params).then(res => {
-                if(res.code==0){
-                    
-                }
-            })
+            if (this.selectArray!='') {
+                this.$emit('courseFinishData', this.selectArray)
+            }else{
+                this.$alert('请选择您要添加的课程！')
+            }          
         }
     },
     watch: {

@@ -42,7 +42,7 @@ import DetailClass from '@/components/classManage/detailClass' //添加课程
 import SelectStudentList from '@/components/selectStudentList/selectStudentList' //选择学生列表
 import ClassStudentList from '@/components/selectStudentList/classStudentList' //班级学生列表
 
-import AddCourses from '@/components/addCourses/addCourses'
+
 
 Vue.use(Router)
 
@@ -206,9 +206,5 @@ export default new Router({
     path: '/register',
     name: 'Register',
     component: Register
-  }, {
-    path: '/addCourses',
-    name: 'addCourses',
-    component: AddCourses
   }]
 })
