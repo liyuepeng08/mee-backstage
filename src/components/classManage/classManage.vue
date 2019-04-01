@@ -38,7 +38,7 @@
             </div>
           </template> 
         </el-table-column>-->
-        <el-table-column prop="name" label="教程名称" width="340"></el-table-column>
+        <el-table-column prop="name" label="班级名称" width="340"></el-table-column>
         <el-table-column prop="createTime" label="创建时间"></el-table-column>
         <el-table-column label="在班学生(人)" width="340">
           <template slot-scope="scope">
@@ -264,7 +264,7 @@ export default {
       console.log(searchMsg);
       //搜索内容添加到要传递的参数中
       this.params.createTime = searchMsg.date;
-      this.params.title = searchMsg.searchText;
+      this.params.name = searchMsg.searchText;
       this.params.pageIndex = 1;
       //重新加载表格数据
       this.loadCourseList();
