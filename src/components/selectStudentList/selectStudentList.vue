@@ -187,6 +187,7 @@ export default {
                 studentArray.push(studentObj)
                 let params = { params: { "users": studentArray } }
                 this.axiosC.post('/classroom/addClassUser', params).then(res => {
+                    console.log(res);
                     if (res.status == 200) {
                         this.$message('添加成功！');
                     }

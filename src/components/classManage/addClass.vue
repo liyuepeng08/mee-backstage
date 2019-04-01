@@ -37,9 +37,9 @@
                             <div class="lessonImg">
                                 <img :src="v.thumbnail" alt>
                             </div>
-                            <h4>{{v.title}}</h4>
+                            <h4>{{v.title?v.title:v.taskTitle}}</h4>
                             <div class="clearfix">
-                                <span class="fl lessonTitle">{{v.tag2}}</span>
+                                <span class="fl lessonTitle">{{v.tag2?v.tag2:v.taskCode}}</span>
                             </div>
                             <div class="lessonBtn">
                                 <span class="detail" @click="toCourseDetail(v.id)">详情</span>|

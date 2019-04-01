@@ -26,7 +26,7 @@
                 <template slot-scope="scope">
                     <el-button type="text" size="small" @click="detailMsg(scope)">详情</el-button>
                     <el-button type="text" size="small" @click="modify(scope)">编辑</el-button>
-                    <el-button type="text" size="small" @click="deleteMsg(scope,rows)">删除</el-button>
+                    <el-button type="text" size="small" @click="deleteMsg(scope,tableData)">删除</el-button>
                 </template>
             </el-table-column>
         </el-table>
