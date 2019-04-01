@@ -237,7 +237,7 @@ export default {
         let {
           status,
           data: { data: dataMsg, code }
-        } = await this.axios({
+        } = await this.axiosC({
           url: "/classroom/update",
           method: "get",
           params: {

@@ -77,10 +77,6 @@
               </template>
             </el-table-column>
           </el-table>
-          <div class="addTeaBtn">
-            <i class="el-icon-plus"></i>
-            添加教师
-          </div>
         </el-form-item>
         <pages v-if="totalCount" :pageSize="10" @changeNum="changePage" :total="totalCount"></pages>
       </dl>
@@ -177,7 +173,7 @@ export default {
     font-size: 18px;
     color: #080808;
     padding: 0px 21px 25px 0px;
-    background-color: #f3f3f5;
+    background-color: #f8fafc;
   }
   //下dl模板
   .model {

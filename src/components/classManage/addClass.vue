@@ -145,7 +145,7 @@ export default {
         path = "classroom/create";
       }
       //新增
-      http: this.axios
+      http: this.axiosC
         .get(path, {
           params: {
             params: {
@@ -285,7 +285,7 @@ export default {
     font-size: 18px;
     color: #080808;
     padding: 0px 21px 25px 0px;
-    background-color: #f3f3f5;
+    background-color: #f8fafc;
   }
   //下dl模板
   .model {
