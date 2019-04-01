@@ -3,9 +3,9 @@
         <el-breadcrumb separator-class="el-icon-arrow-right">
             <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
             <el-breadcrumb-item>资源管理</el-breadcrumb-item>
-            <el-breadcrumb-item>新建课程</el-breadcrumb-item>
+            <el-breadcrumb-item>课程详情</el-breadcrumb-item>
         </el-breadcrumb>
-        <h2-title text="新建课程"></h2-title>
+        <h2-title text="课程详情"></h2-title>
         <div class="courseDetail-content">
             <a @click="$router.go(-1)" class="goback">&lt; 返回</a>
             <div class="title-detail clearfix">

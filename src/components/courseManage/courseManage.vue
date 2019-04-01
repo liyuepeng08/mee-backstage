@@ -259,7 +259,7 @@ export default {
     changePage(pageNum) {
       //切换页码回调函数，参数是切换后的页码
       this.params.pageIndex = pageNum;
-      this.loadCourseList(pageNum, 10);
+      this.loadCourseList();
     },
     searchCourseList(searchMsg) {
       //点击搜索，调用的回调函数
