@@ -129,8 +129,8 @@ export default {
           // });
           this.tableData = dataMsg.list; //赋值表格数据
           this.totalCount = dataMsg.totalCount; //总条数赋值
-        }else{
-           this.loading = false;
+        } else {
+          this.loading = false;
         }
       } catch (err) {
         console.log(err);
@@ -182,6 +182,7 @@ export default {
           this.searchConfig.cascader1.data = dataMsg; //赋值给搜索框配置json
         }
       } catch (err) {
+        // this.$message("获取数据失败！");
         console.log(err);
       }
     },

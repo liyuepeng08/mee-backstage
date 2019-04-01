@@ -1,6 +1,6 @@
 <template>
   <div class="addStudent">
-    <p class="topNav">
+    <p class="isShow">
       <el-breadcrumb separator-class="el-icon-arrow-right">
         <el-breadcrumb-item>用户管理</el-breadcrumb-item>
         <el-breadcrumb-item>学生管理</el-breadcrumb-item>
