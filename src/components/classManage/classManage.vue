@@ -44,7 +44,7 @@
           <template slot-scope="scope">
             <div class="people">
               <span>{{scope.row.studentNum?scope.row.studentNum:0}}</span>
-              <i @click="nextHref" class="el-icon-edit-outline"></i>
+              <i @click="nextHref(scope)" class="el-icon-edit-outline"></i>
             </div>
           </template>
         </el-table-column>
@@ -114,7 +114,7 @@ export default {
 
         if (status === 200 && dataMsg) {
           //请求成功
-          console.log(dataMsg.list);
+          // console.log(dataMsg.list);
           this.loading = false;
           // dataMsg.list.forEach(item => {
           //   //返回的数据处理
@@ -270,9 +270,10 @@ export default {
       this.loadCourseList();
     },
     // 跳转学生列表
-    nextHref() {
+    nextHref(scope) {
       this.$router.push({
-        path: "classManage/classStudentList"
+        path: "classManage/classStudentList",
+        query:{roomId:scope.row.id}
       });
     }
   },

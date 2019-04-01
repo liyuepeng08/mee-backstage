@@ -3,7 +3,7 @@
         <p class="topNav">
             <span>班级管理</span>
             <i class="el-icon-arrow-right"></i>
-            <span>学生列表</span>
+            <span class="active">学生列表</span>
         </p>
         <h2>学生列表</h2>
 
@@ -68,9 +68,11 @@ export default {
             tableData: [],
             paramsData: {},
             multipleSelection: [],
+            roomId: ''
         }
     },
     mounted() {
+        this.roomId = this.$route.query.roomId;
         this.tid = sessionStorage.getItem('tid');
         this.getStudentList()
     },
@@ -91,18 +93,20 @@ export default {
         getStudentList(pageNum) {
             pageNum = pageNum || 1;
             if (JSON.stringify(this.paramsData) === "{}") {
-                this.paramsData = { tid: this.tid, roomId: 1001, pageIndex: pageNum, pageSize: this.pageSize }
+                this.paramsData = { tid: this.tid, roomId: this.roomId, pageIndex: pageNum, pageSize: this.pageSize }
             } else {
                 this.paramsData.pageIndex = pageNum;
             }
             this.axiosC.get('/classroom/selectStudentList', { params: { params: this.paramsData } }).then(res => {
+                console.log(res)
                 if (res.status == 200) {
+                    this.loading = false
                     if (res.data.code == 0) {
                         this.total = res.data.data.totalCount;
                         this.pagerCount = res.data.data.totalPage;
                         if (res.data.data.list == '') {
                             this.loading = false
-                        } 
+                        }
                         this.showPage = true
                         res.data.data.list.forEach(item => {
                             if (item.gender == 1) {
@@ -165,7 +169,10 @@ export default {
         //跳转选择学生列表页
         addStudent() {
             this.$router.push({
-                path: "selectStudentList"
+                path: "selectStudentList",
+                query:{
+                    roomId:this.roomId
+                }
             })
         },
         // 批量删除
@@ -182,6 +189,12 @@ export default {
             this.getStudentList()
         },
     },
+    watch: {
+    $route(to, form) {
+      //监听路由变化，返回时刷新数据
+      to.path === "/admin/classManage/classStudentList" && this.getStudentList();
+    }
+  },
     components: {
         Pages,
         NewSearch,
@@ -196,10 +209,11 @@ export default {
     z-index: 2;
     height: 100%;
     width: 100%;
-    background-color: #f3f3f5;
+    background-color: #f8fafc;
     .topNav {
         font-size: 12px;
         color: #a9a9a9;
+        background: #f8fafc;
         .active {
             color: #5693ff;
         }
@@ -208,6 +222,7 @@ export default {
         font-size: 18px;
         color: #080808;
         margin: 30px 0;
+        background: #f8fafc;
     }
     .tableList {
         width: 1126px;

@@ -1,5 +1,12 @@
 <template>
     <div class="addClass">
+        <p class="topNav">
+            <el-breadcrumb separator-class="el-icon-arrow-right">
+                <el-breadcrumb-item>班级管理</el-breadcrumb-item>
+                <el-breadcrumb-item>班级列表</el-breadcrumb-item>
+                <el-breadcrumb-item class="active">创建班级</el-breadcrumb-item>
+            </el-breadcrumb>
+        </p>
         <h3 class="pageTitle">创建班级</h3>
         <!-- <form class="el-form demo-ruleForm"> -->
         <el-form
@@ -33,11 +40,10 @@
                             <h4>{{v.title}}</h4>
                             <div class="clearfix">
                                 <span class="fl lessonTitle">{{v.tag2}}</span>
-                                <span class="fr">12章节</span>
                             </div>
                             <div class="lessonBtn">
-                                <span class="detail">详情</span>|
-                                <span>删除</span>
+                                <span class="detail" @click="toCourseDetail(v.id)">详情</span>|
+                                <span @click="removeCur">删除</span>
                             </div>
                         </li>
                         <li class="addLesson" @click="addTaskBtn">
@@ -302,21 +308,21 @@ export default {
             this.tableData = teacher
         },
         teacherFinished(classId) {
-            let teacherArr = [];
+            let teacherArr = [],teacherObj={};
             let tid = Number(sessionStorage.getItem('tid'))
             this.tableData.forEach(item => {
-                teacherArr.tid = tid;
-                teacherArr.uid = item.uid;
-                teacherArr.roomId = classId;
-                teacherArr.status = item.status;
-                teacherArr.role = item.role;
-                teacherArr.mobile = item.mobile;
-                teacherArr.nickName = item.nickName;
-                teacherArr.gender = item.gender;
-
+                teacherObj.tid = tid;
+                teacherObj.uid = item.uid;
+                teacherObj.roomId = classId;
+                teacherObj.status = item.status;
+                teacherObj.role = item.role;
+                teacherObj.mobile = item.mobile;
+                teacherObj.nickName = item.nickName;
+                teacherObj.gender = item.gender;
             })
+            teacherArr.push(teacherObj)
             let params = { params: { "users": teacherArr } }
-            this.axiosC.post('/classroom/addClassUser', params).then(res => {            
+            this.axiosC.post('/classroom/addClassUser', params).then(res => {
                 if (res.status == 200) {
                     console.log(res.data)
                 }
@@ -326,6 +332,7 @@ export default {
         courseFinishData(course) {
             this.isCourse = false;
             this.courseData = course
+            console.log(this.courseData)
         },
         courseFinish(classId) {
             let params = {}, tid = sessionStorage.getItem('tid');
@@ -346,6 +353,19 @@ export default {
                 }
             })
 
+        },
+        // 跳转课程详情
+        toCourseDetail(id) {
+            this.$router.push({
+                path: "/admin/courseManage/courseDetail",
+                query: {
+                    courseId: id
+                }
+            })
+        },
+        // 删除选中课程
+        removeCur() {
+            
         },
 
     },
@@ -369,11 +389,22 @@ export default {
     width: 100%;
     // background-color: #f3f3f5;
     z-index: 100;
+    .topNav {
+        padding: 0 0 30px 0;
+        background-color: #f8fafc;
+        font-size: 12px;
+        color: #a9a9a9;
+        .active {
+            /deep/.el-breadcrumb__inner {
+                color: #5693ff;
+            }
+        }
+    }
     .pageTitle {
         font-size: 18px;
         color: #080808;
         padding: 0px 21px 25px 0px;
-        background-color: #f3f3f5;
+        background-color: #f8fafc;
     }
     //下dl模板
     .model {
@@ -434,6 +465,7 @@ export default {
                     padding: 0 14px;
                     span {
                         padding: 0 10px;
+                        cursor: pointer;
                     }
                 }
             }
