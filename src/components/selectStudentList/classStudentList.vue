@@ -38,13 +38,12 @@
                     </template>
                 </el-table-column>
             </el-table>
-            <div class="pos1">
+            <div class="pos1" v-if="showpage">
                 <p class="stuCount">
                     学生人数：
                     <span>{{multipleSelection.length}}</span>
                 </p>
                 <pages
-                    v-if="showpage"
                     @changeNum="getStudentList"
                     :pageSize="pageSize"
                     :total="total"
@@ -60,17 +59,19 @@ import NewSearch from "../newSearch/newSearch";
 export default {
     data() {
         return {
+            tid: '',
             total: 1,//总条数
             pagerCount: 1, //总页数
             pageSize: 10,
             loading: true,
-            showpage: true,
+            showpage: false,
             tableData: [],
             paramsData: {},
             multipleSelection: [],
         }
     },
     mounted() {
+        this.tid = sessionStorage.getItem('tid');
         this.getStudentList()
     },
     methods: {
@@ -90,19 +91,34 @@ export default {
         getStudentList(pageNum) {
             pageNum = pageNum || 1;
             if (JSON.stringify(this.paramsData) === "{}") {
-                this.paramsData = { role: 2, pageIndex: pageNum, pageSize: this.pageSize }
+                this.paramsData = { tid: this.tid, roomId: 1001, pageIndex: pageNum, pageSize: this.pageSize }
             } else {
                 this.paramsData.pageIndex = pageNum;
             }
-            let tid = sessionStorage.getItem('tid');
-            // let params = { roomId: 1001, tid: tid };
-            // this.axios.get('/classroom/selectStudentList', { params: { params } }).then(res => {
-            //     if (res.status == 200) {
-            //         console.log(res);
-            //     } else {
-            //         this.loading = false
-            //     }
-            // })
+            this.axiosC.get('/classroom/selectStudentList', { params: { params: this.paramsData } }).then(res => {
+                if (res.status == 200) {
+                    if (res.data.code == 0) {
+                        this.total = res.data.data.totalCount;
+                        this.pagerCount = res.data.data.totalPage;
+                        if (res.data.data.list == '') {
+                            this.loading = false
+                        } 
+                        this.showPage = true
+                        res.data.data.list.forEach(item => {
+                            if (item.gender == 1) {
+                                item.gender = '男'
+                            } else if (item.gender == 2) {
+                                item.gender = '保密'
+                            } else {
+                                item.gender = '女'
+                            }
+                        })
+                        this.tableData = res.data.data.list;
+                    }
+                } else {
+                    this.loading = false
+                }
+            })
         },
         // 学生详情
         detailMsg(scope) {
