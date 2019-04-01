@@ -87,11 +87,6 @@ export default {
         //加载课程列表传参
         tid: sessionStorage.getItem("tid"),
         pageIndex: 1
-        // title: "",
-        // createTime: "",
-        // categoryId: "",
-        // pageSize: 10,
-        // status: 1
       }
     };
   },
@@ -260,6 +255,7 @@ export default {
     },
     //切换页码回调函数，参数是切换后的页码
     changePage(pageNum) {
+      this.params.pageIndex = pageNum;
       this.loadCourseList(pageNum, 10);
     },
     //点击搜索，调用的回调函数
