@@ -305,7 +305,11 @@ export default {
                     roomId: id
                 };
             this.axiosC.get('/classroom/showTasks', { params: { params } }).then(res => {
-                console.log(res);
+                if (res.status == 200) {
+                    if (res.data.code == 0) {
+                        this.courseData = res.data.data;
+                    }
+                }
             }).catch((err) => {
                 console.log(err);
             })
@@ -379,7 +383,7 @@ export default {
         // 删除选中课程
         removeCur(i) {
             this.courseData.splice(i, 1);
-            this, $message('删除成功！')
+            this.$message('删除成功！')
         },
 
     },
