@@ -199,17 +199,17 @@ export default {
       });
     },
     //详情
-    detail(courseId) {
+    detail(roomId) {
       //编辑课程按钮点击事件，参数为课程id
       this.$router.push({
         path: "/admin/classManage/detailClass",
         query: {
-          courseId
+          roomId
         }
       });
     },
     //删除
-    deleteButt(courseId, index) {
+    deleteButt(roomId, index) {
       //删除课程按钮点击事件，参数为课程id
       //弹窗确认
       this.$confirm("此操作将永久删除该课程, 是否继续?", "提示", {
@@ -220,14 +220,14 @@ export default {
         .then(() => {
           // 开始删除
           //删除数据方法
-          this.deleteCourse(courseId, index);
+          this.deleteCourse(roomId, index);
         })
         .catch(() => {
           //取消
         });
     },
     //删除课程接口
-    async deleteCourse(courseId, index) {
+    async deleteCourse(roomId, index) {
       try {
         let {
           status,
@@ -237,7 +237,7 @@ export default {
           method: "get",
           params: {
             params: JSON.stringify({
-              id: courseId,
+              id: roomId,
               status: 3
             })
           }

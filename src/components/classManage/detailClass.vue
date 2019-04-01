@@ -115,19 +115,22 @@ export default {
         creator: "", //创建人ID
         name: "", //班级名称
         description: "" //描述
-      }
+      },
+      params: {}
     };
   },
   created() {
     //查看地址栏是否有courseId，有的话就是 更新课程，否则就是 新建课程。
     let courseId = this.$route.query.courseId;
-    this.id = courseId;
+    let tid = sessionStorage.getItem("tid");
+    // this.id = courseId;
+    this.getClassDetail(courseId); //请求获取课程详情数据
     this.getCourseDetail(courseId); //请求获取课程详情数据
   },
   methods: {
     submit: function(formName) {},
-    //更新课程时，获取 课程详情数据
-    async getCourseDetail(roomId) {
+    //获取班级详情
+    async getClassDetail(roomId) {
       try {
         this.isLoad = true; //加载数据loading动画显示
         let {
@@ -136,6 +139,30 @@ export default {
         } = await this.axiosC({
           method: "get",
           url: "/classroom/" + roomId
+        });
+        if (status === 200 && dataMsg) {
+          // this.setCourseDetail(dataMsg); //将获取到的课程详情，存入到vuex中
+          // this.selectedTagsText = dataMsg.tag1.split(",");
+          this.ruleForm = dataMsg;
+          this.isLoad = false; //加载数据loading动画隐藏
+        }
+      } catch (err) {
+        console.log(err);
+      }
+    },
+    //获取班级课程详情
+    async getCourseDetail(roomId) {
+      try {
+        this.isLoad = true; //加载数据loading动画显示
+        let {
+          status,
+          data: { data: dataMsg }
+        } = await this.axiosC({
+          method: "get",
+          url: "classroom/showTasks",
+          params: {
+            params: this.params
+          }
         });
         if (status === 200 && dataMsg) {
           // this.setCourseDetail(dataMsg); //将获取到的课程详情，存入到vuex中
