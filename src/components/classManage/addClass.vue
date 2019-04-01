@@ -43,7 +43,7 @@
                             </div>
                             <div class="lessonBtn">
                                 <span class="detail" @click="toCourseDetail(v.id)">详情</span>|
-                                <span @click="removeCur">删除</span>
+                                <span @click="removeCur(i)">删除</span>
                             </div>
                         </li>
                         <li class="addLesson" @click="addTaskBtn">
@@ -153,7 +153,6 @@ export default {
             this.getCourseList(this.id)//获得课程            
         } else {
             this.loading = false
-
         }
     },
     methods: {
@@ -183,10 +182,19 @@ export default {
                     let data = response.data;
                     if (data.code == 0) {
                         if (this.tableData != '') {
-                            this.teacherFinished(data.data);
+                            if (this.id) {
+                                this.teacherFinished(this.id);
+                            } else {
+                                this.teacherFinished(data.data);
+                            }
                         }
                         if (this.courseData != '') {
-                            this.courseFinish(data.data);
+                            if (this.id) {
+                                this.courseFinish(this.id);
+                            } else {
+                                this.courseFinish(data.data);
+                            }
+
                         }
                         let timer = setTimeout(() => {
                             //倒计时跳转
@@ -308,7 +316,7 @@ export default {
             this.tableData = teacher
         },
         teacherFinished(classId) {
-            let teacherArr = [],teacherObj={};
+            let teacherArr = [], teacherObj = {};
             let tid = Number(sessionStorage.getItem('tid'))
             this.tableData.forEach(item => {
                 teacherObj.tid = tid;
@@ -324,7 +332,11 @@ export default {
             let params = { params: { "users": teacherArr } }
             this.axiosC.post('/classroom/addClassUser', params).then(res => {
                 if (res.status == 200) {
-                    console.log(res.data)
+                    if (res.data.code == 0) {
+                        console.log(res.data)
+                    } else {
+                        this.$alert(res.data.msg)
+                    }
                 }
             })
         },
@@ -332,7 +344,6 @@ export default {
         courseFinishData(course) {
             this.isCourse = false;
             this.courseData = course
-            console.log(this.courseData)
         },
         courseFinish(classId) {
             let params = {}, tid = sessionStorage.getItem('tid');
@@ -349,6 +360,8 @@ export default {
                 if (res.status == 200) {
                     if (res.data.code == 0) {
                         this.$message('添加成功！')
+                    } else {
+                        this.$alert(res.data.msg)
                     }
                 }
             })
@@ -364,8 +377,9 @@ export default {
             })
         },
         // 删除选中课程
-        removeCur() {
-            
+        removeCur(i) {
+            this.courseData.splice(i, 1);
+            this, $message('删除成功！')
         },
 
     },
