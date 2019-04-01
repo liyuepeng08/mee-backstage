@@ -76,7 +76,7 @@
                             </template>
                         </el-table-column>
                     </el-table>
-                    <div class="addTeaBtn" @click="addTeacherBtn(courseId)">
+                    <div class="addTeaBtn" @click="addTeacherBtn(id)">
                         <i class="el-icon-plus"></i>
                         添加教师
                     </div>
@@ -176,8 +176,12 @@ export default {
                 .then(response => {
                     let data = response.data;
                     if (data.code == 0) {
-                        this.teacherFinished(data.data);
-                        this.courseFinish(data.data);
+                        if (this.tableData != '') {
+                            this.teacherFinished(data.data);
+                        }
+                        if (this.courseData != '') {
+                            this.courseFinish(data.data);
+                        }
                         let timer = setTimeout(() => {
                             //倒计时跳转
                             this.$router.push({
@@ -294,16 +298,25 @@ export default {
         },
         // 获得选中老师数据
         teacherFinishData(teacher) {
-            console.log(teacher);
             this.isShow = false
             this.tableData = teacher
         },
-        teacherFinished(d) {
+        teacherFinished(classId) {
+            let teacherArr = [];
+            let tid = Number(sessionStorage.getItem('tid'))
             this.tableData.forEach(item => {
-                item.roomId = d
+                teacherArr.tid = tid;
+                teacherArr.uid = item.uid;
+                teacherArr.roomId = classId;
+                teacherArr.status = item.status;
+                teacherArr.role = item.role;
+                teacherArr.mobile = item.mobile;
+                teacherArr.nickName = item.nickName;
+                teacherArr.gender = item.gender;
+
             })
-            let params = { params: { "users": this.selectedArr } }
-            this.axiosC.post('/classroom/addClassUser', params).then(res => {
+            let params = { params: { "users": teacherArr } }
+            this.axiosC.post('/classroom/addClassUser', params).then(res => {            
                 if (res.status == 200) {
                     console.log(res.data)
                 }
@@ -314,23 +327,20 @@ export default {
             this.isCourse = false;
             this.courseData = course
         },
-        courseFinish(d) {
-            // tid roomId courseId
+        courseFinish(classId) {
             let params = {}, tid = sessionStorage.getItem('tid');
             this.courseData.forEach(item => {
-                let courseIds = [];
-                courseIds.push(item.id.toString());
+                let courseIdsArr = [];
+                courseIdsArr.push(item.id.toString());
                 params = {
                     tid: tid,
-                    roomId: this.courseId,
-                    courseIds: courseIds
+                    roomId: classId,
+                    courseIds: courseIdsArr
                 }
             })
-            // params = JSON.stringify(params);
             this.axiosC.post('/classroom/addTask', params).then(res => {
                 if (res.status == 200) {
                     if (res.data.code == 0) {
-                        console.log(res.data.data)
                         this.$message('添加成功！')
                     }
                 }
