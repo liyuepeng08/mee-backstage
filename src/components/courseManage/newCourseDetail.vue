@@ -382,34 +382,6 @@ export default {
                 console.log(err)
             }
         },
-        // async loadCatagoryList(id) {        //根据上一级分类的id，加载下一级。  参数是选中的value值，是一个数组，对应选中功能的一二级的value值
-        
-        //     let {status, data: {data: dataMsg}} = await this.axiosC({
-        //         url: '/material/categroy/list/' + id[id.length - 1],
-        //         method: 'get',
-        //         params: {
-        //             params: {
-        //                 status: 1
-        //             }
-        //         }
-        //     })
-
-        //     if (status === 200 && dataMsg) {
-        //         this.subjectList.every((item) => {
-        //             if (item.value == id) {
-        //                 item.children = dataMsg.map((subItem) => {     //结果
-        //                     return {
-        //                         label: subItem.name,
-        //                         value: subItem.id,
-        //                         pid: subItem.pid,
-        //                         children: []
-        //                     }
-        //                 })
-        //                 return false        //跳出循环
-        //             }
-        //         })
-        //     }
-        // },
         ...mapMutations([
             'setTitle',
             'setSubtitle',

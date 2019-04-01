@@ -25,7 +25,7 @@
                 <el-button size="small" icon="el-icon-share" round type="primary">点击上传</el-button>
             </el-upload>
             <!-- <el-button class="addBtn" type="primary" icon="el-icon-share" @click="importBtn">导入</el-button> -->
-            <a href="#">
+            <a href="./static/用户导入模版.xls" download="用户导入模版">
                 <i class="el-icon-download"></i>下载模板
             </a>
             <!-- <el-button
