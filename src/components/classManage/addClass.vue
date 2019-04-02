@@ -219,16 +219,19 @@ export default {
                             }
                         });
                     } else {
-                        this.$message(data.msg);
+                        this.$message({
+                            message: data.msg,
+                            type: 'warning'
+                        });
                     }
                 })
                 .catch(error => {
-                    this.$message("提交失败！");
+                    this.$message.error("提交失败！");
                 });
         },
         //更新课程时，获取 课程详情数据
         async getCourseDetail(roomId) {
-            console.log("更新");
+            // console.log("更新");
             try {
                 this.isLoad = true; //加载数据loading动画显示
                 let {
@@ -317,7 +320,21 @@ export default {
         // 获得选中老师数据
         teacherFinishData(teacher) {
             this.isShow = false
-            this.tableData = teacher
+            if (this.tableData != '') {
+                teacher.forEach(item => {
+                    this.tableData.push(item)
+                })
+                for (let i = 0; i < this.tableData.length-1; i++) {
+                    if (this.tableData[i].uid == this.tableData[(i + 1)].uid) {
+                        this.tableData.splice(i, 1)
+                        this.isShow = true
+                        this.$message({
+                            message: '昵称为' + this.tableData[i].nickName + '的老师已添加，无需重复添加！',
+                            type: 'warning'
+                        })
+                    }
+                }
+            }
         },
         teacherFinished(classId) {
             let teacherArr = [], teacherObj = {};
@@ -363,7 +380,10 @@ export default {
             this.axiosC.post('/classroom/addTask', params).then(res => {
                 if (res.status == 200) {
                     if (res.data.code == 0) {
-                        this.$message('添加成功！')
+                        this.$message({
+                            message: '添加成功！',
+                            type: 'success'
+                        })
                     } else {
                         this.$alert(res.data.msg)
                     }
@@ -382,8 +402,12 @@ export default {
         },
         // 删除选中课程
         removeCur(i) {
-            this.courseData.splice(i, 1);
-            this.$message('删除成功！')
+            // this.courseData.splice(i, 1);
+            this.$message({
+                message: '禁止删除！',
+                type: 'warning'
+            })
+
         },
 
     },
