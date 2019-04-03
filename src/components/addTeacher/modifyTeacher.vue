@@ -336,12 +336,19 @@ export default {
               }
             })
             .catch(error => {
-              this.$message("提交失败！");
+              this.$message({
+                message: "提交失败！",
+                type: "warning"
+              });
+
               console.log(error);
             });
         } else {
           console.log("error submit!!");
-          this.$message("请填写所有带*号的必填项！");
+          this.$message({
+            message: "请填写所有带*号的必填项！",
+            type: "warning"
+          });
           return false;
         }
       });
